@@ -87,6 +87,12 @@ const LoginPage = (hooks) => {
     }
   }
 
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      handleLogin()
+    }
+  }
+
   return (
     <>
       <Grid 
@@ -132,12 +138,14 @@ const LoginPage = (hooks) => {
                 id="usr" 
                 label="用户名" 
                 variant="outlined"
+                onKeyDown={handleKeyDown}
               />
               <TextField 
                 id="pwd" 
                 label="密码" 
                 variant="outlined" 
                 type="password"
+                onKeyDown={handleKeyDown}
               />
               <Button 
                 variant="outlined"

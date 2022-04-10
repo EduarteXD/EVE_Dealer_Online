@@ -5,7 +5,9 @@ import dotenv from 'dotenv'
 import express from 'express'
 import mysql from 'mysql'
 import crypto from 'crypto'
+import path from 'path'
 
+const __dirname = path.resolve()
 dotenv.config()
 const app = express()
 app.use(bodyParser.urlencoded({ extended: 'true' }))
@@ -36,7 +38,8 @@ const genTrackerID = (uid) => {
     var now = new Date()
     var id = 'E-' + base62(parseInt(now.getTime() / 1000 + now.getTime() % 1000))
     const md5 = crypto.createHash('md5')
-    var token = 'T-' + md5.update(base62(parseInt(now.getTime() / 1000))).digest('hex').toUpperCase()
+    var token = 'T-' + base62(parseInt(now.getTime() / 10 + now.getTime() % 1000))
+    // var token = 'T-' + md5.update(base62(parseInt(now.getTime() / 100))).digest('hex').toUpperCase()
     const deleteParms = [uid]
     connection.query('delete from `trackers` where `uid` = ?', deleteParms, (err) => {
       if (err)
@@ -100,6 +103,18 @@ connection.connect((err) => {
   }
 })
 
+app.use(express.static('./public'))
+
+app.get('/api/data/itemlist/version', (req, res) => {
+  res.json({
+    version: '2204'
+  })
+})
+
+app.get('/api/data/itemlist', (req, res) => {
+  res.sendFile(__dirname + '/data/itemlist.json')
+})
+
 app.get('/api/user', async (req, res) => {
   var response = {
     login: false
@@ -126,6 +141,27 @@ app.get('/api/user', async (req, res) => {
   res.json(response)
 })
 
+app.get('/api/user/info', async (req, res) => {
+  var promise = new Promise((resolve, reject) => {
+    const queryParams = [req.cookies['tracker-id']]
+    connection.query('select `uname`, `email`, `rule` from `users` where `uid` = (select `uid` from `trackers` where `id` = ?)', queryParams, (err, rows) => {
+      if (err)
+      {
+        reject(err)
+      }
+      const md5 = crypto.createHash('md5')
+      resolve({
+        name: rows[0].uname,
+        avatar: md5.update(rows[0].email).digest('hex'),
+        rule: rows[0].rule
+      })
+    })
+  })
+
+  var response = await promise;
+  res.json(response)
+})
+
 app.post('/api/login', (req, res) => {
   const queryParams = [req.body.name]
   connection.query('select `pwd`, `uid` from `users` where `uname` = ?', queryParams, async (err, rows) => {
@@ -141,13 +177,11 @@ app.post('/api/login', (req, res) => {
     if (rows[0].pwd === pwd) {
       try {
         var Tracker = await genTrackerID(rows[0].uid)
-        // console.log(Tracker)
         res.cookie('tracker-id', Tracker.id)
         res.cookie('tracker-token', Tracker.token)
         res.json({
           ok: true,
-          uid: rows[0].uid,
-          uname: req.body.name
+          uid: rows[0].uid
         })
       }
       catch (err) {

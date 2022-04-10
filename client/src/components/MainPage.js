@@ -43,17 +43,17 @@ const MainPage = (hooks) => {
 
   return (
     <>
-    {
-      loggedIn ? (
-        <>
-          <BackgroundFrame />
-        </>
-      ) : (
-        <LoginPage
-          setUserStat={setUserStat}
-        />
-      )
-    }
+      {
+        loggedIn ? (
+          <>
+            <BackgroundFrame />
+          </>
+        ) : (
+          <LoginPage
+            setUserStat={setUserStat}
+          />
+        )
+      }
     </>
   )
 }
