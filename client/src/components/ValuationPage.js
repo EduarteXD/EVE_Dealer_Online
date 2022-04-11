@@ -1,7 +1,8 @@
 import React from 'react'
 import { Box, LinearProgress, TextField, Grid, Card, Divider, Typography, Button, Table,
   TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar } from '@mui/material'
-import resolveMarket from '../functions/ResolveEsiMarket'
+
+import getEsiMarketData from '../functions/GeiEsiMarketData'
 import resolveClipboard from '../functions/ResolveClipboard'
 import getItemList from '../functions/GetItemList'
 
@@ -9,11 +10,15 @@ const ValuationPage = (hooks) => {
   const [requestSent, setRequestStat] = React.useState(false)
   const [haveResult, setResult] = React.useState(false)
   const [isLoading, setLoading] = React.useState(true)
+  const [isLoadingMarket, setMarketLoading] = React.useState(true)
   const [result, setData] = React.useState({})
+
+  var storage = window.sessionStorage
 
   if (!requestSent)
   {
     setRequestStat(true)
+    /*
     if (!hooks.marketRequested)
     {
       fetch('https://esi.evepc.163.com/latest/markets/prices/?datasource=serenity')
@@ -25,13 +30,16 @@ const ValuationPage = (hooks) => {
       })
   
     }
+    */
+    getEsiMarketData(setMarketLoading)
     getItemList(setLoading)
   }
 
   const handleCalc = () => {
     setResult(false)
     // console.log(resolveClipboard(document.getElementById('contract').value, marketData))
-    setData(resolveClipboard(document.getElementById('contract').value, hooks.marketData))
+    // setData(resolveClipboard(document.getElementById('contract').value, hooks.marketData))
+    setData(resolveClipboard(document.getElementById('contract').value, JSON.parse(storage['EsiMarketData'])))
     // console.log(result)
     setResult(true)
     document.getElementById('contract').value = ''
@@ -40,7 +48,7 @@ const ValuationPage = (hooks) => {
   return (
     <>
       {
-        isLoading ? (
+        isLoading || isLoadingMarket ? (
           <>
             <Box
               sx={{

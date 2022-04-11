@@ -7,12 +7,15 @@ import getBlueprintList from '../functions/GetBlueprintList'
 import getMatchedItem from '../functions/GetMatchedItem'
 import blueprintDetail from '../functions/BlueprintDetail'
 import getIdToName from '../functions/GetIdToName'
+import getEsiMarketData from '../functions/GeiEsiMarketData'
 
 const ManufacturePage = () => {
   const [reqestSent, setRequestStat] = React.useState(false)
   const [isLoading, setLoading] = React.useState(true)
   const [isBpLoading, setLoadingBp] = React.useState(true)
   const [isId2NameLoading, setLoadingId2Name] = React.useState(true)
+  const [isEsiMarketLoading, setEsiLoading] = React.useState(true)
+  const [totValue, setValue] = React.useState(0)
   const [brief, setBrief] = React.useState({
     exists: false
   })
@@ -53,12 +56,13 @@ const ManufacturePage = () => {
     getIdToName(setLoadingId2Name)
     getItemList(setLoading)
     getBlueprintList(setLoadingBp)
+    getEsiMarketData(setEsiLoading)
   }
 
   return (
     <>
       {
-        isLoading || isBpLoading || isId2NameLoading ? (
+        isLoading || isBpLoading || isId2NameLoading || isEsiMarketLoading ? (
           <>
             <Box
               sx={{
@@ -282,7 +286,15 @@ const ManufacturePage = () => {
                                     <TableCell
                                       align='right'
                                     >
-                                      100,000,000 ISK
+                                      {
+                                        format(
+                                          parseInt(
+                                            JSON.parse(
+                                              window.sessionStorage['EsiMarketData']
+                                            )[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
+                                          )
+                                        )
+                                      }
                                     </TableCell>
                                     <TableCell
                                       align='right'

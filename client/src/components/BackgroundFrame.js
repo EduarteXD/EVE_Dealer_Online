@@ -15,9 +15,11 @@ const Frame = () => {
   const [notifyCount, setNotifyCount] = React.useState(0)
   const [drawerStat, setDrawer] = React.useState(false)
   const [reqSent, setReqStat] = React.useState(false)
-  const [marketRequested, setMarketRequest] = React.useState(false)
   const [userInfo, setUserInfo] = React.useState({})
+  /*
+  const [marketRequested, setMarketRequest] = React.useState(false)
   const [marketData, setMarketData] = React.useState({})
+  */
 
   const changePage = (pageNum) => {
     if (pageNum === page)
@@ -109,10 +111,10 @@ const Frame = () => {
           {
             page === 1 && (
               <ValuationPage
-                marketData={marketData}
-                setMarketData={setMarketData}
-                marketRequested={marketRequested}
-                setMarketRequest={setMarketRequest}
+                // marketData={marketData}
+                // setMarketData={setMarketData}
+                // marketRequested={marketRequested}
+                // setMarketRequest={setMarketRequest}
               />
             )
           }
