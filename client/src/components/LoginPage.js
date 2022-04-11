@@ -99,18 +99,21 @@ const LoginPage = (hooks) => {
         container 
         spacing={2}
         sx={{
-          width: '75vw',
+          width: 
+          {
+            xs: '380px',
+            md: '440px'
+          },
           margin: 'auto',
           left: '0',
           right: '0'
         }}
       >
-        <Grid item xl={4.25} lg={4} md={2.5} sm={1} xs={0} />
-        <Grid item xl={3.5} lg={4} md={7} sm={10} xs={12}>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
           <Paper
             elevation={3}
             sx={{
-              height: '380px',
               margin: 'auto',
               position: 'flex',
               marginTop: '28vh',
@@ -138,43 +141,117 @@ const LoginPage = (hooks) => {
             </Box>
             <Box
               component="form"
-              sx={{
-                '& > :not(style)': { m: 1, width: '28ch' },
-                paddingTop: '10px'
-              }}
             >
-              <TextField 
-                id="usr" 
-                label="用户名" 
-                variant="outlined"
-                onKeyDown={handleKeyDown}
-              />
-              <TextField 
-                id="pwd" 
-                label="密码" 
-                variant="outlined" 
-                type="password"
-                onKeyDown={handleKeyDown}
-              />
-              <Button 
-                variant="outlined"
-                sx={{
-                  padding: '10px 0 10px 0',
-                }}
-                onClick={handleLogin}
+              <Grid
+                container
+                spacing={1}
               >
-                登录
-              </Button>
-              <Button 
-                variant="text"
-                onClick={sendNotify}
-              >
-                注册
-              </Button>
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={10}
+                >
+                  <Box
+                    sx={{
+                      padding: '20px 20px 0 20px'
+                    }}
+                  >
+                    <TextField
+                      id="usr" 
+                      label="用户名" 
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={10}
+                >
+                  <Box
+                    sx={{
+                      padding: '15px 20px 20px 20px'
+                    }}
+                  >
+                  <TextField 
+                    id="pwd" 
+                    label="密码" 
+                    variant="outlined"
+                    fullWidth 
+                    type="password"
+                    onKeyDown={handleKeyDown}
+                  />
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={10}
+                >
+                  <Box>
+                    <Button 
+                      variant="outlined"
+                      sx={{
+                        padding: '10px 0 10px 0',
+                      }}
+                      onClick={handleLogin}
+                    >
+                      登录
+                    </Button>
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={1}
+                />
+                <Grid
+                  item
+                  xs={10}
+                >
+                  <Box
+                    sx={{
+                      padding: '0 0 15px 0'
+                    }}
+                  >
+                    <Button 
+                      variant="text"
+                      onClick={sendNotify}
+                    >
+                      注册
+                    </Button>
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                />
+              </Grid>
             </Box>
           </Paper>
         </Grid>
-        <Grid item xl={4.25} lg={4} md={2.5} sm={1} xs={0} />
+        <Grid item xs={1} />
       </Grid>
       <Snackbar
         open={regNotify}

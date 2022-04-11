@@ -128,7 +128,7 @@ const ManufacturePage = () => {
                                     >
                                       <Grid 
                                         item
-                                        md={1}
+                                        md={1.5}
                                       >
                                         <img 
                                           // src={'icons/' + matched[key] + '_64.png'}
@@ -143,7 +143,9 @@ const ManufacturePage = () => {
                                         item
                                         md={8}
                                       >
-                                        <Typography>
+                                        <Typography
+                                          mt={0.5}
+                                        >
                                           {key}
                                         </Typography>
                                       </Grid>

@@ -8,7 +8,7 @@
   fetch('api/data/blueprints/version')
     .then(response => response.json())
     .then((dat) => {
-      if(storage['blueprintListVersion'] === undefined || storage['blueprintList'] !== dat.version)
+      if(storage['blueprintListVersion'] === undefined || storage['blueprintListVersion'] !== dat.version)
       {
         fetch('api/data/blueprints')
         .then(response => response.json())
