@@ -97,7 +97,7 @@ const LoginPage = (hooks) => {
     <>
       <Grid 
         container 
-        spacing={2}
+        spacing={0}
         sx={{
           width: 
           {
@@ -116,7 +116,13 @@ const LoginPage = (hooks) => {
             sx={{
               margin: 'auto',
               position: 'flex',
-              marginTop: '28vh',
+              marginTop: {
+                xs: '24vh',
+                sm: '28vh',
+                md: '28vh',
+                lg: '28vh',
+                xl: '28vh'
+              },
               left: '0',
               right: '0',
               textAlign: 'center'
@@ -144,7 +150,7 @@ const LoginPage = (hooks) => {
             >
               <Grid
                 container
-                spacing={1}
+                spacing={0}
               >
                 <Grid
                   item

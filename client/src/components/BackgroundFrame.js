@@ -45,7 +45,7 @@ const Frame = () => {
     })
   }
 
-  const title = ['Welcome aboard!', '物资估价']
+  const title = ['Welcome aboard!', '物资估价', '库存管理', '生产管理']
 
   if (userInfo.avatar !== undefined)
   {

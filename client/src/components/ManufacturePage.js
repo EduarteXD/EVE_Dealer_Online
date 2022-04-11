@@ -5,16 +5,19 @@ import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, Linea
 import getItemList from '../functions/GetItemList'
 import getBlueprintList from '../functions/GetBlueprintList'
 import getMatchedItem from '../functions/GetMatchedItem'
+import blueprintDetail from '../functions/BlueprintDetail'
 
 const ManufacturePage = () => {
-  const [lineCount, setCount] = React.useState(0)
   const [reqestSent, setRequestStat] = React.useState(false)
   const [isLoading, setLoading] = React.useState(true)
   const [isBpLoading, setLoadingBp] = React.useState(true)
+  const [brief, setBrief] = React.useState({
+    exists: false
+  })
   const [matched, setMatched] = React.useState({})
 
   const handleClick = (id) => {
-    alert(id)
+    console.log(blueprintDetail(id))
   }
 
   const handleChange = () => {
@@ -166,7 +169,6 @@ const ManufacturePage = () => {
                   </Grid>
                 </Paper>
               </Grid>
-
               <Grid
                 item
                 xs={0}
@@ -190,7 +192,23 @@ const ManufacturePage = () => {
                   </Typography>
                   <Divider />
                   {
-                    lineCount === 0 ? (
+                    brief.exists ? (
+                      <>
+                        <TableContainer>
+                          <Table aria-label="result">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>名称</TableCell>
+                                <TableCell align='right'>自制</TableCell>
+                                <TableCell align='right'>需求数量</TableCell>
+                                <TableCell align='right'>生产/购买数量</TableCell>
+                                <TableCell align='right'>操作</TableCell>
+                              </TableRow>
+                            </TableHead>
+                          </Table>
+                        </TableContainer>
+                      </>
+                    ) : (
                       <>
                         <Grid
                           container
@@ -223,11 +241,7 @@ const ManufacturePage = () => {
                               空空如也~
                             </Typography>
                           </Grid>
-                        </Grid>
-                      </>
-                    ) : (
-                      <>
-                      
+                        </Grid>                      
                       </>
                     )
                   }
