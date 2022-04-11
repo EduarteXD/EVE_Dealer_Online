@@ -17,6 +17,16 @@ const App = () => {
 
   return (
     <>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '80px',
+          right: '30px',
+          zIndex: '1000'
+        }}
+      >
+        dev build @20220411#5
+      </Box>
       <MainPage
         setAppStat={setAppStat}
         appStat={appStat}

@@ -1,7 +1,7 @@
-var storage = window.localStorage
-var blueprints = JSON.parse(storage['blueprintList']);
-
 const blueprintDetail = (itemID) => {
+  var storage = window.localStorage
+  var blueprints = JSON.parse(storage['blueprintList'])
+  var ID2Name = JSON.parse(storage['ID2Name'])
   /*
     result = {
       materials: [
@@ -9,27 +9,32 @@ const blueprintDetail = (itemID) => {
             id: id, 
             quantity: quantity, <- per process
             toBuy: true,
-            module: false,
+            dividable: false,
             resolve: {}
           },
           {
             id: id, 
             toBuy: true
-            module: true,
+            dividable: true,
             resolve: {
               materials: [
                 {
                   id: id, 
                   quantity: quantity,
                   toBuy: true,
+                  dividable: false,
                   resolve: {}
                 }
               ],
-              blueprintID: id
+              blueprintID: id,
+              perProcess: perProcessMade,
+              name: name
             }
           }
       ],
-      blueprintID: id
+      blueprintID: id,
+      perProcess: perProcessMade,
+      name: name
     }
   */
   // console.log(blueprints)
@@ -49,16 +54,18 @@ const blueprintDetail = (itemID) => {
       var resolve = blueprintDetail(blueprint.mt[key].typeID)
       resolvedItems[i] = {
         id: blueprint.mt[key].typeID,
+        name: ID2Name[blueprint.mt[key].typeID],
         quantity: blueprint.mt[key].quantity,
         toBuy: true,
-        module: 'materials' in resolve,
+        dividable: 'materials' in resolve,
         resolve: resolve
       }
       i++
     }
     var result = {
-      materials: resolvedItems,
-      blueprintID: blueprint.bp
+      blueprintID: blueprint.bp,
+      perProcess: blueprint.pq,
+      materials: resolvedItems
     }
     return result
   }

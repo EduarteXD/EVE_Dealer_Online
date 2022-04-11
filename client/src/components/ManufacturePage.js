@@ -6,18 +6,34 @@ import getItemList from '../functions/GetItemList'
 import getBlueprintList from '../functions/GetBlueprintList'
 import getMatchedItem from '../functions/GetMatchedItem'
 import blueprintDetail from '../functions/BlueprintDetail'
+import getIdToName from '../functions/GetIdToName'
 
 const ManufacturePage = () => {
   const [reqestSent, setRequestStat] = React.useState(false)
   const [isLoading, setLoading] = React.useState(true)
   const [isBpLoading, setLoadingBp] = React.useState(true)
+  const [isId2NameLoading, setLoadingId2Name] = React.useState(true)
   const [brief, setBrief] = React.useState({
     exists: false
   })
   const [matched, setMatched] = React.useState({})
 
+  const format = (num) => {
+    var reg=/\d{1,3}(?=(\d{3})+$)/g;
+    return (num + '').replace(reg, '$&,');
+  }
+
   const handleClick = (id) => {
-    console.log(blueprintDetail(id))
+    setBrief({
+      exists: true,
+      content: blueprintDetail(id)
+    })
+    document.getElementById('object').value=''
+    handleChange()
+  }
+
+  const handleDivide = (key) => {
+
   }
 
   const handleChange = () => {
@@ -34,6 +50,7 @@ const ManufacturePage = () => {
   if (!reqestSent)
   {
     setRequestStat(true)
+    getIdToName(setLoadingId2Name)
     getItemList(setLoading)
     getBlueprintList(setLoadingBp)
   }
@@ -41,7 +58,7 @@ const ManufacturePage = () => {
   return (
     <>
       {
-        isLoading || isBpLoading ? (
+        isLoading || isBpLoading || isId2NameLoading ? (
           <>
             <Box
               sx={{
@@ -202,9 +219,94 @@ const ManufacturePage = () => {
                                 <TableCell align='right'>自制</TableCell>
                                 <TableCell align='right'>需求数量</TableCell>
                                 <TableCell align='right'>生产/购买数量</TableCell>
+                                <TableCell align='right'>估价</TableCell>
                                 <TableCell align='right'>操作</TableCell>
                               </TableRow>
                             </TableHead>
+                            <TableBody>
+                              {
+                                Object.keys(brief.content.materials).map((key) => (
+                                  <TableRow
+                                    key={brief.content.materials[key].id}
+                                  >
+                                    <TableCell>
+                                      <Grid 
+                                        container
+                                      >
+                                        <Grid 
+                                          item
+                                          md={1}
+                                        >
+                                          <img
+                                            src={'https://images.evetech.net/types/' + brief.content.materials[key].id + '/icon?size=32'}
+                                            style={{
+                                              width: '32px',
+                                              height: '32px'
+                                            }}
+                                          />
+                                        </Grid>
+                                        <Grid 
+                                          item
+                                          xl={1}
+                                          lg={2}
+                                          md={3}
+                                          xs={0}
+                                        />
+                                        <Grid
+                                          item
+                                          md={6}
+                                        >
+                                          <Typography
+                                            mt={0.5}
+                                          >
+                                            {brief.content.materials[key].name}
+                                          </Typography>
+                                        </Grid>
+                                      </Grid>
+                                    </TableCell>
+                                    <TableCell
+                                      align='right'
+                                    >
+                                      {brief.content.materials[key].toBuy ? '否' : '是'}
+                                    </TableCell>
+                                    <TableCell
+                                      align='right'
+                                    >
+                                      {format(brief.content.materials[key].quantity)}
+                                    </TableCell>
+                                    <TableCell
+                                      align='right'
+                                    >
+                                      {format(brief.content.materials[key].quantity)}
+                                    </TableCell>
+                                    <TableCell
+                                      align='right'
+                                    >
+                                      100,000,000 ISK
+                                    </TableCell>
+                                    <TableCell
+                                      align='right'
+                                    >
+                                      {
+                                        brief.content.materials[key].dividable ? (
+                                          <>
+                                            <Button variant='outlined' onClick={() => handleDivide(key)}>
+                                              自制
+                                            </Button>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Button variant='outlined' disabled onClick={() => handleDivide(key)}>
+                                              自制
+                                            </Button>
+                                          </>
+                                        )
+                                      }
+                                    </TableCell>
+                                  </TableRow>
+                                ))
+                              }
+                            </TableBody>
                           </Table>
                         </TableContainer>
                       </>
