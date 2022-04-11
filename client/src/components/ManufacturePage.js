@@ -22,8 +22,8 @@ const ManufacturePage = () => {
   const [matched, setMatched] = React.useState({})
 
   const format = (num) => {
-    var reg=/\d{1,3}(?=(\d{3})+$)/g;
-    return (num + '').replace(reg, '$&,');
+    var reg=/\d{1,3}(?=(\d{3})+$)/g
+    return (num + '').replace(reg, '$&,')
   }
 
   const handleClick = (id) => {
@@ -31,12 +31,36 @@ const ManufacturePage = () => {
       exists: true,
       content: blueprintDetail(id)
     })
+    // console.log(blueprintDetail(id))
     document.getElementById('object').value=''
     handleChange()
   }
 
   const handleDivide = (key) => {
-
+    brief.content.materials[key].toBuy = false
+    var temp = brief
+    var start = Object.keys(brief.content.materials).length
+    // console.log(start)
+    for (var i in brief.content.materials[key].resolve.materials)
+    {
+      brief.content.materials[key].resolve.materials[i].quantity = brief.content.materials[key].resolve.materials[i].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
+      temp.content.materials[parseInt(start) + parseInt(i)] = brief.content.materials[key].resolve.materials[i]
+    }
+    setBrief({...temp})
+    
+    /*
+    setBrief({
+      exists: true,
+      content: {
+        materials: {
+          ...brief.content.materials,
+          ...brief.content.materials[key].resolve.materials
+        },
+        perProcess: brief.content.perProcess
+      }
+    })
+    console.log(brief)
+    */
   }
 
   const handleChange = () => {
@@ -231,7 +255,7 @@ const ManufacturePage = () => {
                               {
                                 Object.keys(brief.content.materials).map((key) => (
                                   <TableRow
-                                    key={brief.content.materials[key].id}
+                                    key={key}
                                   >
                                     <TableCell>
                                       <Grid 
@@ -300,7 +324,7 @@ const ManufacturePage = () => {
                                       align='right'
                                     >
                                       {
-                                        brief.content.materials[key].dividable ? (
+                                        brief.content.materials[key].dividable && brief.content.materials[key].toBuy ? (
                                           <>
                                             <Button variant='outlined' onClick={() => handleDivide(key)}>
                                               自制
@@ -308,7 +332,7 @@ const ManufacturePage = () => {
                                           </>
                                         ) : (
                                           <>
-                                            <Button variant='outlined' disabled onClick={() => handleDivide(key)}>
+                                            <Button variant='outlined' disabled>
                                               自制
                                             </Button>
                                           </>
