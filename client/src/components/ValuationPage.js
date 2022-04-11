@@ -186,7 +186,8 @@ const ValuationPage = (hooks) => {
                                               md={1}
                                             >
                                             <img
-                                              src={'icons/' + result[key].id + '_64.png' }
+                                              // src={'icons/' + result[key].id + '_64.png' }
+                                              src={'https://images.evetech.net/types/' + result[key].id + '/icon?size=32'}
                                               style={{
                                                 width: '32px',
                                                 height: '32px'
@@ -195,7 +196,7 @@ const ValuationPage = (hooks) => {
                                             </Grid>
                                           )
                                         }
-                                        <Grid 
+                                        <Grid
                                           item
                                           md={8}
                                         >

@@ -138,7 +138,7 @@ const Frame = () => {
                   sm: '50vw',
                   md: '22vw',
                   lg: '20vw',
-                  xl: '15vw'
+                  xl: '18vw'
                 }
               }}
             >

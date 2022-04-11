@@ -1,158 +1,244 @@
 import React from 'react'
-import { Button, Grid, Paper, Typography, Divider, Avatar, TextField } from '@mui/material'
+import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
+  TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+
+import getItemList from '../functions/GetItemList'
+import getBlueprintList from '../functions/GetBlueprintList'
+import getMatchedItem from '../functions/GetMatchedItem'
 
 const ManufacturePage = () => {
   const [lineCount, setCount] = React.useState(0)
+  const [reqestSent, setRequestStat] = React.useState(false)
+  const [isLoading, setLoading] = React.useState(true)
+  const [isBpLoading, setLoadingBp] = React.useState(true)
+  const [matched, setMatched] = React.useState({})
+
+  const handleClick = (id) => {
+    alert(id)
+  }
+
+  const handleChange = () => {
+    if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '')
+    {
+      getMatchedItem(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched)
+    }
+    else
+    {
+      setMatched({})
+    }
+  }
+
+  if (!reqestSent)
+  {
+    setRequestStat(true)
+    getItemList(setLoading)
+    getBlueprintList(setLoadingBp)
+  }
 
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: '85vw',
-          margin: 'auto',
-          left: '0',
-          right: '0',
-          marginTop: '5vh'
-        }}
-      >
-        <Grid
-          item
-          xs={0}
-        />
-        <Grid
-          item
-          xs={12}
-        >
-          <Paper>
-            <Typography
-              variant='h6'
+      {
+        isLoading || isBpLoading ? (
+          <>
+            <Box
               sx={{
-                padding: '20px 20px 20px 20px'
+                textAlign: 'center'
               }}
             >
-              添加生产计划
-            </Typography>
-            <Divider />
+              <LinearProgress />
+            </Box>
+          </>
+        ) : (
+          <>
             <Grid
               container
               spacing={2}
               sx={{
-                padding: '20px 20px 20px 20px'
+                width: '85vw',
+                margin: 'auto',
+                left: '0',
+                right: '0',
+                marginTop: '5vh'
               }}
             >
               <Grid
                 item
-                lg={3}
-                md={4}
-                sm={12}
-              >
-                <Typography
-                  sx={{
-                    paddingBottom: '10px'
-                  }}
-                >
-                  生产对象
-                </Typography>
-                <TextField
-                  id='object'
-                  label='请输入生产对象'
-                />
-              </Grid>
+                xs={0}
+              />
               <Grid
                 item
-                md={4}
-                sm={12}
+                xs={12}
               >
-                <Typography
-                  sx={{
-                    paddingBottom: '10px'
-                  }}
-                >
-                  计算依赖
-                </Typography>
-                <Button 
-                  variant='outlined'
-                  
-                >
-                  生成简报
-                </Button>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-        <Grid
-          item
-          xs={0}
-        />
-        <Grid
-          item
-          xs={0}
-        />
-        <Grid
-          item
-          xs={12}
-        >
-          <Paper>
-            <Typography
-              variant='h6'
-              sx={{
-                padding: '20px 20px 20px 20px'
-              }}
-            >
-              简报
-            </Typography>
-            <Divider />
-            {
-              lineCount === 0 ? (
-                <>
+                <Paper>
+                  <Typography
+                    variant='h6'
+                    sx={{
+                      padding: '20px 20px 20px 20px'
+                    }}
+                  >
+                    添加生产计划
+                  </Typography>
+                  <Divider />
                   <Grid
                     container
-                    spacing={0}
+                    spacing={2}
                     sx={{
                       padding: '20px 20px 20px 20px'
                     }}
                   >
                     <Grid
                       item
-                      xs={0}
+                      md={4}
+                      xs={12}
                     >
-                      <Avatar
-                        src="noitem.svg"
+                      <TextField
+                        id='object'
+                        fullWidth
+                        label='请输入生产对象'
+                        onChange={handleChange}
                       />
                     </Grid>
                     <Grid
                       item
-                      xs={8}
+                      md={8}
+                      xs={12}
                     >
-                      <Typography
-                        variant='h6'
-                        sx={{
-                          paddingLeft: '20px',
-                          margin: 'auto',
-                          marginTop: '3px',
-                          verticalAlign: 'center'
-                        }}
+                      <TableContainer
+                        component={Paper}
                       >
-                        空空如也~
-                      </Typography>
+                        <Table aria-label="result">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>名称</TableCell>
+                              <TableCell align='right'>操作</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {
+                              Object.keys(matched).map((key) => (
+                                <TableRow
+                                  key={matched[key]}
+                                  sx={{
+                                    '&:last-child td, &:last-child th': { border: 0 }
+                                  }}
+                                >
+                                  <TableCell>
+                                    <Grid
+                                      container
+                                    >
+                                      <Grid 
+                                        item
+                                        md={1}
+                                      >
+                                        <img 
+                                          // src={'icons/' + matched[key] + '_64.png'}
+                                          src={'https://images.evetech.net/types/' + matched[key] + '/icon?size=32'}
+                                          style={{
+                                            width: '32px',
+                                            height: '32px'
+                                          }}
+                                        />
+                                      </Grid>
+                                      <Grid 
+                                        item
+                                        md={8}
+                                      >
+                                        <Typography>
+                                          {key}
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
+                                  </TableCell>
+                                  <TableCell align='right'>
+                                    <Button variant='outlined' onClick={() => handleClick(matched[key])}>
+                                      创建简报
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))
+                            }
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
                     </Grid>
                   </Grid>
-                </>
-              ) : (
-                <>
-                
-                </>
-              )
-            }
-          </Paper>
-        </Grid>
-        <Grid
-          item
-          xs={0}
-        />
-      </Grid>
+                </Paper>
+              </Grid>
+
+              <Grid
+                item
+                xs={0}
+              />
+              <Grid
+                item
+                xs={0}
+              />
+              <Grid
+                item
+                xs={12}
+              >
+                <Paper>
+                  <Typography
+                    variant='h6'
+                    sx={{
+                      padding: '20px 20px 20px 20px'
+                    }}
+                  >
+                    简报
+                  </Typography>
+                  <Divider />
+                  {
+                    lineCount === 0 ? (
+                      <>
+                        <Grid
+                          container
+                          spacing={0}
+                          sx={{
+                            padding: '20px 20px 20px 20px'
+                          }}
+                        >
+                          <Grid
+                            item
+                            xs={0}
+                          >
+                            <Avatar
+                              src="noitem.svg"
+                            />
+                          </Grid>
+                          <Grid
+                            item
+                            xs={8}
+                          >
+                            <Typography
+                              variant='h6'
+                              sx={{
+                                paddingLeft: '20px',
+                                margin: 'auto',
+                                marginTop: '3px',
+                                verticalAlign: 'center'
+                              }}
+                            >
+                              空空如也~
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </>
+                    ) : (
+                      <>
+                      
+                      </>
+                    )
+                  }
+                </Paper>
+              </Grid>
+              <Grid
+                item
+                xs={0}
+              />
+            </Grid>
+          </>
+        )
+      }
     </>
   )
 }

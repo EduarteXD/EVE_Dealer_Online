@@ -1,6 +1,5 @@
-var storage = window.localStorage
-
 const resolveClipboard = (data, marketData) => {
+  var storage = window.localStorage
   var items = {}
   var nameToID = JSON.parse(storage['itemList'])
   data.trim().split('\n').forEach((val) => {

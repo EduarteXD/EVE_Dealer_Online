@@ -111,8 +111,18 @@ app.get('/api/data/itemlist/version', (req, res) => {
   })
 })
 
+app.get('/api/data/blueprints/version', (req, res) => {
+  res.json({
+    version: '2204'
+  })
+})
+
 app.get('/api/data/itemlist', (req, res) => {
   res.sendFile(__dirname + '/data/itemlist.json')
+})
+
+app.get('/api/data/blueprints', (req, res) => {
+  res.sendFile(__dirname + '/data/blueprints.json')
 })
 
 app.get('/api/user', async (req, res) => {
