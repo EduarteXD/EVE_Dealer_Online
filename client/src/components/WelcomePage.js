@@ -46,7 +46,7 @@ const WelcomePage = (hooks) => {
                   padding: '20px 20px 20px 20px'
                 }}
               >
-                估算收入
+                已配置的生产线价值
               </Typography>
               <Divider />
               <Grid
@@ -67,7 +67,7 @@ const WelcomePage = (hooks) => {
                       今日累计
                     </Typography>
                     <Typography>
-                      ...ISK
+                      100,000,000 ISK
                     </Typography>
                   </Box>
                 </Grid>
@@ -82,7 +82,7 @@ const WelcomePage = (hooks) => {
                       最近7日
                     </Typography>
                     <Typography>
-                      ...ISK
+                      700,000,000 ISK
                     </Typography>
                   </Box>
                 </Grid>
@@ -198,11 +198,6 @@ const WelcomePage = (hooks) => {
                   padding: '5px 5px 5px 5px'
                 }}
               >
-                <Tooltip title='详情'>
-                  <IconButton>
-                    <Avatar src='https://image.evepc.163.com/Character/93800049_64.jpg' />
-                  </IconButton>
-                </Tooltip>
                 <Tooltip title='添加'>
                   <IconButton>
                     <Avatar>
@@ -229,7 +224,6 @@ const WelcomePage = (hooks) => {
                 TODO List
               </Typography>
               <Divider />
-              
             </Card>
           </Grid>
         </Grid>

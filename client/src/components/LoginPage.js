@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Grid, TextField, Box, Button, Snackbar, IconButton } from '@mui/material'
+import { Paper, Grid, TextField, Box, Button, Snackbar, IconButton, Avatar } from '@mui/material'
 import { Close } from '@mui/icons-material'
 
 import './LoadingPage.css'
@@ -110,7 +110,7 @@ const LoginPage = (hooks) => {
           <Paper
             elevation={3}
             sx={{
-              height: '360px',
+              height: '380px',
               margin: 'auto',
               position: 'flex',
               marginTop: '28vh',
@@ -121,11 +121,20 @@ const LoginPage = (hooks) => {
           >
             <Box
               sx={{
-                border: 'solid',
-                height: '8vh'
+                height: '8vh',
+                padding: '20px 0 0 0'
               }}
             >
-              Here is the Logo Placeholder
+              <Avatar 
+                src="login.svg"
+                sx={{ 
+                  width: 64, 
+                  height: 64,
+                  margin: 'auto',
+                  left: '0',
+                  right: '0'
+                }}
+              />
             </Box>
             <Box
               component="form"

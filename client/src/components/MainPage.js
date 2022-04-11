@@ -4,7 +4,6 @@ import LoginPage from './LoginPage'
 import BackgroundFrame from './BackgroundFrame'
 
 const MainPage = (hooks) => {
-
   const [requestSent, setRequest] = React.useState(false)
   const [loggedIn, setUserStat] = React.useState(false)
   
@@ -31,7 +30,8 @@ const MainPage = (hooks) => {
       }
     })
     .catch((err) => {
-      console.warn(err)
+      // console.warn(err)
+      hooks.setFail(true)
     })
   }
 
@@ -45,9 +45,7 @@ const MainPage = (hooks) => {
     <>
       {
         loggedIn ? (
-          <>
-            <BackgroundFrame />
-          </>
+          <BackgroundFrame />
         ) : (
           <LoginPage
             setUserStat={setUserStat}

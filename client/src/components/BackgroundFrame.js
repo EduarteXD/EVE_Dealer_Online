@@ -1,18 +1,23 @@
 import React from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Tooltip, Avatar, Drawer,
    List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material'
-import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, LocalOfferOutlined } from '@mui/icons-material'
+import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, LocalOfferOutlined,
+  FactoryOutlined, InfoOutlined } from '@mui/icons-material'
 
 import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
+import ManufacturePage from './ManufacturePage'
+
+import AboutPage from './AboutPage'
 
 const Frame = () => {
-
   const [page, setPage] = React.useState(0)
   const [notifyCount, setNotifyCount] = React.useState(0)
   const [drawerStat, setDrawer] = React.useState(false)
   const [reqSent, setReqStat] = React.useState(false)
+  const [marketRequested, setMarketRequest] = React.useState(false)
   const [userInfo, setUserInfo] = React.useState({})
+  const [marketData, setMarketData] = React.useState({})
 
   const changePage = (pageNum) => {
     if (pageNum === page)
@@ -103,7 +108,22 @@ const Frame = () => {
           }
           {
             page === 1 && (
-              <ValuationPage userInfo={userInfo} />
+              <ValuationPage
+                marketData={marketData}
+                setMarketData={setMarketData}
+                marketRequested={marketRequested}
+                setMarketRequest={setMarketRequest}
+              />
+            )
+          }
+          {
+            page === 3 && (
+              <ManufacturePage />
+            )
+          }
+          {
+            page === 99 && (
+              <AboutPage />
             )
           }
           <Drawer
@@ -114,8 +134,11 @@ const Frame = () => {
             <Box 
               sx={{
                 width: {
-                  xs: '80vw',
-                  md: '15vw'
+                  xs: '73vw',
+                  sm: '50vw',
+                  md: '22vw',
+                  lg: '20vw',
+                  xl: '15vw'
                 }
               }}
             >
@@ -127,7 +150,7 @@ const Frame = () => {
                   <ListItemText primary="主页" />
                 </ListItem>
                 <Divider />
-                <ListItem button key="refine" onClick={() => changePage(1)}>
+                <ListItem button key="valu" onClick={() => changePage(1)}>
                   <ListItemIcon>
                     <PriceChangeOutlined />
                   </ListItemIcon>
@@ -138,6 +161,19 @@ const Frame = () => {
                     <LocalOfferOutlined />
                   </ListItemIcon>
                   <ListItemText primary="库存管理" />
+                </ListItem>
+                <ListItem button key="manu" onClick={() => changePage(3)}>
+                  <ListItemIcon>
+                    <FactoryOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="生产管理" />
+                </ListItem>
+                <Divider />
+                <ListItem button key="about" onClick={() => changePage(99)}>
+                  <ListItemIcon>
+                    <InfoOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="关于本软件" />
                 </ListItem>
               </List>
             </Box>

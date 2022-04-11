@@ -150,11 +150,18 @@ app.get('/api/user/info', async (req, res) => {
         reject(err)
       }
       const md5 = crypto.createHash('md5')
-      resolve({
-        name: rows[0].uname,
-        avatar: md5.update(rows[0].email).digest('hex'),
-        rule: rows[0].rule
-      })
+      if (rows !== undefined)
+      {
+        resolve({
+          name: rows[0].uname,
+          avatar: md5.update(rows[0].email).digest('hex'),
+          rule: rows[0].rule
+        })
+      }
+      else
+      {
+        reject({reason: 'noUser'})
+      }
     })
   })
 
@@ -174,17 +181,25 @@ app.post('/api/login', (req, res) => {
     }
     const md5 = crypto.createHash('md5')
     var pwd = md5.update(req.body.pwd).digest('hex').toUpperCase()
-    if (rows[0].pwd === pwd) {
-      try {
-        var Tracker = await genTrackerID(rows[0].uid)
-        res.cookie('tracker-id', Tracker.id)
-        res.cookie('tracker-token', Tracker.token)
-        res.json({
-          ok: true,
-          uid: rows[0].uid
-        })
+    if (rows[0] !== undefined)
+    {
+      if (rows[0].pwd === pwd) {
+        try {
+          var Tracker = await genTrackerID(rows[0].uid)
+          res.cookie('tracker-id', Tracker.id)
+          res.cookie('tracker-token', Tracker.token)
+          res.json({
+            ok: true,
+            uid: rows[0].uid
+          })
+        }
+        catch (err) {
+          res.json({
+            ok: false
+          })
+        }
       }
-      catch (err) {
+      else {
         res.json({
           ok: false
         })
@@ -199,5 +214,5 @@ app.post('/api/login', (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-  console.log('[Info] Server is listening at *:%s ', process.env.PORT)
+  console.log('[Info] Server is running at *:%s ', process.env.PORT)
 })

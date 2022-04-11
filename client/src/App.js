@@ -7,6 +7,7 @@ import LoadingPage from './components/LoadingPage'
 import MainPage from './components/MainPage'
 
 const App = () => {
+  const [loadFail, setFail] = React.useState(false)
   const [appStat, setAppStat] = React.useState({
     requestSent: false,
     isLoading: true
@@ -19,11 +20,14 @@ const App = () => {
       <MainPage
         setAppStat={setAppStat}
         appStat={appStat}
+        setFail={setFail}
       />
       <Box
         className={boxClass}
       >
-        <LoadingPage />
+        <LoadingPage 
+          loadFail={loadFail} 
+        />
       </Box>
     </>
   )

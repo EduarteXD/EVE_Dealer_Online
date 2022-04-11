@@ -6,6 +6,8 @@ const resolveMarket = (data) => {
       avg: data[i].average_price
     }
   }
+
+  return result
 }
 
 export default resolveMarket

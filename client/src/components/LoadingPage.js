@@ -1,9 +1,9 @@
 import React from 'react'
-import { LinearProgress, Paper, Box } from '@mui/material'
+import { LinearProgress, Paper, Box, Avatar, Typography, Button } from '@mui/material'
 
 import './LoadingPage.css'
 
-const LoadingPage = () => {
+const LoadingPage = (hooks) => {
   return (
     <>
       <Paper 
@@ -16,23 +16,67 @@ const LoadingPage = () => {
           zIndex: '999'
         }}
       >
-        <LinearProgress />
+        {
+          !hooks.loadFail && (
+            <LinearProgress />
+          )
+        }
         <Box
           sx={{
-            border:'solid',
-            width: '30vw',
-            height: '30vh',
+            width: '90vw',
             margin: 'auto',
-            marginTop: '35vh',
+            marginTop: '20vh',
             left: '0',
-            right: '0'
-
+            right: '0',
+            textAlign: 'center'
           }}
         >
-          Here should be a logo
-          <br />
-          EVE Dealer Online preAlpha 1.0.0
+          <Avatar
+            src='logo.svg'
+            sx={{ 
+              width: 192, 
+              height: 192,
+              margin: 'auto',
+              left: '0',
+              right: '0'
+            }}
+          />
+          <Typography 
+            variant='h6'
+            sx={{
+              padding: '20px 20px 20px 20px'
+            }}
+          >
+            加载中
+          </Typography>
         </Box>
+        {
+          hooks.loadFail && (
+            <Box
+              sx={{
+                width: '40vw',
+                margin: 'auto',
+                left: '0',
+                right: '0',
+                textAlign: 'center'
+              }}
+            >
+              <Button
+                variant="outlined"
+                onClick={() => window.location.reload()}
+              >
+                刷新
+              </Button>
+              <Typography
+                sx={{
+                  padding: '10px 10px 10px 10px'
+                }}
+              >
+                加载失败，刷新一下？
+              </Typography>
+            </Box>
+          )
+        }
       </Paper>
     </>
   )
