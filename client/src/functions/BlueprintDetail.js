@@ -65,6 +65,8 @@ const blueprintDetail = (itemID) => {
         i++
       }
       var result = {
+        id: itemID,
+        name: ID2Name[itemID],
         blueprintID: blueprint.bp,
         perProcess: blueprint.pq,
         materials: resolvedItems

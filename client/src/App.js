@@ -25,8 +25,12 @@ const App = () => {
           zIndex: '1000'
         }}
       >
-        <Typography>
-          dev build @20220412#1
+        <Typography
+          sx={{
+            opacity: '0.2'
+          }}
+        >
+          dev build @20220412#2
         </Typography>
       </Box>
       <MainPage

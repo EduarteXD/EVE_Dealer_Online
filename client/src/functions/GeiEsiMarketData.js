@@ -1,7 +1,7 @@
 import resolveMarket from '../functions/ResolveEsiMarket'
 
 /**
- * Should only be used in a PAGE
+ * @description Fetch the Esi market data into session storage, Should only be used in a PAGE
  * @param setLoading: the hook which controls loading page display
  */
 const getEsiMarketData = (setLoading) => {

@@ -27,6 +27,9 @@ const ManufacturePage = () => {
     return (num + '').replace(reg, '$&,')
   }
 
+  /**
+   * @description Setup the brief
+   */
   const handleClick = (id) => {
     var detail = blueprintDetail(id)
     detail.totVal = 0
@@ -34,65 +37,56 @@ const ManufacturePage = () => {
       if (detail.materials[key].toBuy) {
         var lineValue = market[detail.materials[key].id].avg * detail.materials[key].quantity
         if (!isNaN(lineValue)) {
-          // console.log(lineValue)
           detail.totVal = parseInt(detail.totVal) + parseInt(lineValue)
         }
       }
     }
-    // console.log(detail.totVal)
     setBrief({
       exists: true,
       content: detail
     })
-    // console.log(blueprintDetail(id))
     document.getElementById('object').value=''
     handleChange(false)
   }
 
+  const stepTwo = () => {
+
+  }
+
+  /**
+   * @description Divide a item into materials
+   */
   const handleDivide = (key) => {
     brief.content.materials[key].toBuy = false
-    var temp = brief
-    var start = Object.keys(brief.content.materials).length
-    // console.log(start)
-    for (var i in brief.content.materials[key].resolve.materials)
-    {
+    var temp = JSON.parse(JSON.stringify(brief))
+    var originEnd = Object.keys(brief.content.materials).length
+    var insertLen = Object.keys(brief.content.materials[key].resolve.materials).length
+    /* 
+      Create a space to insert the materials needed to manufacture the item 
+      In order to show the materials it need below it
+      before:
+        /-ItemA
+        /-ItemB
+      after:
+        /-ItemA
+        / /-{space to insert the material}
+        / /-{space to insert the material}
+        /-ItemB
+    */
+    for (var i = parseInt(key) + 1; i < parseInt(originEnd); i++) {
+      temp.content.materials[parseInt(i) + parseInt(insertLen)] = brief.content.materials[i]
+    }
+    for (var i in brief.content.materials[key].resolve.materials) {
       brief.content.materials[key].resolve.materials[i].quantity = brief.content.materials[key].resolve.materials[i].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
-      temp.content.materials[parseInt(start) + parseInt(i)] = brief.content.materials[key].resolve.materials[i]
-      if (!isNaN(market[temp.content.materials[parseInt(start) + parseInt(i)].id].avg)) {
-        temp.content.totVal += parseInt(market[temp.content.materials[parseInt(start) + parseInt(i)].id].avg * temp.content.materials[parseInt(start) + parseInt(i)].quantity)
+      temp.content.materials[parseInt(key) + parseInt(i) + 1] = brief.content.materials[key].resolve.materials[i]
+      if (!isNaN(market[temp.content.materials[parseInt(key) + parseInt(i) + 1].id].avg)) {
+        temp.content.totVal += parseInt(market[temp.content.materials[parseInt(key) + parseInt(i) + 1].id].avg * temp.content.materials[parseInt(key) + parseInt(i) + 1].quantity)
       }
     }
     if (!isNaN(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)) {
       temp.content.totVal -= parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
     }
-    /*
-    for (var key in temp.content.materials) {
-      if (temp.content.materials[key].toBuy) {
-        var lineValue = JSON.parse(
-            window.sessionStorage['EsiMarketData']
-          )[temp.content.materials[key].id].avg * temp.content.materials[key].quantity
-        if (!isNaN(lineValue)) {
-          // console.log(lineValue)
-          temp.content.totVal = parseInt(temp.content.totVal) + parseInt(lineValue)
-        }
-      }
-    }
-    */
     setBrief({...temp})
-    
-    /*
-    setBrief({
-      exists: true,
-      content: {
-        materials: {
-          ...brief.content.materials,
-          ...brief.content.materials[key].resolve.materials
-        },
-        perProcess: brief.content.perProcess
-      }
-    })
-    console.log(brief)
-    */
   }
 
   const handleChange = (rstBrief=true) => {
@@ -228,6 +222,13 @@ const ManufacturePage = () => {
                                       </Grid>
                                       <Grid 
                                         item
+                                        xl={0}
+                                        lg={0.1}
+                                        md={0.5}
+                                        xs={1}
+                                      />
+                                      <Grid 
+                                        item
                                         md={8}
                                       >
                                         <Typography
@@ -291,18 +292,63 @@ const ManufacturePage = () => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              <TableRow>
-                                <TableCell>合计：{format(brief.content.totVal)} 星币</TableCell>
-                                <TableCell align='right'></TableCell>
-                                <TableCell align='right'></TableCell>
-                                <TableCell align='right'></TableCell>
-                                <TableCell align='right'></TableCell>
-                                <TableCell align='right'></TableCell>
+                              <TableRow
+                                sx={{
+                                  backgroundColor: '#f2f2f2'
+                                }}
+                              >
+                                <TableCell>
+                                  <Grid 
+                                    container
+                                  >
+                                    <Grid 
+                                      item
+                                      md={1}
+                                    >
+                                      <img
+                                        src={'https://images.evetech.net/types/' + brief.content.id + '/icon?size=32'}
+                                        style={{
+                                          width: '32px',
+                                          height: '32px'
+                                        }}
+                                      />
+                                    </Grid>
+                                    <Grid 
+                                      item
+                                      xl={1}
+                                      lg={2}
+                                      md={3}
+                                      xs={0}
+                                    />
+                                    <Grid
+                                      item
+                                      md={6}
+                                    >
+                                      <Typography
+                                        mt={0.6}
+                                      >
+                                        {brief.content.name}
+                                      </Typography>
+                                    </Grid>
+                                  </Grid>
+                                </TableCell>
+                                <TableCell align='right'>是</TableCell>
+                                <TableCell align='right'>1</TableCell>
+                                <TableCell align='right'>1</TableCell>
+                                <TableCell align='right'>{format(brief.content.totVal)} 星币</TableCell>
+                                <TableCell align='right'>
+                                  <Button variant='outlined' disabled>
+                                    自制
+                                  </Button>
+                                </TableCell>
                               </TableRow>
                               {
                                 Object.keys(brief.content.materials).map((key) => (
                                   <TableRow
                                     key={key}
+                                    sx={
+                                      brief.content.materials[key].toBuy ? {} : {backgroundColor: '#f2f2f2'}
+                                    }
                                   >
                                     <TableCell>
                                       <Grid 
@@ -332,7 +378,7 @@ const ManufacturePage = () => {
                                           md={6}
                                         >
                                           <Typography
-                                            mt={0.5}
+                                            mt={0.6}
                                           >
                                             {brief.content.materials[key].name}
                                           </Typography>
@@ -369,7 +415,7 @@ const ManufacturePage = () => {
                                         brief.content.materials[key].toBuy ? (
                                           <>
                                             {
-                                              !isNaN(market[brief.content.materials[key].id].avg * brief.content.materials[key].quantity) ? (
+                                              !isNaN(market[brief.content.materials[key].id].avg) ? (
                                                 format(
                                                   parseInt(
                                                     market[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
@@ -387,6 +433,13 @@ const ManufacturePage = () => {
                                                 </>
                                               )
                                             }
+                                            {
+                                              !isNaN(market[brief.content.materials[key].id].avg) && (
+                                                <>
+                                                  &nbsp;星币
+                                                </>
+                                              )
+                                            }
                                           </>
                                         ) : (
                                           <>
@@ -399,24 +452,61 @@ const ManufacturePage = () => {
                                       align='right'
                                     >
                                       {
-                                        brief.content.materials[key].dividable && brief.content.materials[key].toBuy ? (
-                                          <>
-                                            <Button variant='outlined' onClick={() => handleDivide(key)}>
-                                              自制
-                                            </Button>
-                                          </>
-                                        ) : (
-                                          <>
-                                            <Button variant='outlined' disabled>
-                                              自制
-                                            </Button>
-                                          </>
+                                        brief.content.materials[key].dividable ? (
+                                          brief.content.materials[key].toBuy ? (
+                                            <>
+                                              <Button variant='outlined' onClick={() => handleDivide(key)}>
+                                                自制
+                                              </Button>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Button variant='outlined' disabled>
+                                                自制
+                                              </Button>
+                                            </>
+                                        )) : (
+                                          <></>
                                         )
                                       }
                                     </TableCell>
                                   </TableRow>
                                 ))
                               }
+                              <TableRow>
+                                <TableCell>
+                                  <Button 
+                                    variant='outlined' 
+                                    onClick={() => stepTwo()}
+                                    sx={{
+                                      display: {
+                                        md: 'none'
+                                      }
+                                    }}  
+                                  >
+                                    下一步
+                                  </Button>
+                                </TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'>
+                                  <Button 
+                                    variant='outlined' 
+                                    onClick={() => stepTwo()}
+                                    sx={{
+                                      display: {
+                                        sx: 'none',
+                                        sm: 'none',
+                                        md: 'inline'
+                                      }
+                                    }}  
+                                  >
+                                    下一步
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
                             </TableBody>
                           </Table>
                         </TableContainer>
