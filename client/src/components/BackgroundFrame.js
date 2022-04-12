@@ -7,6 +7,7 @@ import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, Loc
 import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
 import ManufacturePage from './ManufacturePage'
+import PurchasingListPage from './PurchasingListPage'
 
 import AboutPage from './AboutPage'
 
@@ -47,7 +48,9 @@ const Frame = () => {
     })
   }
 
-  const title = ['Welcome aboard!', '物资估价', '库存管理', '生产管理']
+  const title = ['Welcome aboard!', '物资估价', '库存管理', '生产管理', '采购清单']
+  const titleEn = ['Welcome aboard!', 'Contract Evaluation', 'Stock Management', 
+    'Industry Management', 'Purchasing List']
 
   if (userInfo.avatar !== undefined)
   {
@@ -120,7 +123,14 @@ const Frame = () => {
           }
           {
             page === 3 && (
-              <ManufacturePage />
+              <ManufacturePage
+                setPage={setPage}
+              />
+            )
+          }
+          {
+            page === 4 && (
+              <PurchasingListPage />
             )
           }
           {

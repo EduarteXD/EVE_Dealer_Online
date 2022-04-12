@@ -30,7 +30,7 @@ const App = () => {
             opacity: '0.2'
           }}
         >
-          dev build @20220412#2
+          dev build @20220412#3
         </Typography>
       </Box>
       <MainPage

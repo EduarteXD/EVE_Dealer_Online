@@ -10,7 +10,7 @@ import blueprintDetail from '../functions/BlueprintDetail'
 import getIdToName from '../functions/GetIdToName'
 import getEsiMarketData from '../functions/GeiEsiMarketData'
 
-const ManufacturePage = () => {
+const ManufacturePage = (hooks) => {
   const [reqestSent, setRequestStat] = React.useState(false)
   const [isLoading, setLoading] = React.useState(true)
   const [isBpLoading, setLoadingBp] = React.useState(true)
@@ -50,7 +50,24 @@ const ManufacturePage = () => {
   }
 
   const stepTwo = () => {
-
+    var toBuy = {}
+    for (var key in brief.content.materials) {
+      if (brief.content.materials[key].toBuy)
+      {
+        if (toBuy[brief.content.materials[key].id] !== undefined) {
+          toBuy[brief.content.materials[key].id].quantity += parseInt(brief.content.materials[key].quantity)
+        }
+        else {
+          toBuy[brief.content.materials[key].id] = {
+            name: brief.content.materials[key].name,
+            quantity: parseInt(brief.content.materials[key].quantity),
+            id: brief.content.materials[key].id
+          }
+        }
+      }
+    }
+    window.sessionStorage['brief'] = JSON.stringify(toBuy)
+    hooks.setPage(4)
   }
 
   /**
@@ -76,11 +93,11 @@ const ManufacturePage = () => {
     for (var i = parseInt(key) + 1; i < parseInt(originEnd); i++) {
       temp.content.materials[parseInt(i) + parseInt(insertLen)] = brief.content.materials[i]
     }
-    for (var i in brief.content.materials[key].resolve.materials) {
-      brief.content.materials[key].resolve.materials[i].quantity = brief.content.materials[key].resolve.materials[i].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
-      temp.content.materials[parseInt(key) + parseInt(i) + 1] = brief.content.materials[key].resolve.materials[i]
-      if (!isNaN(market[temp.content.materials[parseInt(key) + parseInt(i) + 1].id].avg)) {
-        temp.content.totVal += parseInt(market[temp.content.materials[parseInt(key) + parseInt(i) + 1].id].avg * temp.content.materials[parseInt(key) + parseInt(i) + 1].quantity)
+    for (var j in brief.content.materials[key].resolve.materials) {
+      brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
+      temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
+      if (!isNaN(market[temp.content.materials[parseInt(key) + parseInt(j) + 1].id].avg)) {
+        temp.content.totVal += parseInt(market[temp.content.materials[parseInt(key) + parseInt(j) + 1].id].avg * temp.content.materials[parseInt(key) + parseInt(j) + 1].quantity)
       }
     }
     if (!isNaN(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)) {
