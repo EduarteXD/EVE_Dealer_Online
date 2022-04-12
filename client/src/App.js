@@ -19,7 +19,7 @@ const App = () => {
     <>
       <Box
         sx={{
-          position: 'flex',
+          position: 'fixed',
           top: '80px',
           right: '30px',
           zIndex: '1000'
