@@ -2,7 +2,8 @@ import React from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Tooltip, Avatar, Drawer,
    List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material'
 import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, ConstructionOutlined,
-  FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev, ArrowCircleUp } from '@mui/icons-material'
+  FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev, ArrowCircleUp, 
+  SettingsOutlined, ChangeCircleOutlined, Inventory2Outlined, ShowChartOutlined } from '@mui/icons-material'
 
 import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
@@ -204,6 +205,15 @@ const Frame = () => {
                     <ConstructionOutlined />
                   </ListItemIcon>
                 </ListItem>
+                <ListItem button key="facility" onClick={() => changePage(6)}>
+                  <ListItemIcon>
+                    <SettingsOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="设施管理" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
+                </ListItem>
                 <ListItem button key="industry" onClick={() => changePage(3)}>
                   <ListItemIcon>
                     <FactoryOutlined />
@@ -218,6 +228,33 @@ const Frame = () => {
                     <ScienceOutlined />
                   </ListItemIcon>
                   <ListItemText primary="反应管理" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
+                </ListItem>
+                <ListItem button key="recycle" onClick={() => changePage(7)}>
+                  <ListItemIcon>
+                    <ChangeCircleOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="化矿回收" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
+                </ListItem>
+                <ListItem button key="inventory" onClick={() => changePage(8)}>
+                  <ListItemIcon>
+                    <Inventory2Outlined />
+                  </ListItemIcon>
+                  <ListItemText primary="库存管理" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
+                </ListItem>
+                <ListItem button key="market" onClick={() => changePage(8)}>
+                  <ListItemIcon>
+                    <ShowChartOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="市场信息" />
                   <ListItemIcon>
                     <LogoDev />
                   </ListItemIcon>

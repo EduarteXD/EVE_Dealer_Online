@@ -20,7 +20,7 @@ const App = () => {
       <Box
         sx={{
           position: 'fixed',
-          top: '80px',
+          bottom: '30px',
           left: '30px',
           zIndex: '1000'
         }}
@@ -31,7 +31,7 @@ const App = () => {
             color: 'gray'
           }}
         >
-          dev build @20220412#5
+          dev build @20220412#6
         </Typography>
       </Box>
       <MainPage
