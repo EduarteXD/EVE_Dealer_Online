@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 import './App.css'
 
@@ -25,7 +25,9 @@ const App = () => {
           zIndex: '1000'
         }}
       >
-        dev build @20220412#0
+        <Typography>
+          dev build @20220412#0
+        </Typography>
       </Box>
       <MainPage
         setAppStat={setAppStat}
