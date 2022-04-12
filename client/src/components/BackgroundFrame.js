@@ -8,6 +8,7 @@ import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
 import ManufacturePage from './ManufacturePage'
 import PurchasingListPage from './PurchasingListPage'
+import BlueprintsVaultPage from './BlueprintsVaultPage'
 
 import AboutPage from './AboutPage'
 
@@ -138,6 +139,11 @@ const Frame = () => {
                 // marketRequested={marketRequested}
                 // setMarketRequest={setMarketRequest}
               />
+            )
+          }
+          {
+            page === 2 && (
+              <BlueprintsVaultPage />
             )
           }
           {

@@ -189,6 +189,36 @@ app.get('/api/user/info', async (req, res) => {
   res.json(response)
 })
 
+app.post('/api/blueprint/query', async (req, res) => {
+  if (req.cookies['tracker-id'] != undefined) {
+    var Tracker = {
+      id: req.cookies['tracker-id'],
+      token: req.cookies['tracker-token'],
+    }
+    var uinfo = await verifyTrackerID(Tracker)
+    if (uinfo.valid)
+    {
+      const queryParams = [uinfo.uid]
+      connection.query('select `bpid`, `mefficent`, `tefficent` from `bpvault` where uid = ?', queryParams, (err, rows) => {
+  
+      })
+    }
+    
+  }
+  else
+  {
+    res.json({ ok: false })
+  }
+})
+
+app.post('/api/blueprint/add', (req, res) => {
+  /*
+  connection.query('select  from `bpvault` where uid = ? and bpid = ?', queryParams, (err, rows) => {
+
+  })
+  */
+})
+
 app.post('/api/login', (req, res) => {
   const queryParams = [req.body.name]
   connection.query('select `pwd`, `uid` from `users` where `uname` = ?', queryParams, async (err, rows) => {
