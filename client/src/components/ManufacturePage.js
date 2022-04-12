@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
   TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { PrecisionManufacturingOutlined } from '@mui/icons-material'
 
 import getItemList from '../functions/GetItemList'
 import getBlueprintList from '../functions/GetBlueprintList'
@@ -311,12 +312,22 @@ const ManufacturePage = () => {
                                       align='right'
                                     >
                                       {
-                                        format(
-                                          parseInt(
-                                            JSON.parse(
-                                              window.sessionStorage['EsiMarketData']
-                                            )[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
-                                          )
+                                        brief.content.materials[key].toBuy ? (
+                                          <>
+                                            {
+                                              format(
+                                                parseInt(
+                                                  JSON.parse(
+                                                    window.sessionStorage['EsiMarketData']
+                                                  )[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
+                                                )
+                                              )
+                                            }
+                                          </>
+                                        ) : (
+                                          <>
+                                            <PrecisionManufacturingOutlined />
+                                          </>
                                         )
                                       }
                                     </TableCell>

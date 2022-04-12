@@ -19,13 +19,13 @@ const App = () => {
     <>
       <Box
         sx={{
-          position: 'absolute',
+          position: 'flex',
           top: '80px',
           right: '30px',
           zIndex: '1000'
         }}
       >
-        dev build @20220411#5
+        dev build @20220412#0
       </Box>
       <MainPage
         setAppStat={setAppStat}
