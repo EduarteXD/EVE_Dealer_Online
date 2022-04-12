@@ -201,7 +201,7 @@ const Frame = () => {
                   </ListItemIcon>
                   <ListItemText primary="蓝图管理" />
                   <ListItemIcon>
-                    <LogoDev />
+                    <ConstructionOutlined />
                   </ListItemIcon>
                 </ListItem>
                 <ListItem button key="industry" onClick={() => changePage(3)}>
@@ -238,14 +238,8 @@ const Frame = () => {
             <Box
               sx={{
                 position: 'fixed',
-                top: '90vh',
-                left: {
-                  xl: '94vw',
-                  lg: '94vw',
-                  md: '93vw',
-                  sm: '91vw',
-                  xs: '87vw'
-                }
+                bottom: '20px',
+                right: '20px' 
               }}
             >
               <Tooltip title='返回顶部'>

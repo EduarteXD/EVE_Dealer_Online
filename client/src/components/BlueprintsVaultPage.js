@@ -213,7 +213,7 @@ const BlueprintsVaultPage = () => {
                               <TableRow key={key}>
                                 <TableCell>
                                   <Grid container>
-                                    <Grid item md={1.5}>
+                                    <Grid item md={1}>
                                       <img
                                         src={
                                           "https://images.evetech.net/types/" +
@@ -226,7 +226,6 @@ const BlueprintsVaultPage = () => {
                                         }}
                                       />
                                     </Grid>
-                                    <Grid item xl={0} lg={0.1} md={0.5} xs={1} />
                                     <Grid item md={8}>
                                       <Typography mt={0.5}>{ID2Name[myBp.content[key].bpid]}</Typography>
                                     </Grid>
