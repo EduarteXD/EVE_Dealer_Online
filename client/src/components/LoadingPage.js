@@ -41,14 +41,18 @@ const LoadingPage = (hooks) => {
               right: '0'
             }}
           />
-          <Typography 
-            variant='h6'
-            sx={{
-              padding: '20px 20px 20px 20px'
-            }}
-          >
-            加载中
-          </Typography>
+          {
+            !hooks.loadFail && (
+              <Typography 
+                variant='h6'
+                sx={{
+                  padding: '20px 20px 20px 20px'
+                }}
+              >
+                加载中
+              </Typography>
+            )
+          }
         </Box>
         {
           hooks.loadFail && (
@@ -58,7 +62,8 @@ const LoadingPage = (hooks) => {
                 margin: 'auto',
                 left: '0',
                 right: '0',
-                textAlign: 'center'
+                textAlign: 'center',
+                paddingTop: '40px'
               }}
             >
               <Button
@@ -72,7 +77,7 @@ const LoadingPage = (hooks) => {
                   padding: '10px 10px 10px 10px'
                 }}
               >
-                加载失败，刷新一下？
+                ::后端服务器加载失败::
               </Typography>
             </Box>
           )

@@ -26,7 +26,7 @@ const App = () => {
         }}
       >
         <Typography>
-          dev build @20220412#0
+          dev build @20220412#1
         </Typography>
       </Box>
       <MainPage

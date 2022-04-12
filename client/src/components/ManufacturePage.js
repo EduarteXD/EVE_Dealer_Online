@@ -16,11 +16,11 @@ const ManufacturePage = () => {
   const [isBpLoading, setLoadingBp] = React.useState(true)
   const [isId2NameLoading, setLoadingId2Name] = React.useState(true)
   const [isEsiMarketLoading, setEsiLoading] = React.useState(true)
-  const [totValue, setValue] = React.useState(0)
   const [brief, setBrief] = React.useState({
     exists: false
   })
   const [matched, setMatched] = React.useState({})
+  const [market, setMarketInfo] = React.useState(undefined)
 
   const format = (num) => {
     var reg=/\d{1,3}(?=(\d{3})+$)/g
@@ -28,13 +28,25 @@ const ManufacturePage = () => {
   }
 
   const handleClick = (id) => {
+    var detail = blueprintDetail(id)
+    detail.totVal = 0
+    for (var key in detail.materials) {
+      if (detail.materials[key].toBuy) {
+        var lineValue = market[detail.materials[key].id].avg * detail.materials[key].quantity
+        if (!isNaN(lineValue)) {
+          // console.log(lineValue)
+          detail.totVal = parseInt(detail.totVal) + parseInt(lineValue)
+        }
+      }
+    }
+    // console.log(detail.totVal)
     setBrief({
       exists: true,
-      content: blueprintDetail(id)
+      content: detail
     })
     // console.log(blueprintDetail(id))
     document.getElementById('object').value=''
-    handleChange()
+    handleChange(false)
   }
 
   const handleDivide = (key) => {
@@ -46,7 +58,26 @@ const ManufacturePage = () => {
     {
       brief.content.materials[key].resolve.materials[i].quantity = brief.content.materials[key].resolve.materials[i].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
       temp.content.materials[parseInt(start) + parseInt(i)] = brief.content.materials[key].resolve.materials[i]
+      if (!isNaN(market[temp.content.materials[parseInt(start) + parseInt(i)].id].avg)) {
+        temp.content.totVal += parseInt(market[temp.content.materials[parseInt(start) + parseInt(i)].id].avg * temp.content.materials[parseInt(start) + parseInt(i)].quantity)
+      }
     }
+    if (!isNaN(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)) {
+      temp.content.totVal -= parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
+    }
+    /*
+    for (var key in temp.content.materials) {
+      if (temp.content.materials[key].toBuy) {
+        var lineValue = JSON.parse(
+            window.sessionStorage['EsiMarketData']
+          )[temp.content.materials[key].id].avg * temp.content.materials[key].quantity
+        if (!isNaN(lineValue)) {
+          // console.log(lineValue)
+          temp.content.totVal = parseInt(temp.content.totVal) + parseInt(lineValue)
+        }
+      }
+    }
+    */
     setBrief({...temp})
     
     /*
@@ -64,14 +95,17 @@ const ManufacturePage = () => {
     */
   }
 
-  const handleChange = () => {
-    if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '')
-    {
+  const handleChange = (rstBrief=true) => {
+    if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '') {
       getMatchedItem(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched)
     }
-    else
-    {
+    else {
       setMatched({})
+    }
+    if (rstBrief) {
+      setBrief({
+        exists: false
+      })
     }
   }
 
@@ -82,6 +116,10 @@ const ManufacturePage = () => {
     getItemList(setLoading)
     getBlueprintList(setLoadingBp)
     getEsiMarketData(setEsiLoading)
+  }
+
+  if (!isEsiMarketLoading && market === undefined) {
+    setMarketInfo(JSON.parse(window.sessionStorage['EsiMarketData']))
   }
 
   return (
@@ -253,6 +291,14 @@ const ManufacturePage = () => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
+                              <TableRow>
+                                <TableCell>合计：{format(brief.content.totVal)} 星币</TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
+                              </TableRow>
                               {
                                 Object.keys(brief.content.materials).map((key) => (
                                   <TableRow
@@ -306,7 +352,15 @@ const ManufacturePage = () => {
                                     <TableCell
                                       align='right'
                                     >
-                                      {format(brief.content.materials[key].quantity)}
+                                      {
+                                        brief.content.materials[key].toBuy ? (
+                                          format(brief.content.materials[key].quantity)
+                                        ) : (
+                                          format(
+                                            Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess) * brief.content.materials[key].resolve.perProcess
+                                          )
+                                        )
+                                      }
                                     </TableCell>
                                     <TableCell
                                       align='right'
@@ -315,12 +369,22 @@ const ManufacturePage = () => {
                                         brief.content.materials[key].toBuy ? (
                                           <>
                                             {
-                                              format(
-                                                parseInt(
-                                                  JSON.parse(
-                                                    window.sessionStorage['EsiMarketData']
-                                                  )[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
+                                              !isNaN(market[brief.content.materials[key].id].avg * brief.content.materials[key].quantity) ? (
+                                                format(
+                                                  parseInt(
+                                                    market[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
+                                                  )
                                                 )
+                                              ) : (
+                                                <>
+                                                  <Typography
+                                                    sx={{
+                                                      color: 'red'
+                                                    }}
+                                                  >
+                                                    无报价
+                                                  </Typography>
+                                                </>
                                               )
                                             }
                                           </>

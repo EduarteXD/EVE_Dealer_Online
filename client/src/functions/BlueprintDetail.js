@@ -1,7 +1,4 @@
 const blueprintDetail = (itemID) => {
-  var storage = window.localStorage
-  var blueprints = JSON.parse(storage['blueprintList'])
-  var ID2Name = JSON.parse(storage['ID2Name'])
   /*
     result = {
       materials: [
@@ -37,42 +34,50 @@ const blueprintDetail = (itemID) => {
       name: name
     }
   */
-  // console.log(blueprints)
-  if (itemID in blueprints) {
-    var blueprint = blueprints[itemID]
-    // console.log(blueprint)
-    var resolvedItems = []
-    /*
+  var storage = window.localStorage
+  var blueprints = JSON.parse(storage['blueprintList'])
+  var ID2Name = JSON.parse(storage['ID2Name'])
+  
+  const calc = (itemID) => {
+    // console.log(blueprints)
+    if (itemID in blueprints) {
+      var blueprint = blueprints[itemID]
+      // console.log(blueprint)
+      var resolvedItems = []
+      /*
+        for (var key in blueprint.mt)
+        {
+          resolvedItem[key] = blueprintDetail(blueprint.mt.typeID, blueprint.mt.quantity)
+        }
+      */
+      var i = 0
       for (var key in blueprint.mt)
       {
-        resolvedItem[key] = blueprintDetail(blueprint.mt.typeID, blueprint.mt.quantity)
+        var resolve = calc(blueprint.mt[key].typeID)
+        resolvedItems[i] = {
+          id: blueprint.mt[key].typeID,
+          name: ID2Name[blueprint.mt[key].typeID],
+          quantity: blueprint.mt[key].quantity,
+          toBuy: true,
+          dividable: 'materials' in resolve,
+          resolve: resolve
+        }
+        i++
       }
-    */
-    var i = 0
-    for (var key in blueprint.mt)
+      var result = {
+        blueprintID: blueprint.bp,
+        perProcess: blueprint.pq,
+        materials: resolvedItems
+      }
+      return result
+    }
+    else
     {
-      var resolve = blueprintDetail(blueprint.mt[key].typeID)
-      resolvedItems[i] = {
-        id: blueprint.mt[key].typeID,
-        name: ID2Name[blueprint.mt[key].typeID],
-        quantity: blueprint.mt[key].quantity,
-        toBuy: true,
-        dividable: 'materials' in resolve,
-        resolve: resolve
-      }
-      i++
+      return {}
     }
-    var result = {
-      blueprintID: blueprint.bp,
-      perProcess: blueprint.pq,
-      materials: resolvedItems
-    }
-    return result
   }
-  else
-  {
-    return {}
-  }
+
+  return calc(itemID)
 }
 
 export default blueprintDetail

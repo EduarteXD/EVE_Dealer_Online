@@ -10,9 +10,10 @@ const getMatchedItem = (inputed, setMatched) => {
       // console.log(nameToID[name])
       // console.log(blueprints[nameToID[name]])
       if (blueprints[nameToID[name]] !== undefined) {
-        if (str.search('版') < 0)
-        {
-          result[name] = nameToID[name]
+        if (str.search('版') < 0) {
+          if (blueprints[nameToID[name]].mt[0].typeID !== nameToID[name]) {
+            result[name] = nameToID[name]
+          }
         }
       }
     }
