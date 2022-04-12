@@ -47,6 +47,8 @@ const ManufacturePage = (hooks) => {
     })
     document.getElementById('object').value=''
     handleChange(false)
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
   }
 
   const stepTwo = () => {
@@ -67,6 +69,8 @@ const ManufacturePage = (hooks) => {
       }
     }
     window.sessionStorage['brief'] = JSON.stringify(toBuy)
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
     hooks.setPage(4)
   }
 

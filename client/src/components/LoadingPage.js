@@ -32,7 +32,7 @@ const LoadingPage = (hooks) => {
           }}
         >
           <Avatar
-            src='logo.svg'
+            src='loading_anime.svg'
             sx={{ 
               width: 192, 
               height: 192,

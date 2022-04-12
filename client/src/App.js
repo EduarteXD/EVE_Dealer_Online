@@ -21,16 +21,17 @@ const App = () => {
         sx={{
           position: 'fixed',
           top: '80px',
-          right: '30px',
+          left: '30px',
           zIndex: '1000'
         }}
       >
         <Typography
           sx={{
-            opacity: '0.2'
+            opacity: '0.2',
+            color: 'gray'
           }}
         >
-          dev build @20220412#3
+          dev build @20220412#4
         </Typography>
       </Box>
       <MainPage

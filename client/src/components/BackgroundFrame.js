@@ -1,8 +1,8 @@
 import React from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Tooltip, Avatar, Drawer,
    List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material'
-import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, LocalOfferOutlined,
-  FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev } from '@mui/icons-material'
+import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, ConstructionOutlined,
+  FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev, ArrowCircleUp } from '@mui/icons-material'
 
 import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
@@ -11,6 +11,8 @@ import PurchasingListPage from './PurchasingListPage'
 
 import AboutPage from './AboutPage'
 
+import './BackgroundFrame.css'
+
 const Frame = () => {
   const [page, setPage] = React.useState(0)
   const [notifyCount, setNotifyCount] = React.useState(0)
@@ -18,6 +20,7 @@ const Frame = () => {
   const [reqSent, setReqStat] = React.useState(false)
   const [indusAlert, setIndusAlert] = React.useState(true)
   const [userInfo, setUserInfo] = React.useState({})
+  const [toTop, setToTop] = React.useState(false)
   /*
   const [marketRequested, setMarketRequest] = React.useState(false)
   const [marketData, setMarketData] = React.useState({})
@@ -47,6 +50,21 @@ const Frame = () => {
     .catch((err) => {
       console.warn(err)
     })
+  }
+
+  window.onscroll = () => {
+    if (!toTop && document.body.scrollTop + document.documentElement.scrollTop > 100) {
+      setToTop(true)
+    }
+    else if (toTop && document.body.scrollTop + document.documentElement.scrollTop <= 100)
+    {
+      setToTop(false)
+    }
+  }
+
+  const gotoTop = () => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
   }
 
   const title = ['Welcome aboard!', '物资估价', '蓝图管理', '生产管理', '采购清单', '反应管理']
@@ -185,6 +203,9 @@ const Frame = () => {
                     <FactoryOutlined />
                   </ListItemIcon>
                   <ListItemText primary="生产管理" />
+                  <ListItemIcon>
+                    <ConstructionOutlined />
+                  </ListItemIcon>
                 </ListItem>
                 <ListItem button key="react" onClick={() => changePage(5)}>
                   <ListItemIcon>
@@ -206,6 +227,33 @@ const Frame = () => {
             </Box>
           </Drawer>
         </Box>
+        {
+          toTop && (
+            <Box
+              sx={{
+                position: 'fixed',
+                top: '90vh',
+                left: {
+                  xl: '94vw',
+                  lg: '94vw',
+                  md: '93vw',
+                  sm: '91vw',
+                  xs: '87vw'
+                }
+              }}
+            >
+              <Tooltip title='返回顶部'>
+                <IconButton
+                  onClick={gotoTop}
+                >
+                    <ArrowCircleUp 
+                      fontSize='large'
+                    />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )
+        }
         <Box 
           sx={{
             height: '20vh'
