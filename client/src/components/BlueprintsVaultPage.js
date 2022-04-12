@@ -1,6 +1,6 @@
 import React from 'react'
 import { Divider, Grid, Typography, Paper, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
-  Button, Box, LinearProgress } from '@mui/material'
+  Button, Box, LinearProgress, Avatar } from '@mui/material'
 
 import getItemList from '../functions/GetItemList'
 import getBlueprintList from '../functions/GetBlueprintList'
@@ -15,18 +15,50 @@ const BlueprintsVaultPage = () => {
   const [isID2NameLoading, setID2NameLoading] = React.useState(true)
   const [isLoadingItem, setItemLoading] = React.useState(true)
   const [settingOpen, setSettingOpen] = React.useState(false)
+  const [ID2NameLoaded, setID2NameLoaded] = React.useState(false)
+  const [requestedBp, setReqBp] = React.useState(false)
+  const [myBp, setMyBp] = React.useState({
+    exists: false
+  })
+  const [ID2Name, setID2Name] = React.useState({})
   const [bpInfo, setbpInfo] = React.useState({
     id: 4311,
     name: '龙卷风级蓝图'
   })
 
+  const updateBpList = () => {
+    fetch('api/blueprint/query')
+    .then((response) => response.json())
+    .then((data) => {
+      setMyBp({
+        exists: true,
+        content: data
+      })
+    })
+    .catch((err) => {
+      console.warn(err)
+    })
+  }
+
+  if (!requestedBp) {
+    setReqBp(true)
+    updateBpList()
+  }
+
   const handleChange = () => {
     if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '') {
-      getMatchedBlueprints(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched)
+      var blueprints = JSON.parse(window.localStorage['blueprintList'])
+      var nameToID = JSON.parse(window.localStorage['itemList'])
+      getMatchedBlueprints(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched, ID2Name, blueprints, nameToID)
     }
     else {
       setMatched({})
     }
+  }
+
+  if (!isID2NameLoading && !ID2NameLoaded) {
+    setID2NameLoaded(true)
+    setID2Name(JSON.parse(window.localStorage['ID2Name']))
   }
 
   const handleClick = (key, name) => {
@@ -77,7 +109,7 @@ const BlueprintsVaultPage = () => {
                     padding: "20px 20px 20px 20px",
                   }}
                 >
-                  添加蓝图
+                  添加 / 修改蓝图
                 </Typography>
                 <Divider />
                 <Grid
@@ -153,6 +185,102 @@ const BlueprintsVaultPage = () => {
               </Paper>
             </Grid>
             <Grid item xs={0} />
+            <Grid item xs={12}>
+              <Paper>
+                <Typography
+                  variant='h6'
+                  sx={{
+                    padding: '20px 20px 20px 20px'
+                  }}
+                >
+                  我的蓝图
+                </Typography>
+                <Divider />
+                {
+                  myBp.exists ? (
+                    <TableContainer>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>名称</TableCell>
+                            <TableCell align="right">材料效率</TableCell>
+                            <TableCell align="right">时间效率</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {
+                            Object.keys(myBp.content).map((key) => (
+                              <TableRow key={key}>
+                                <TableCell>
+                                  <Grid container>
+                                    <Grid item md={1.5}>
+                                      <img
+                                        src={
+                                          "https://images.evetech.net/types/" +
+                                          myBp.content[key].bpid +
+                                          "/bp?size=32"
+                                        }
+                                        style={{
+                                          width: "32px",
+                                          height: "32px",
+                                        }}
+                                      />
+                                    </Grid>
+                                    <Grid item xl={0} lg={0.1} md={0.5} xs={1} />
+                                    <Grid item md={8}>
+                                      <Typography mt={0.5}>{ID2Name[myBp.content[key].bpid]}</Typography>
+                                    </Grid>
+                                  </Grid>
+                                </TableCell>
+                                <TableCell align="right">{myBp.content[key].mefficent}</TableCell>
+                                <TableCell align="right">{myBp.content[key].tefficent}</TableCell>
+                              </TableRow>
+                            ))
+                          }
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  ) : (
+                    <>
+                      <Grid
+                        container
+                        spacing={0}
+                        sx={{
+                          padding: '20px 20px 20px 20px'
+                        }}
+                      >
+                        <Grid
+                          item
+                          xs={0}
+                        >
+                          <Avatar
+                            src="noitem.svg"
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={8}
+                        >
+                          <Typography
+                            variant='h6'
+                            sx={{
+                              paddingLeft: '20px',
+                              margin: 'auto',
+                              marginTop: '3px',
+                              verticalAlign: 'center'
+                            }}
+                          >
+                            空空如也~
+                          </Typography>
+                        </Grid>
+                      </Grid> 
+                    </>
+                  )
+                }
+                
+              </Paper>
+            </Grid>
+            <Grid item xs={0} md={7} />
           </Grid>
           {
             settingOpen && (
@@ -160,6 +288,7 @@ const BlueprintsVaultPage = () => {
                 bpInfo={bpInfo}
                 settingOpen={settingOpen}
                 setSettingOpen={setSettingOpen}
+                updateBpList={updateBpList}
               />
             )
           }

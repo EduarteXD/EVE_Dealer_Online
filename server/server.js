@@ -189,7 +189,7 @@ app.get('/api/user/info', async (req, res) => {
   res.json(response)
 })
 
-app.post('/api/blueprint/query', async (req, res) => {
+app.get('/api/blueprint/query', async (req, res) => {
   if (req.cookies['tracker-id'] != undefined) {
     var Tracker = {
       id: req.cookies['tracker-id'],
@@ -200,10 +200,18 @@ app.post('/api/blueprint/query', async (req, res) => {
     {
       const queryParams = [uinfo.uid]
       connection.query('select `bpid`, `mefficent`, `tefficent` from `bpvault` where uid = ?', queryParams, (err, rows) => {
-  
+        if (err)
+        {
+          res.json({ ok: false })
+          throw err
+        }
+        res.json(rows)
       })
     }
-    
+    else 
+    {
+      res.json({ ok: false })
+    }
   }
   else
   {
@@ -211,12 +219,63 @@ app.post('/api/blueprint/query', async (req, res) => {
   }
 })
 
-app.post('/api/blueprint/add', (req, res) => {
-  /*
-  connection.query('select  from `bpvault` where uid = ? and bpid = ?', queryParams, (err, rows) => {
-
-  })
-  */
+app.post('/api/blueprint/add', async (req, res) => {
+  if (req.cookies['tracker-id'] != undefined) {
+    var Tracker = {
+      id: req.cookies['tracker-id'],
+      token: req.cookies['tracker-token'],
+    }
+    var uinfo = await verifyTrackerID(Tracker)
+    if (uinfo.valid)
+    {
+      const queryParams = [uinfo.uid, req.body.id]
+      connection.query('select count(*) from `bpvault` where uid = ? and bpid = ?', queryParams, (err, rows) => {
+        if (err)
+        {
+          res.json({ ok: false })
+          throw err
+        }
+        if (rows[0]['count(*)'] === 0)
+        {
+          const insertParms = [uinfo.uid, req.body.id, req.body.me, req.body.te]
+          connection.query('insert into `bpvault` (`uid`, `bpid`, `mefficent`, `tefficent`) values (?, ?, ?, ?)', insertParms, (err) => {
+            if (err)
+            {
+              res.json({ ok: false })
+              throw err
+            }
+            else
+            {
+              res.json({ ok: true })
+            }
+          })
+        }
+        else
+        {
+          const updateParams = [req.body.me, req.body.te, uinfo.uid, req.body.id]
+          connection.query('update `bpvault` set `mefficent` = ?, `tefficent` = ? where `uid` = ? and `bpid` = ?', updateParams, (err) => {
+            if (err)
+            {
+              res.json({ ok: false })
+              throw err
+            }
+            else
+            {
+              res.json({ ok: true })
+            }
+          })
+        }
+      })
+    }
+    else
+    {
+      res.json({ ok: false })
+    }
+  }
+  else
+  {
+    res.json({ ok: false })
+  }
 })
 
 app.post('/api/login', (req, res) => {

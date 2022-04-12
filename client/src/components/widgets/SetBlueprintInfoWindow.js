@@ -16,7 +16,7 @@ const SetBlueprintInfoWindow = (hooks) => {
   const handleSubmit = () => {
     fetch('api/blueprint/add', {
       body: JSON.stringify({ 
-        id: hooks.hooks.bpInfo.id,
+        id: hooks.bpInfo.id,
         me: mEff,
         te: tEff
       }),
@@ -25,11 +25,22 @@ const SetBlueprintInfoWindow = (hooks) => {
         "Content-Type": "application/json",
       }
     })
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((data) => {
-
+      if (data.ok)
+      {
+        hooks.setSettingOpen(false)
+        hooks.updateBpList()
+      }
+      else
+      {
+        alert('请求失败！')
+        hooks.setSettingOpen(false)
+      }
     })
-    hooks.setSettingOpen(false)
+    .catch((err) => {
+      console.warn(err)
+    })
   }
 
   const handleClickAway = () => {
