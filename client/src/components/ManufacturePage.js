@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
-  TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { PrecisionManufacturingOutlined } from '@mui/icons-material'
+  TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, IconButton, Collapse } from '@mui/material'
+import { PrecisionManufacturingOutlined, Close } from '@mui/icons-material'
 
 import getItemList from '../functions/GetItemList'
 import getBlueprintList from '../functions/GetBlueprintList'
@@ -148,6 +148,25 @@ const ManufacturePage = (hooks) => {
           </>
         ) : (
           <>
+            <Collapse in={hooks.indusAlert}>
+              <Alert
+                severity="info"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      hooks.setIndusAlert(false);
+                    }}
+                  >
+                    <Close fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                你可以先前往蓝图管理界面设置你的蓝图时间 / 材料信息，如没有设置蓝图信息，则会按照默认无研究状态进行计算
+              </Alert>
+            </Collapse>
             <Grid
               container
               spacing={2}

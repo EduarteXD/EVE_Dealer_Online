@@ -43,8 +43,8 @@ const PurchasingListPage = () => {
           marginTop: "5vh"
         }}
       >
-        <Grid item xs={1} />
-        <Grid item xs={10}>
+        <Grid item xs={0} />
+        <Grid item xs={12}>
           <Paper>
             <Typography
               variant="h6"
@@ -106,7 +106,7 @@ const PurchasingListPage = () => {
             </TableContainer>
           </Paper>
         </Grid>
-        <Grid item xs={1} />
+        <Grid item xs={0} />
       </Grid>
       <Snackbar
         anchorOrigin={{

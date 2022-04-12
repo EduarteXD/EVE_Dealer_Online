@@ -2,7 +2,7 @@ import React from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Tooltip, Avatar, Drawer,
    List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material'
 import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, LocalOfferOutlined,
-  FactoryOutlined, InfoOutlined } from '@mui/icons-material'
+  FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev } from '@mui/icons-material'
 
 import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
@@ -16,6 +16,7 @@ const Frame = () => {
   const [notifyCount, setNotifyCount] = React.useState(0)
   const [drawerStat, setDrawer] = React.useState(false)
   const [reqSent, setReqStat] = React.useState(false)
+  const [indusAlert, setIndusAlert] = React.useState(true)
   const [userInfo, setUserInfo] = React.useState({})
   /*
   const [marketRequested, setMarketRequest] = React.useState(false)
@@ -48,9 +49,9 @@ const Frame = () => {
     })
   }
 
-  const title = ['Welcome aboard!', '物资估价', '库存管理', '生产管理', '采购清单']
-  const titleEn = ['Welcome aboard!', 'Contract Evaluation', 'Stock Management', 
-    'Industry Management', 'Purchasing List']
+  const title = ['Welcome aboard!', '物资估价', '蓝图管理', '生产管理', '采购清单', '反应管理']
+  const titleEn = ['Welcome aboard!', 'Contract Evaluation', 'Blueprints Management', 
+    'Industry Management', 'Purchasing List', 'React Management']
 
   if (userInfo.avatar !== undefined)
   {
@@ -125,6 +126,8 @@ const Frame = () => {
             page === 3 && (
               <ManufacturePage
                 setPage={setPage}
+                indusAlert={indusAlert}
+                setIndusAlert={setIndusAlert}
               />
             )
           }
@@ -162,23 +165,35 @@ const Frame = () => {
                   <ListItemText primary="主页" />
                 </ListItem>
                 <Divider />
-                <ListItem button key="valu" onClick={() => changePage(1)}>
+                <ListItem button key="valuation" onClick={() => changePage(1)}>
                   <ListItemIcon>
                     <PriceChangeOutlined />
                   </ListItemIcon>
                   <ListItemText primary="物资估价" />
                 </ListItem>
-                <ListItem button key="store" onClick={() => changePage(2)}>
+                <ListItem button key="blueprint" onClick={() => changePage(2)}>
                   <ListItemIcon>
-                    <LocalOfferOutlined />
+                    <ArchitectureOutlined />
                   </ListItemIcon>
-                  <ListItemText primary="库存管理" />
+                  <ListItemText primary="蓝图管理" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
                 </ListItem>
-                <ListItem button key="manu" onClick={() => changePage(3)}>
+                <ListItem button key="industry" onClick={() => changePage(3)}>
                   <ListItemIcon>
                     <FactoryOutlined />
                   </ListItemIcon>
                   <ListItemText primary="生产管理" />
+                </ListItem>
+                <ListItem button key="react" onClick={() => changePage(5)}>
+                  <ListItemIcon>
+                    <ScienceOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="反应管理" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
                 </ListItem>
                 <Divider />
                 <ListItem button key="about" onClick={() => changePage(99)}>
