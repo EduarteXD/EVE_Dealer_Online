@@ -1,4 +1,4 @@
-import resolveMarket from '../functions/ResolveEsiMarket'
+import resolveMarket from './ResolveEsiMarket'
 
 /**
  * @description Fetch the Esi market data into session storage, Should only be used in a PAGE

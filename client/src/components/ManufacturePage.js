@@ -9,7 +9,7 @@ import getBlueprintList from '../functions/GetBlueprintList'
 import getMatchedItem from '../functions/GetMatchedItem'
 import blueprintDetail from '../functions/BlueprintDetail'
 import getIdToName from '../functions/GetIdToName'
-import getEsiMarketData from '../functions/GeiEsiMarketData'
+import getEsiMarketData from '../functions/GetEsiMarketData'
 
 const ManufacturePage = (hooks) => {
   const [reqestSent, setRequestStat] = React.useState(false)
@@ -64,10 +64,12 @@ const ManufacturePage = (hooks) => {
       exists: true,
       content: detail
     })
+    /*
     console.log({
       exists: true,
       content: detail
     })
+    */
     document.getElementById('object').value=''
     handleChange(false)
     document.body.scrollTop = 0
@@ -178,7 +180,7 @@ const ManufacturePage = (hooks) => {
         }
       }
     }
-    console.log(temp)
+    // console.log(temp)
     temp.content.materials[key].toBuy = true
     setBrief(temp)
   }

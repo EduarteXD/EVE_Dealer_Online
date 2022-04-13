@@ -23,10 +23,6 @@ const Frame = () => {
   const [indusAlert, setIndusAlert] = React.useState(true)
   const [userInfo, setUserInfo] = React.useState({})
   const [toTop, setToTop] = React.useState(false)
-  /*
-  const [marketRequested, setMarketRequest] = React.useState(false)
-  const [marketData, setMarketData] = React.useState({})
-  */
 
   const changePage = (pageNum) => {
     if (pageNum === page)
@@ -43,6 +39,7 @@ const Frame = () => {
 
   if (!reqSent)
   {
+    setNotifyCount(0)
     setReqStat(true);
     fetch('api/user/info')
     .then(response => response.json())
@@ -70,8 +67,8 @@ const Frame = () => {
   }
 
   const title = ['Welcome aboard!', '物资估价', '蓝图管理', '生产管理', '采购清单', '反应管理']
-  const titleEn = ['Welcome aboard!', 'Contract Evaluation', 'Blueprints Management', 
-    'Industry Management', 'Purchasing List', 'React Management']
+
+  title[99] = '关于'
 
   if (userInfo.avatar !== undefined)
   {

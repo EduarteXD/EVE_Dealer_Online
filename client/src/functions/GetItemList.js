@@ -1,5 +1,5 @@
 /**
- * @description Fetch the item list into local storage, Should only be used in a PAGE
+ * @description Fetch the item name to id list into local storage, Should only be used in a PAGE
  * @param setLoading: the hook which controls loading page display
  */
 const getItemList = (setLoading) => {

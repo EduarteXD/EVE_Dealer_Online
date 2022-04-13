@@ -41,17 +41,9 @@ const blueprintDetail = (itemID) => {
   var ID2Name = JSON.parse(storage['ID2Name'])
   
   const calc = (itemID, depth) => {
-    // console.log(blueprints)
     if (itemID in blueprints) {
       var blueprint = blueprints[itemID]
-      // console.log(blueprint)
       var resolvedItems = []
-      /*
-        for (var key in blueprint.mt)
-        {
-          resolvedItem[key] = blueprintDetail(blueprint.mt.typeID, blueprint.mt.quantity)
-        }
-      */
       var i = 0
       for (var key in blueprint.mt)
       {

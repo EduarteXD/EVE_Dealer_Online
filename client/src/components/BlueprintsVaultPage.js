@@ -49,21 +49,13 @@ const BlueprintsVaultPage = () => {
 
   const handleChange = () => {
     if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '') {
-      // var blueprints = JSON.parse(window.localStorage['blueprintList'])
-      // var nameToID = JSON.parse(window.localStorage['itemList'])
+      // remove non-Chinese characters
       getMatchedBlueprints(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched, ID2Name, blueprints, nameToID)
     }
     else {
       setMatched({})
     }
   }
-
-  /*
-  if (!isID2NameLoading && !ID2NameLoaded) {
-    setID2NameLoaded(true)
-    setID2Name(JSON.parse(window.localStorage['ID2Name']))
-  }
-  */
 
   const handleClick = (key, name) => {
     setbpInfo({
@@ -74,7 +66,6 @@ const BlueprintsVaultPage = () => {
   }
 
   if (!requestSent) {
-    // getBlueprintList(setBpLoading)
     setReqStat(true)
     getBlueprintList((stat) => {
       setBpLoading(stat)
@@ -88,7 +79,6 @@ const BlueprintsVaultPage = () => {
         setNameToID(JSON.parse(window.localStorage['itemList']))
       }
     })
-    // getIdToName(setID2NameLoading)
     getIdToName((stat) => {
       setID2NameLoading(stat)
       if (!stat) {
@@ -172,6 +162,7 @@ const BlueprintsVaultPage = () => {
                                 <Grid container>
                                   <Grid item md={1.5}>
                                     <img
+                                      alt={key}
                                       src={
                                         "https://images.evetech.net/types/" +
                                         matched[key] +
@@ -237,6 +228,7 @@ const BlueprintsVaultPage = () => {
                                   <Grid container>
                                     <Grid item md={1}>
                                       <img
+                                        alt={key + 'bp'}
                                         src={
                                           "https://images.evetech.net/types/" +
                                           myBp.content[key].bpid +

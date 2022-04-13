@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, LinearProgress, TextField, Grid, Card, Divider, Typography, Button, Table,
   TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar } from '@mui/material'
 
-import getEsiMarketData from '../functions/GeiEsiMarketData'
+import getEsiMarketData from '../functions/GetEsiMarketData'
 import resolveClipboard from '../functions/ResolveClipboard'
 import getItemList from '../functions/GetItemList'
 
@@ -18,29 +18,13 @@ const ValuationPage = (hooks) => {
   if (!requestSent)
   {
     setRequestStat(true)
-    /*
-    if (!hooks.marketRequested)
-    {
-      fetch('https://esi.evepc.163.com/latest/markets/prices/?datasource=serenity')
-      .then(response => response.json())
-      .then((data) => {
-        // setMarketData(data)
-        hooks.setMarketData(resolveMarket(data))
-        hooks.setMarketRequest(true)
-      })
-  
-    }
-    */
     getEsiMarketData(setMarketLoading)
     getItemList(setLoading)
   }
 
   const handleCalc = () => {
     setResult(false)
-    // console.log(resolveClipboard(document.getElementById('contract').value, marketData))
-    // setData(resolveClipboard(document.getElementById('contract').value, hooks.marketData))
     setData(resolveClipboard(document.getElementById('contract').value, JSON.parse(storage['EsiMarketData'])))
-    // console.log(result)
     setResult(true)
     document.getElementById('contract').value = ''
   }
@@ -194,7 +178,7 @@ const ValuationPage = (hooks) => {
                                               md={1}
                                             >
                                             <img
-                                              // src={'icons/' + result[key].id + '_64.png' }
+                                              alt={key}
                                               src={'https://images.evetech.net/types/' + result[key].id + '/icon?size=32'}
                                               style={{
                                                 width: '32px',
