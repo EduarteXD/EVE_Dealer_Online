@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
   TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, IconButton, Collapse } from '@mui/material'
 import { PrecisionManufacturingOutlined, Close } from '@mui/icons-material'
+import ShowTotValue from './widgets/TotValueWindow'
 
 import getItemList from '../functions/GetItemList'
 import getBlueprintList from '../functions/GetBlueprintList'
@@ -21,6 +22,24 @@ const ManufacturePage = (hooks) => {
   })
   const [matched, setMatched] = React.useState({})
   const [market, setMarketInfo] = React.useState(undefined)
+
+  const [showWidget, setWidget] = React.useState(false)
+  window.onscroll = () => {
+    if (!showWidget && document.body.scrollTop + document.documentElement.scrollTop > 200) {
+      setWidget(true)
+    }
+    else if (showWidget && document.body.scrollTop + document.documentElement.scrollTop <= 200)
+    {
+      setWidget(false)
+    }
+    if (!hooks.toTop && document.body.scrollTop + document.documentElement.scrollTop > 100) {
+      hooks.setToTop(true)
+    }
+    else if (hooks.toTop && document.body.scrollTop + document.documentElement.scrollTop <= 100)
+    {
+      hooks.setToTop(false)
+    }
+  }
 
   const format = (num) => {
     var reg=/\d{1,3}(?=(\d{3})+$)/g
@@ -45,10 +64,22 @@ const ManufacturePage = (hooks) => {
       exists: true,
       content: detail
     })
+    console.log({
+      exists: true,
+      content: detail
+    })
     document.getElementById('object').value=''
     handleChange(false)
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
+  }
+
+  const renderName = (name, depth) => {
+    var prefix = '|—\xa0'
+    for (var i = depth; i > 0; i--) {
+      prefix = '|\xa0\xa0\xa0\xa0' + prefix
+    }
+    return prefix + name
   }
 
   const stepTwo = () => {
@@ -108,6 +139,48 @@ const ManufacturePage = (hooks) => {
       temp.content.totVal -= parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
     }
     setBrief({...temp})
+  }
+
+  /**
+   * @description Fold materials into a item 
+   */
+  const handleReject = (key) => {
+    var temp = {
+      exists: true,
+      content: {
+        materials: [],
+        blueprintID: brief.content.blueprintID,
+        id: brief.content.id,
+        name: brief.content.name,
+        totVal: 0,
+        perProcess: brief.content.perProcess
+      }
+    }
+    var start = parseInt(key) + 1
+    var foldLevel = brief.content.materials[key].depth
+    var toDelete = 0
+    while (brief.content.materials[toDelete + start] !== undefined && 
+      brief.content.materials[toDelete + start].depth > foldLevel) {
+      toDelete++
+    }
+    for (let i = 0; i < start; i++)
+    {
+      temp.content.materials[i] = brief.content.materials[i]
+      if (!isNaN(market[temp.content.materials[i].id].avg)) {
+        temp.content.totVal += parseInt(market[temp.content.materials[i].id].avg * temp.content.materials[i].quantity)
+      }
+    }
+    for (let i = start; brief.content.materials[i] !== undefined; i++) {
+      if (brief.content.materials[i + toDelete] !== undefined) {
+        temp.content.materials[i] = brief.content.materials[i + toDelete]
+        if (!isNaN(market[temp.content.materials[i].id].avg)) {
+          temp.content.totVal += parseInt(market[temp.content.materials[i].id].avg * temp.content.materials[i].quantity)
+        }
+      }
+    }
+    console.log(temp)
+    temp.content.materials[key].toBuy = true
+    setBrief(temp)
   }
 
   const handleChange = (rstBrief=true) => {
@@ -252,7 +325,7 @@ const ManufacturePage = (hooks) => {
                                         md={1.5}
                                       >
                                         <img 
-                                          // src={'icons/' + matched[key] + '_64.png'}
+                                          alt={key}
                                           src={'https://images.evetech.net/types/' + matched[key] + '/icon?size=32'}
                                           style={{
                                             width: '32px',
@@ -346,6 +419,7 @@ const ManufacturePage = (hooks) => {
                                       md={1}
                                     >
                                       <img
+                                        alt={brief.content.name}
                                         src={'https://images.evetech.net/types/' + brief.content.id + '/icon?size=32'}
                                         style={{
                                           width: '32px',
@@ -376,11 +450,7 @@ const ManufacturePage = (hooks) => {
                                 <TableCell align='right'>1</TableCell>
                                 <TableCell align='right'>1</TableCell>
                                 <TableCell align='right'>{format(brief.content.totVal)} 星币</TableCell>
-                                <TableCell align='right'>
-                                  <Button variant='outlined' disabled>
-                                    自制
-                                  </Button>
-                                </TableCell>
+                                <TableCell align='right'></TableCell>
                               </TableRow>
                               {
                                 Object.keys(brief.content.materials).map((key) => (
@@ -399,6 +469,7 @@ const ManufacturePage = (hooks) => {
                                           md={1}
                                         >
                                           <img
+                                            alt={brief.content.materials[key].name}
                                             src={'https://images.evetech.net/types/' + brief.content.materials[key].id + '/icon?size=32'}
                                             style={{
                                               width: '32px',
@@ -420,7 +491,7 @@ const ManufacturePage = (hooks) => {
                                           <Typography
                                             mt={0.6}
                                           >
-                                            {brief.content.materials[key].name}
+                                            {renderName(brief.content.materials[key].name, brief.content.materials[key].depth)}
                                           </Typography>
                                         </Grid>
                                       </Grid>
@@ -501,8 +572,8 @@ const ManufacturePage = (hooks) => {
                                             </>
                                           ) : (
                                             <>
-                                              <Button variant='outlined' disabled>
-                                                自制
+                                              <Button variant='outlined' onClick={() => handleReject(key)}>
+                                                撤销
                                               </Button>
                                             </>
                                         )) : (
@@ -514,19 +585,7 @@ const ManufacturePage = (hooks) => {
                                 ))
                               }
                               <TableRow>
-                                <TableCell>
-                                  <Button 
-                                    variant='outlined' 
-                                    onClick={() => stepTwo()}
-                                    sx={{
-                                      display: {
-                                        md: 'none'
-                                      }
-                                    }}  
-                                  >
-                                    下一步
-                                  </Button>
-                                </TableCell>
+                                <TableCell></TableCell>
                                 <TableCell align='right'></TableCell>
                                 <TableCell align='right'></TableCell>
                                 <TableCell align='right'></TableCell>
@@ -535,13 +594,6 @@ const ManufacturePage = (hooks) => {
                                   <Button 
                                     variant='outlined' 
                                     onClick={() => stepTwo()}
-                                    sx={{
-                                      display: {
-                                        sx: 'none',
-                                        sm: 'none',
-                                        md: 'inline'
-                                      }
-                                    }}  
                                   >
                                     下一步
                                   </Button>
@@ -595,6 +647,13 @@ const ManufacturePage = (hooks) => {
                 xs={0}
               />
             </Grid>
+            {
+              brief.exists && showWidget && (
+                <ShowTotValue
+                  val={format(brief.content.totVal)}
+                />
+              )
+            }
           </>
         )
       }

@@ -153,6 +153,8 @@ const Frame = () => {
                 setPage={setPage}
                 indusAlert={indusAlert}
                 setIndusAlert={setIndusAlert}
+                toTop={toTop}
+                setToTop={setToTop}
               />
             )
           }
@@ -276,7 +278,8 @@ const Frame = () => {
               sx={{
                 position: 'fixed',
                 bottom: '20px',
-                right: '20px' 
+                right: '20px',
+                zIndex: '998'
               }}
             >
               <Tooltip title='返回顶部'>

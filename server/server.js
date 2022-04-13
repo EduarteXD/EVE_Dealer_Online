@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import mysql from 'mysql'
 import crypto from 'crypto'
+import compression from 'compression'
 import path from 'path'
 
 const __dirname = path.resolve()
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: 'true' }))
 app.use(bodyParser.json({ extended: 'true' }))
 app.use(cors())
 app.use(cookies())
+app.use(compression())
 
 const connection = mysql.createConnection({
   host: process.env.SQL_HOST,
@@ -107,7 +109,7 @@ app.use(express.static('./public'))
 
 app.get('/api/data/itemlist/version', (req, res) => {
   res.json({
-    version: '2204'
+    version: '2204_2'
   })
 })
 
@@ -119,7 +121,7 @@ app.get('/api/data/blueprints/version', (req, res) => {
 
 app.get('/api/data/idtoname/version', (req, res) => {
   res.json({
-    version: '2204'
+    version: '2204_2'
   })
 })
 

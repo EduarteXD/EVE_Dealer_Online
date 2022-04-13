@@ -7,6 +7,7 @@ const blueprintDetail = (itemID) => {
             quantity: quantity, <- per process
             toBuy: true,
             dividable: false,
+            depth: 0,
             resolve: {}
           },
           {
@@ -20,6 +21,7 @@ const blueprintDetail = (itemID) => {
                   quantity: quantity,
                   toBuy: true,
                   dividable: false,
+                  depth: 1,
                   resolve: {}
                 }
               ],
@@ -38,7 +40,7 @@ const blueprintDetail = (itemID) => {
   var blueprints = JSON.parse(storage['blueprintList'])
   var ID2Name = JSON.parse(storage['ID2Name'])
   
-  const calc = (itemID) => {
+  const calc = (itemID, depth) => {
     // console.log(blueprints)
     if (itemID in blueprints) {
       var blueprint = blueprints[itemID]
@@ -53,9 +55,10 @@ const blueprintDetail = (itemID) => {
       var i = 0
       for (var key in blueprint.mt)
       {
-        var resolve = calc(blueprint.mt[key].typeID)
+        var resolve = calc(blueprint.mt[key].typeID, depth + 1)
         resolvedItems[i] = {
           id: blueprint.mt[key].typeID,
+          depth: depth,
           name: ID2Name[blueprint.mt[key].typeID],
           quantity: blueprint.mt[key].quantity,
           toBuy: true,
@@ -79,7 +82,8 @@ const blueprintDetail = (itemID) => {
     }
   }
 
-  return calc(itemID)
+  var result = calc(itemID, 0)
+  return result
 }
 
 export default blueprintDetail

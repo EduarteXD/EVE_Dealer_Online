@@ -15,8 +15,10 @@ const BlueprintsVaultPage = () => {
   const [isID2NameLoading, setID2NameLoading] = React.useState(true)
   const [isLoadingItem, setItemLoading] = React.useState(true)
   const [settingOpen, setSettingOpen] = React.useState(false)
-  const [ID2NameLoaded, setID2NameLoaded] = React.useState(false)
+  // const [ID2NameLoaded, setID2NameLoaded] = React.useState(false)
+  const [nameToID, setNameToID] = React.useState({})
   const [requestedBp, setReqBp] = React.useState(false)
+  const [blueprints, setBlueprints] = React.useState({})
   const [myBp, setMyBp] = React.useState({
     exists: false
   })
@@ -47,8 +49,8 @@ const BlueprintsVaultPage = () => {
 
   const handleChange = () => {
     if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '') {
-      var blueprints = JSON.parse(window.localStorage['blueprintList'])
-      var nameToID = JSON.parse(window.localStorage['itemList'])
+      // var blueprints = JSON.parse(window.localStorage['blueprintList'])
+      // var nameToID = JSON.parse(window.localStorage['itemList'])
       getMatchedBlueprints(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched, ID2Name, blueprints, nameToID)
     }
     else {
@@ -56,10 +58,12 @@ const BlueprintsVaultPage = () => {
     }
   }
 
+  /*
   if (!isID2NameLoading && !ID2NameLoaded) {
     setID2NameLoaded(true)
     setID2Name(JSON.parse(window.localStorage['ID2Name']))
   }
+  */
 
   const handleClick = (key, name) => {
     setbpInfo({
@@ -70,9 +74,27 @@ const BlueprintsVaultPage = () => {
   }
 
   if (!requestSent) {
-    getBlueprintList(setBpLoading)
-    getItemList(setItemLoading)
-    getIdToName(setID2NameLoading)
+    // getBlueprintList(setBpLoading)
+    setReqStat(true)
+    getBlueprintList((stat) => {
+      setBpLoading(stat)
+      if (!stat) {
+        setBlueprints(JSON.parse(window.localStorage['blueprintList']))
+      }
+    })
+    getItemList((stat) => {
+      setItemLoading(stat)
+      if (!stat) {
+        setNameToID(JSON.parse(window.localStorage['itemList']))
+      }
+    })
+    // getIdToName(setID2NameLoading)
+    getIdToName((stat) => {
+      setID2NameLoading(stat)
+      if (!stat) {
+        setID2Name(JSON.parse(window.localStorage['ID2Name']))
+      }
+    })
   }
 
   return (

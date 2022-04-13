@@ -58,13 +58,13 @@ const SetBlueprintInfoWindow = (hooks) => {
             sx={{
               width: {
                 md: '550px',
-                xs: '90vw',
-                position: 'fixed',
-                margin: 'auto',
-                left: '0',
-                right: '0',
-                top: '30vh'
-              }
+                xs: '90vw'
+              },
+              position: 'fixed',
+              margin: 'auto',
+              left: '0',
+              right: '0',
+              top: '25vh'
             }}
           >
             <Paper
