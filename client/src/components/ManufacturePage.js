@@ -28,7 +28,7 @@ const ManufacturePage = (hooks) => {
   const [matched, setMatched] = React.useState({})
   const [market, setMarketInfo] = React.useState(undefined)
 
-  const [useFacility, setFacility] = React.useState({})
+  const [useFacility, setFacility] = React.useState([])
 
   const [myBp, setMyBp] = React.useState({})
   const [idToName, setIdToName] = React.useState({})
@@ -88,9 +88,10 @@ const ManufacturePage = (hooks) => {
     // var bpID = content.blueprintID
     var temp = JSON.parse(JSON.stringify(content))
     for (var i = start; i < end; i++) {
-      var result = calcMaterialRequirement(temp.materials[i].quantity, 1, temp.materials[i].id, bpID, myBp, idToGroup, itemGroup)
+      var result = calcMaterialRequirement(temp.materials[i].quantity, 1, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup)
       temp.materials[i].quantity = result.material
     }
+    setFacility([result.facilityName])
     return temp
   }
 
@@ -148,16 +149,19 @@ const ManufacturePage = (hooks) => {
     for (var i = parseInt(key) + 1; i < parseInt(originEnd); i++) {
       temp.content.materials[parseInt(i) + parseInt(insertLen)] = brief.content.materials[i]
     }
+    var facilitiesInUse = useFacility
     for (var j in brief.content.materials[key].resolve.materials) {
       var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity, 
         Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess), 
         temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup)
       brief.content.materials[key].resolve.materials[j].quantity = manuDetail.material
       temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
-
       // brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
       // temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
+      facilitiesInUse[parseInt(key) + 1] = manuDetail.facilityName
+      // console.log(facilitiesInUse)
     }
+    setFacility(facilitiesInUse)
     temp.content.totVal = 0
     for (let key in temp.content.materials) {
       if (!isNaN(market[temp.content.materials[key].id].avg) && temp.content.materials[key].toBuy) {
@@ -175,6 +179,12 @@ const ManufacturePage = (hooks) => {
    * @description Fold materials into a item 
    */
   const handleReject = (key) => {
+    //----------------------------
+    var facilitiesInUse = useFacility
+    facilitiesInUse[parseInt(key) + 1] = undefined
+    setFacility(facilitiesInUse)
+    //----------------------------
+    setFacility(facilitiesInUse)
     var temp = {
       exists: true,
       content: {
@@ -469,6 +479,7 @@ const ManufacturePage = (hooks) => {
                             <TableHead>
                               <TableRow>
                                 <TableCell>名称</TableCell>
+                                <TableCell align='right'>设施</TableCell>
                                 <TableCell align='right'>自制</TableCell>
                                 <TableCell align='right'>需求数量</TableCell>
                                 <TableCell align='right'>生产/购买数量</TableCell>
@@ -517,6 +528,11 @@ const ManufacturePage = (hooks) => {
                                       </Typography>
                                     </Grid>
                                   </Grid>
+                                </TableCell>
+                                <TableCell align='right'>
+                                  {useFacility[0] !== undefined && (
+                                    useFacility[0]
+                                  )}
                                 </TableCell>
                                 <TableCell align='right'>是</TableCell>
                                 <TableCell align='right'>1</TableCell>
@@ -567,6 +583,11 @@ const ManufacturePage = (hooks) => {
                                           </Typography>
                                         </Grid>
                                       </Grid>
+                                    </TableCell>
+                                    <TableCell align='right'>
+                                      {useFacility[parseInt(key) + 1] !== undefined && (
+                                        useFacility[parseInt(key) + 1]
+                                      )}
                                     </TableCell>
                                     <TableCell
                                       align='right'

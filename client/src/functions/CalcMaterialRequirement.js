@@ -14,6 +14,11 @@ const getBonuses = (bluepringME, structureME, structureRigTech, secLevel) => {
 }
 
 const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGroup) => {
+  // console.log('fetching facility...')
+  console.log('id: %s', itemID)
+  console.log('Group: %s', idToGroup[itemID])
+  console.log(itemGroup['basicComponents'][idToGroup[itemID]])
+  // console.log(itemGroup)
   var structureData = {
     0: { me: 0.0, te: 0.0, name: "NPC空间站(默认)", size: 'xl'},
     35825: { me: 1.0, te: 15.0, name: "莱塔卢", size: 'm' },
@@ -33,6 +38,7 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
   }
 
   var result = {
+    default: true,
     facilityName: '',
     type: '',
     typeID: -1,
@@ -43,8 +49,8 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
     architect: 16, basicComponent: 8, advancedComponent: 4, drone: 2, ammunition: 1 }
   for (let i in facilityList) {
     let me = structureData[facilityList[i].typeID].me
-    if (idToGroup[itemID] in itemGroup['ships']) {
-      if (itemGroup['ships'][idToGroup[itemID]].size == 'xlarge' && structureData[facilityList[i].typeID].size == 'm') {
+    if (itemGroup['ships'][idToGroup[itemID]] !== undefined) {
+      if (itemGroup['ships'][idToGroup[itemID]].size === 'xlarge' && structureData[facilityList[i].typeID].size === 'm') {
         continue
       }
       var shipType = 0
@@ -53,8 +59,8 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
       }
       shipType += typeSelector[itemGroup['ships'][idToGroup[itemID]].size]
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & shipType == shipType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & shipType) === shipType) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -64,11 +70,10 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
         }
       }
     }
-    else if (idToGroup[itemID] in itemGroup['equipments']) {
-      var itemType = typeSelector['equipment']
+    else if (itemGroup['equipments'][idToGroup[itemID]] !== undefined) {
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & itemType == itemType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & typeSelector['equipment']) === typeSelector['equipment']) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -78,11 +83,10 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
         }
       }
     }
-    else if (idToGroup[itemID] in itemGroup['architectures']) {
-      var itemType = typeSelector['architect']
+    else if (itemGroup['architectures'][idToGroup[itemID]] !== undefined) {
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & itemType == itemType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & typeSelector['architect']) === typeSelector['architect']) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -92,11 +96,10 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
         }
       }
     }
-    else if (idToGroup[itemID] in itemGroup['basicComponents']) {
-      var itemType = typeSelector['basicComponent']
+    else if (itemGroup['basicComponents'][idToGroup[itemID]] !== undefined) {
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & itemType == itemType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & typeSelector['basicComponent']) === typeSelector['basicComponent']) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -106,11 +109,10 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
         }
       }
     }
-    else if (idToGroup[itemID] in itemGroup['advancedComponents']) {
-      var itemType = typeSelector['advancedComponent']
+    else if (itemGroup['advancedComponents'][idToGroup[itemID]] !== undefined) {
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & itemType == itemType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & typeSelector['advancedComponent']) === typeSelector['advancedComponent']) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -120,11 +122,10 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
         }
       }
     }
-    else if (idToGroup[itemID] in itemGroup['drones']) {
-      var itemType = typeSelector['drone']
+    else if (itemGroup['drones'][idToGroup[itemID]] !== undefined) {
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & itemType == itemType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & typeSelector['drone']) === typeSelector['drone']) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -134,11 +135,10 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
         }
       }
     }
-    else if (idToGroup[itemID] in itemGroup['ammunition']) {
-      var itemType = typeSelector['ammunition']
+    else if (itemGroup['ammunition'][idToGroup[itemID]] !== undefined) {
       for (let j in facilityList[i].rigs) {
-        if (facilityList[i].rigs[j].rigType & itemType == itemType) {
-          if (result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
+        if ((facilityList[i].rigs[j].rigType & typeSelector['ammunition']) === typeSelector['ammunition']) {
+          if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
@@ -149,7 +149,6 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
       }
     }
   }
-
   return result;
 }
 
@@ -158,7 +157,7 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
  *
  */
 const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, idToGroup, itemGroup) => {
-  const selectBp = (item) => {
+  const selectBp = () => {
     var result = {
       me: 0,
       te: 0
@@ -188,17 +187,28 @@ const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, id
     {
       typeID: 0,
       sec: 2,
-      name: '测试建筑',
+      name: '测试建筑 T1改',
       rigs: {
         0: {
           rigType: 2047,
           rigTech: 0
         }
       }
+    },
+    {
+      typeID: 0,
+      sec: 2,
+      name: '测试建筑 组件T2改',
+      rigs: {
+        0: {
+          rigType: 12,
+          rigTech: 2
+        }
+      }
     }
   ]
   //---------------------------
-  var manuDetail = getProperFacility(facilityList, itemGroup, itemID, selectBp(itemID).me, idToGroup)
+  var manuDetail = getProperFacility(facilityList, itemGroup, itemID, selectBp().me, idToGroup)
 
   return {
     material: Math.max(processCount, Math.ceil((baseCount * manuDetail.me * processCount).toFixed(2))),
