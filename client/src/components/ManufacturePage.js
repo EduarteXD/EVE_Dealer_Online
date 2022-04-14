@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
-  TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, IconButton, Collapse } from '@mui/material'
+  TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, IconButton, Collapse,
+  FormControlLabel, FormGroup, Switch } from '@mui/material'
 import { PrecisionManufacturingOutlined, Close } from '@mui/icons-material'
 import ShowTotValue from './widgets/TotValueWindow'
 
@@ -27,6 +28,7 @@ const ManufacturePage = (hooks) => {
   })
   const [matched, setMatched] = React.useState({})
   const [market, setMarketInfo] = React.useState(undefined)
+  const [useLite, switchToLite] = React.useState(false)
 
   const [useFacility, setFacility] = React.useState([])
 
@@ -53,6 +55,10 @@ const ManufacturePage = (hooks) => {
     {
       hooks.setToTop(false)
     }
+  }
+
+  const switchBrief = () => {
+    switchToLite(!useLite)
   }
 
   const format = (num) => {
@@ -469,6 +475,9 @@ const ManufacturePage = (hooks) => {
                     }}
                   >
                     简报
+                    <FormGroup>
+                      <FormControlLabel control={<Switch onChange={switchBrief} />} label="精简模式" />
+                    </FormGroup>
                   </Typography>
                   <Divider />
                   {
@@ -480,8 +489,14 @@ const ManufacturePage = (hooks) => {
                               <TableRow>
                                 <TableCell>名称</TableCell>
                                 <TableCell align='right'>设施</TableCell>
-                                <TableCell align='right'>自制</TableCell>
-                                <TableCell align='right'>需求数量</TableCell>
+                                {
+                                  !useLite && (
+                                    <>
+                                      <TableCell align='right'>自制</TableCell>
+                                      <TableCell align='right'>需求数量</TableCell>
+                                    </>
+                                  )
+                                }
                                 <TableCell align='right'>生产/购买数量</TableCell>
                                 <TableCell align='right'>估价</TableCell>
                                 <TableCell align='right'>操作</TableCell>
@@ -534,8 +549,14 @@ const ManufacturePage = (hooks) => {
                                     useFacility[0]
                                   )}
                                 </TableCell>
-                                <TableCell align='right'>是</TableCell>
-                                <TableCell align='right'>1</TableCell>
+                                {
+                                  !useLite && (
+                                    <>
+                                      <TableCell align='right'>是</TableCell>
+                                      <TableCell align='right'>1</TableCell>
+                                    </>
+                                  )
+                                }
                                 <TableCell align='right'>1</TableCell>
                                 <TableCell align='right'>{format(brief.content.totVal)} 星币</TableCell>
                                 <TableCell align='right'></TableCell>
@@ -589,16 +610,22 @@ const ManufacturePage = (hooks) => {
                                         useFacility[parseInt(key) + 1]
                                       )}
                                     </TableCell>
-                                    <TableCell
-                                      align='right'
-                                    >
-                                      {brief.content.materials[key].toBuy ? '否' : '是'}
-                                    </TableCell>
-                                    <TableCell
-                                      align='right'
-                                    >
-                                      {format(brief.content.materials[key].quantity)}
-                                    </TableCell>
+                                    {
+                                      !useLite && (
+                                        <>
+                                          <TableCell
+                                            align='right'
+                                          >
+                                            {brief.content.materials[key].toBuy ? '否' : '是'}
+                                          </TableCell>
+                                          <TableCell
+                                            align='right'
+                                          >
+                                            {format(brief.content.materials[key].quantity)}
+                                          </TableCell>
+                                        </>
+                                      )
+                                    }
                                     <TableCell
                                       align='right'
                                     >
@@ -680,8 +707,14 @@ const ManufacturePage = (hooks) => {
                               <TableRow>
                                 <TableCell></TableCell>
                                 <TableCell align='right'></TableCell>
-                                <TableCell align='right'></TableCell>
-                                <TableCell align='right'></TableCell>
+                                {
+                                  !useLite && (
+                                    <>
+                                      <TableCell align='right'></TableCell>
+                                      <TableCell align='right'></TableCell>
+                                    </>
+                                  )
+                                }
                                 <TableCell align='right'></TableCell>
                                 <TableCell align='right'>
                                   <Button 
