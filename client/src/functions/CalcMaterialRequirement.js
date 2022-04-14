@@ -15,9 +15,9 @@ const getBonuses = (bluepringME, structureME, structureRigTech, secLevel) => {
 
 const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGroup) => {
   // console.log('fetching facility...')
-  console.log('id: %s', itemID)
-  console.log('Group: %s', idToGroup[itemID])
-  console.log(itemGroup['basicComponents'][idToGroup[itemID]])
+  // console.log('id: %s', itemID)
+  // console.log('Group: %s', idToGroup[itemID])
+  // console.log(itemGroup['basicComponents'][idToGroup[itemID]])
   // console.log(itemGroup)
   var structureData = {
     0: { me: 0.0, te: 0.0, name: "NPC空间站(默认)", size: 'xl'},
@@ -187,22 +187,11 @@ const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, id
     {
       typeID: 0,
       sec: 2,
-      name: '测试建筑 T1改',
+      name: 'NPC空间站',
       rigs: {
         0: {
           rigType: 2047,
           rigTech: 0
-        }
-      }
-    },
-    {
-      typeID: 0,
-      sec: 2,
-      name: '测试建筑 组件T2改',
-      rigs: {
-        0: {
-          rigType: 12,
-          rigTech: 2
         }
       }
     }

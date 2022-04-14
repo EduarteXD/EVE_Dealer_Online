@@ -1,4 +1,4 @@
-const blueprintDetail = (itemID, updateMaterialRequirement) => {
+const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name) => {
   /*
     result = {
       materials: [
@@ -36,9 +36,9 @@ const blueprintDetail = (itemID, updateMaterialRequirement) => {
       name: name
     }
   */
-  var storage = window.localStorage
-  var blueprints = JSON.parse(storage['blueprintList'])
-  var ID2Name = JSON.parse(storage['ID2Name'])
+  // var storage = window.localStorage
+  // var blueprints = JSON.parse(storage['blueprintList'])
+  // var ID2Name = JSON.parse(storage['ID2Name'])
   
   const calc = (itemID, depth) => {
     if (itemID in blueprints) {
@@ -76,7 +76,7 @@ const blueprintDetail = (itemID, updateMaterialRequirement) => {
 
   var result = calc(itemID, 0)
   result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID)
-  console.log(result)
+  // console.log(result)
   return result
 }
 

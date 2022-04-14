@@ -10,6 +10,7 @@ import ValuationPage from './ValuationPage'
 import ManufacturePage from './ManufacturePage'
 import PurchasingListPage from './PurchasingListPage'
 import BlueprintsVaultPage from './BlueprintsVaultPage'
+import FacilityManagePage from './FacilityManagePage'
 
 import AboutPage from './AboutPage'
 
@@ -161,6 +162,11 @@ const Frame = () => {
             )
           }
           {
+            page === 6 && (
+              <FacilityManagePage />
+            )
+          }
+          {
             page === 99 && (
               <AboutPage />
             )
@@ -200,9 +206,6 @@ const Frame = () => {
                     <ArchitectureOutlined />
                   </ListItemIcon>
                   <ListItemText primary="蓝图管理" />
-                  <ListItemIcon>
-                    <ConstructionOutlined />
-                  </ListItemIcon>
                 </ListItem>
                 <ListItem button key="facility" onClick={() => changePage(6)}>
                   <ListItemIcon>
@@ -210,7 +213,7 @@ const Frame = () => {
                   </ListItemIcon>
                   <ListItemText primary="设施管理" />
                   <ListItemIcon>
-                    <LogoDev />
+                    <ConstructionOutlined />
                   </ListItemIcon>
                 </ListItem>
                 <ListItem button key="industry" onClick={() => changePage(3)}>

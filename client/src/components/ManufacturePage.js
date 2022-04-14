@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
   TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, IconButton, Collapse,
   FormControlLabel, FormGroup, Switch } from '@mui/material'
-import { PrecisionManufacturingOutlined, Close } from '@mui/icons-material'
+import { AccountTreeOutlined, Close } from '@mui/icons-material'
 import ShowTotValue from './widgets/TotValueWindow'
 
 import getItemList from '../functions/GetItemList'
@@ -30,7 +30,7 @@ const ManufacturePage = (hooks) => {
   const [market, setMarketInfo] = React.useState(undefined)
   const [useLite, switchToLite] = React.useState(false)
 
-  const [useFacility, setFacility] = React.useState([])
+  const [useFacility, setFacility] = React.useState(undefined)
 
   const [myBp, setMyBp] = React.useState({})
   const [idToName, setIdToName] = React.useState({})
@@ -70,7 +70,7 @@ const ManufacturePage = (hooks) => {
    * @description Setup the brief
    */
   const handleClick = (id) => {
-    var detail = blueprintDetail(id, updateMaterialRequirement)
+    var detail = blueprintDetail(id, updateMaterialRequirement, blueprintList, idToName)
     detail.totVal = 0
     for (var key in detail.materials) {
       if (detail.materials[key].toBuy) {
@@ -97,14 +97,14 @@ const ManufacturePage = (hooks) => {
       var result = calcMaterialRequirement(temp.materials[i].quantity, 1, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup)
       temp.materials[i].quantity = result.material
     }
-    setFacility([result.facilityName])
+    setFacility(result.facilityName)
     return temp
   }
 
   const renderName = (name, depth) => {
     var prefix = '|—\xa0'
     for (var i = depth; i > 0; i--) {
-      prefix = '|\xa0\xa0\xa0\xa0' + prefix
+      prefix = '\xa0\xa0\xa0\xa0\xa0' + prefix
     }
     return prefix + name
   }
@@ -155,7 +155,6 @@ const ManufacturePage = (hooks) => {
     for (var i = parseInt(key) + 1; i < parseInt(originEnd); i++) {
       temp.content.materials[parseInt(i) + parseInt(insertLen)] = brief.content.materials[i]
     }
-    var facilitiesInUse = useFacility
     for (var j in brief.content.materials[key].resolve.materials) {
       var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity, 
         Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess), 
@@ -164,10 +163,9 @@ const ManufacturePage = (hooks) => {
       temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
       // brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
       // temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
-      facilitiesInUse[parseInt(key) + 1] = manuDetail.facilityName
+      temp.content.materials[key].useFacility = manuDetail.facilityName
       // console.log(facilitiesInUse)
     }
-    setFacility(facilitiesInUse)
     temp.content.totVal = 0
     for (let key in temp.content.materials) {
       if (!isNaN(market[temp.content.materials[key].id].avg) && temp.content.materials[key].toBuy) {
@@ -185,12 +183,6 @@ const ManufacturePage = (hooks) => {
    * @description Fold materials into a item 
    */
   const handleReject = (key) => {
-    //----------------------------
-    var facilitiesInUse = useFacility
-    facilitiesInUse[parseInt(key) + 1] = undefined
-    setFacility(facilitiesInUse)
-    //----------------------------
-    setFacility(facilitiesInUse)
     var temp = {
       exists: true,
       content: {
@@ -225,6 +217,7 @@ const ManufacturePage = (hooks) => {
         temp.content.totVal += parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
       }
     }
+    temp.content.materials[key].useFacility = undefined
     setBrief(temp)
   }
 
@@ -501,12 +494,12 @@ const ManufacturePage = (hooks) => {
                                 <TableCell align='right'>估价</TableCell>
                                 <TableCell align='right'>操作</TableCell>
                               </TableRow>
-                            </TableHead>
-                            <TableBody>
                               <TableRow
+                                /*
                                 sx={{
                                   backgroundColor: '#f2f2f2'
                                 }}
+                                */
                               >
                                 <TableCell>
                                   <Grid 
@@ -545,8 +538,8 @@ const ManufacturePage = (hooks) => {
                                   </Grid>
                                 </TableCell>
                                 <TableCell align='right'>
-                                  {useFacility[0] !== undefined && (
-                                    useFacility[0]
+                                  {useFacility !== undefined && (
+                                    useFacility
                                   )}
                                 </TableCell>
                                 {
@@ -561,6 +554,8 @@ const ManufacturePage = (hooks) => {
                                 <TableCell align='right'>{format(brief.content.totVal)} 星币</TableCell>
                                 <TableCell align='right'></TableCell>
                               </TableRow>
+                              </TableHead>
+                              <TableBody>
                               {
                                 Object.keys(brief.content.materials).map((key) => (
                                   <TableRow
@@ -606,8 +601,8 @@ const ManufacturePage = (hooks) => {
                                       </Grid>
                                     </TableCell>
                                     <TableCell align='right'>
-                                      {useFacility[parseInt(key) + 1] !== undefined && (
-                                        useFacility[parseInt(key) + 1]
+                                      {brief.content.materials[key].useFacility !== undefined && (
+                                        brief.content.materials[key].useFacility
                                       )}
                                     </TableCell>
                                     {
@@ -674,7 +669,11 @@ const ManufacturePage = (hooks) => {
                                           </>
                                         ) : (
                                           <>
-                                            <PrecisionManufacturingOutlined />
+                                            <AccountTreeOutlined
+                                              sx={{
+                                                opacity: 0.5
+                                              }}
+                                            />
                                           </>
                                         )
                                       }
