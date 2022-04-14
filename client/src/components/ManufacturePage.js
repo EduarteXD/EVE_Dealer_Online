@@ -10,18 +10,32 @@ import getMatchedItem from '../functions/GetMatchedItem'
 import blueprintDetail from '../functions/BlueprintDetail'
 import getIdToName from '../functions/GetIdToName'
 import getEsiMarketData from '../functions/GetEsiMarketData'
+import getIdToGroup from '../functions/GetIdToGroup'
+import calcMaterialRequirement from '../functions/CalcMaterialRequirement'
+import getItemGroup from '../functions/GetItemGroup'
 
 const ManufacturePage = (hooks) => {
   const [reqestSent, setRequestStat] = React.useState(false)
   const [isLoading, setLoading] = React.useState(true)
   const [isBpLoading, setLoadingBp] = React.useState(true)
   const [isId2NameLoading, setLoadingId2Name] = React.useState(true)
+  const [isId2GroupLoading, setLoadingId2Group] = React.useState(true)
+  const [isItemGroupLoading, setItemGroupLoading] = React.useState(true)
   const [isEsiMarketLoading, setEsiLoading] = React.useState(true)
   const [brief, setBrief] = React.useState({
     exists: false
   })
   const [matched, setMatched] = React.useState({})
   const [market, setMarketInfo] = React.useState(undefined)
+
+  const [useFacility, setFacility] = React.useState({})
+
+  const [myBp, setMyBp] = React.useState({})
+  const [idToName, setIdToName] = React.useState({})
+  const [itemGroup, setItemGroup] = React.useState({})
+  const [idToGroup, setIdToGroup] = React.useState({})
+  const [nameToId, setNameToId] = React.useState({})
+  const [blueprintList, setBlueprintList] = React.useState({})
 
   const [showWidget, setWidget] = React.useState(false)
   window.onscroll = () => {
@@ -50,7 +64,7 @@ const ManufacturePage = (hooks) => {
    * @description Setup the brief
    */
   const handleClick = (id) => {
-    var detail = blueprintDetail(id)
+    var detail = blueprintDetail(id, updateMaterialRequirement)
     detail.totVal = 0
     for (var key in detail.materials) {
       if (detail.materials[key].toBuy) {
@@ -64,16 +78,20 @@ const ManufacturePage = (hooks) => {
       exists: true,
       content: detail
     })
-    /*
-    console.log({
-      exists: true,
-      content: detail
-    })
-    */
     document.getElementById('object').value=''
     handleChange(false)
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
+  }
+
+  const updateMaterialRequirement = (content, start, end, bpID) => {
+    // var bpID = content.blueprintID
+    var temp = JSON.parse(JSON.stringify(content))
+    for (var i = start; i < end; i++) {
+      var result = calcMaterialRequirement(temp.materials[i].quantity, 1, temp.materials[i].id, bpID, myBp, idToGroup, itemGroup)
+      temp.materials[i].quantity = result.material
+    }
+    return temp
   }
 
   const renderName = (name, depth) => {
@@ -131,15 +149,25 @@ const ManufacturePage = (hooks) => {
       temp.content.materials[parseInt(i) + parseInt(insertLen)] = brief.content.materials[i]
     }
     for (var j in brief.content.materials[key].resolve.materials) {
-      brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
+      var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity, 
+        Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess), 
+        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup)
+      brief.content.materials[key].resolve.materials[j].quantity = manuDetail.material
       temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
-      if (!isNaN(market[temp.content.materials[parseInt(key) + parseInt(j) + 1].id].avg)) {
-        temp.content.totVal += parseInt(market[temp.content.materials[parseInt(key) + parseInt(j) + 1].id].avg * temp.content.materials[parseInt(key) + parseInt(j) + 1].quantity)
+
+      // brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
+      // temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
+    }
+    temp.content.totVal = 0
+    for (let key in temp.content.materials) {
+      if (!isNaN(market[temp.content.materials[key].id].avg) && temp.content.materials[key].toBuy) {
+        temp.content.totVal += parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
       }
     }
-    if (!isNaN(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)) {
-      temp.content.totVal -= parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
-    }
+    // console.log(temp)
+    // console.log(insertLen)
+    // temp.content = updateMaterialRequirement(temp.content, key + 1, key + 1 + insertLen, temp.content.materials[key].resolve.blueprintID)
+    // console.log(temp)
     setBrief({...temp})
   }
 
@@ -168,26 +196,25 @@ const ManufacturePage = (hooks) => {
     for (let i = 0; i < start; i++)
     {
       temp.content.materials[i] = brief.content.materials[i]
-      if (!isNaN(market[temp.content.materials[i].id].avg)) {
-        temp.content.totVal += parseInt(market[temp.content.materials[i].id].avg * temp.content.materials[i].quantity)
-      }
     }
     for (let i = start; brief.content.materials[i] !== undefined; i++) {
       if (brief.content.materials[i + toDelete] !== undefined) {
         temp.content.materials[i] = brief.content.materials[i + toDelete]
-        if (!isNaN(market[temp.content.materials[i].id].avg)) {
-          temp.content.totVal += parseInt(market[temp.content.materials[i].id].avg * temp.content.materials[i].quantity)
-        }
       }
     }
-    // console.log(temp)
     temp.content.materials[key].toBuy = true
+    temp.content.totVal = 0
+    for (let key in temp.content.materials) {
+      if (!isNaN(market[temp.content.materials[key].id].avg) && temp.content.materials[key].toBuy) {
+        temp.content.totVal += parseInt(market[temp.content.materials[key].id].avg * temp.content.materials[key].quantity)
+      }
+    }
     setBrief(temp)
   }
 
   const handleChange = (rstBrief=true) => {
     if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '') {
-      getMatchedItem(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched)
+      getMatchedItem(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched, nameToId, blueprintList)
     }
     else {
       setMatched({})
@@ -199,23 +226,66 @@ const ManufacturePage = (hooks) => {
     }
   }
 
+  const updateBpList = () => {
+    fetch('api/blueprint/query')
+    .then((response) => response.json())
+    .then((data) => {
+      setMyBp({
+        exists: true,
+        content: data
+      })
+    })
+    .catch((err) => {
+      console.warn(err)
+    })
+  }
+
   if (!reqestSent)
   {
     setRequestStat(true)
-    getIdToName(setLoadingId2Name)
-    getItemList(setLoading)
-    getBlueprintList(setLoadingBp)
-    getEsiMarketData(setEsiLoading)
-  }
-
-  if (!isEsiMarketLoading && market === undefined) {
-    setMarketInfo(JSON.parse(window.sessionStorage['EsiMarketData']))
+    updateBpList()
+    getIdToName((stat) => {
+      setLoadingId2Name(stat)
+      if (!stat) {
+        setIdToName(JSON.parse(window.localStorage['ID2Name']))
+      }
+    })
+    getItemList((stat) => {
+      setLoading(stat)
+      if (!stat) {
+        setNameToId(JSON.parse(window.localStorage['itemList']))
+      }
+    })
+    getBlueprintList((stat) => {
+      setLoadingBp(stat)
+      if (!stat) {
+        setBlueprintList(JSON.parse(window.localStorage['blueprintList']))
+      }
+    })
+    getEsiMarketData((stat) => {
+      setEsiLoading(stat)
+      if (!stat) {
+        setMarketInfo(JSON.parse(window.sessionStorage['EsiMarketData']))
+      }
+    })
+    getIdToGroup((stat) => {
+      setLoadingId2Group(stat)
+      if (!stat) {
+        setIdToGroup(JSON.parse(window.localStorage['ID2Group']))
+      }
+    })
+    getItemGroup((stat) => {
+      setItemGroupLoading(stat)
+      if (!stat) {
+        setItemGroup(JSON.parse(window.localStorage['itemgroup']))
+      }
+    })
   }
 
   return (
     <>
       {
-        isLoading || isBpLoading || isId2NameLoading || isEsiMarketLoading ? (
+        isLoading || isBpLoading || isId2NameLoading || isEsiMarketLoading || isId2GroupLoading || isItemGroupLoading ? (
           <>
             <Box
               sx={{

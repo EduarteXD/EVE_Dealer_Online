@@ -31,7 +31,7 @@ const App = () => {
             color: 'gray'
           }}
         >
-          dev build @20220413#1
+          dev build @20220414#0
         </Typography>
       </Box>
       <MainPage

@@ -45,7 +45,8 @@ if fileName == 'typeIDs':
         for key, val in data.items():
             if 'zh' in val['name']:
                 if val['published']:
-                    conv['payload'][key] = val['groupID']
+                    if 'marketGroupID' in val:
+                        conv['payload'][key] = val['marketGroupID']
     # idToName
     if genType == '3':
         for key, val in data.items():
@@ -68,6 +69,7 @@ if fileName == 'typeIDs':
                                                 conv['payload'][key]['me'] = v['bonus']
                                             if v['bonusText']['en'] == 'reduction in time requirements for manufacturing and science jobs':
                                                 conv['payload'][key]['te'] = v['bonus']
+
 
 # blueprints
 if fileName == 'blueprints':

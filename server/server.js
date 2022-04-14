@@ -125,6 +125,26 @@ app.get('/api/data/idtoname/version', (req, res) => {
   })
 })
 
+app.get('/api/data/idtogroup/version', (req, res) => {
+  res.json({
+    version: '2204'
+  })
+})
+
+app.get('/api/data/itemgroup/version', (req, res) => {
+  res.json({
+    version: '2204'
+  })
+})
+
+app.get('/api/data/itemgroup', (req, res) => {
+  res.sendFile(__dirname + '/data/itemgroup.json')
+})
+
+app.get('/api/data/idtogroup', (req, res) => {
+  res.sendFile(__dirname + '/data/idtogroup.json')
+})
+
 app.get('/api/data/idtoname', (req, res) => {
   res.sendFile(__dirname + '/data/idtoname.json')
 })

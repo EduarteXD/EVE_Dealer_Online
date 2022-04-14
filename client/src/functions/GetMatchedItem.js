@@ -1,7 +1,7 @@
-const getMatchedItem = (inputed, setMatched) => {
+const getMatchedItem = (inputed, setMatched, nameToID, blueprints) => {
   var storage = window.localStorage
-  var nameToID = JSON.parse(storage['itemList'])
-  var blueprints = JSON.parse(storage['blueprintList'])
+  // var nameToID = JSON.parse(storage['itemList'])
+  // var blueprints = JSON.parse(storage['blueprintList'])
   var result ={}
   var count = 0
   for (var name in nameToID) {
