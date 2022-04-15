@@ -67,7 +67,7 @@ const Frame = () => {
     document.documentElement.scrollTop = 0
   }
 
-  const title = ['Welcome aboard!', '物资估价', '蓝图管理', '生产管理', '采购清单', '反应管理']
+  const title = ['Welcome aboard!', '物资估价', '蓝图管理', '生产管理', '采购清单', '反应管理', '设施管理']
 
   title[99] = '关于'
 

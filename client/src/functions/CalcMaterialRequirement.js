@@ -191,7 +191,18 @@ const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, id
       rigs: {
         0: {
           rigType: 2047,
-          rigTech: 0
+          rigTech: 0,
+          rigName: 'none'
+        },
+        1: {
+          rigType: 2047,
+          rigTech: 0,
+          rigName: 'none'
+        },
+        2: {
+          rigType: 2047,
+          rigTech: 0,
+          rigName: 'none'
         }
       }
     }

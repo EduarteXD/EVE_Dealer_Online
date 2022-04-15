@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Avatar, Typography, Button } from '@mui/material'
 
-const EmptyBackground = () => {
+const EmptyBackground = (hooks) => {
   return (
     <>
       <Box
@@ -36,6 +36,7 @@ const EmptyBackground = () => {
         </Typography>
         <Button
           variant='outlined'
+          onClick={() => hooks.setAddFacilityWindowOpen(true)}
         >
           添加建筑
         </Button>

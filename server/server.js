@@ -137,6 +137,16 @@ app.get('/api/data/itemgroup/version', (req, res) => {
   })
 })
 
+app.get('/api/data/structurerigs/version', (req, res) => {
+  res.json({
+    version: '2204'
+  })
+})
+
+app.get('/api/data/structurerigs', (req, res) => {
+  res.sendFile(__dirname + '/data/structurerigs.json')
+})
+
 app.get('/api/data/itemgroup', (req, res) => {
   res.sendFile(__dirname + '/data/itemgroup.json')
 })
@@ -241,15 +251,69 @@ app.get('/api/blueprint/query', async (req, res) => {
   }
 })
 
+app.post('/api/structures/add', async (req, res) => {
+  if (req.cookies['tracker-id'] != undefined) {
+    var Tracker = {
+      id: req.cookies['tracker-id'],
+      token: req.cookies['tracker-token']
+    }
+    var uinfo = await verifyTrackerID(Tracker)
+    if (uinfo.valid) {
+      const insertParams = [uinfo.uid, req.body.data]
+      connection.query('insert into `structures` (`uid`, `data`) values (?, ?)', insertParams, (err) => {
+        if (err) {
+          res.json({ ok: false })
+          throw err
+        }
+        else {
+          res.json({ ok: true })
+        }
+      })
+    }
+    else {
+      res.json({ ok: false })
+    }
+  }
+  else {
+    res.json({ ok: false })
+  }
+})
+
+app.get('/api/structures/query', async (req, res) => {
+  if (req.cookies['tracker-id'] != undefined) {
+    var Tracker = {
+      id: req.cookies['tracker-id'],
+      token: req.cookies['tracker-token']
+    }
+    var uinfo = await verifyTrackerID(Tracker)
+    if (uinfo.valid) {
+      const queryParams = [uinfo.uid]
+      connection.query('select `data` from `structures` where `uid` = ?', queryParams, (err, rows) => {
+        if (err) {
+          res.json({ ok: false })
+          throw err
+        }
+        res.json(rows)
+      })
+    }
+    else {
+      res.json({ ok: false })
+    }
+  }
+  else
+  {
+    res.json({ ok: false })
+  }
+})
+
 app.post('/api/blueprint/add', async (req, res) => {
   if (req.cookies['tracker-id'] != undefined) {
     var Tracker = {
       id: req.cookies['tracker-id'],
-      token: req.cookies['tracker-token'],
+      token: req.cookies['tracker-token']
     }
     var uinfo = await verifyTrackerID(Tracker)
-    if (uinfo.valid)
-    {
+    if (uinfo.valid) {
       const queryParams = [uinfo.uid, req.body.id]
       connection.query('select count(*) from `bpvault` where uid = ? and bpid = ?', queryParams, (err, rows) => {
         if (err)

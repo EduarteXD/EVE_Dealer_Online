@@ -1,6 +1,6 @@
+import re
 import yaml
 import json
-
 
 outPut = open('structureRigList.json', 'w', encoding='utf8')
 genType = input("方法:")
@@ -23,8 +23,78 @@ def level_up(key_id, levels):
     return level_up(key_id, levels - 1)
 
 
-res = {}
+def calc_bonus(name, size):
+    if size == 'm':
+        if re.search('制造材料效率', name, flags=0):
+            if re.search('高级', name, flags=0) and re.search('舰船', name, flags=0):
+                ans = 1024
+                if re.search('小型舰船', name, flags=0):
+                    ans += 512
+                if re.search('中型舰船', name, flags=0):
+                    ans += 256
+                if re.search('大型舰船', name, flags=0):
+                    ans += 128
+                return ans
+            if re.search('舰船制造', name, flags=0):
+                if re.search('小型舰船', name, flags=0):
+                    return 512
+                if re.search('中型舰船', name, flags=0):
+                    return 256
+                if re.search('大型舰船', name, flags=0):
+                    return 128
+            if re.search('舰载机', name, flags=0):
+                return 2
+            if re.search('高级', name, flags=0) and re.search('组件', name, flags=0):
+                return 4
+            if re.search('组件', name, flags=0):
+                return 2
+            if re.search('弹药', name, flags=0):
+                return 1
+            if re.search('建筑', name, flags=0):
+                return 16
+            if re.search('装备', name, flags=0):
+                return 32
+    if size == 'l':
+        if re.search('制造效率', name, flags=0):
+            if re.search('高级', name, flags=0) and re.search('舰船', name, flags=0):
+                ans = 1024
+                if re.search('小型舰船', name, flags=0):
+                    ans += 512
+                if re.search('中型舰船', name, flags=0):
+                    ans += 256
+                if re.search('大型舰船', name, flags=0):
+                    ans += 128
+                return ans
+            if re.search('舰船制造', name, flags=0):
+                if re.search('小型舰船', name, flags=0):
+                    return 512
+                if re.search('中型舰船', name, flags=0):
+                    return 256
+                if re.search('大型舰船', name, flags=0):
+                    return 128
+            if re.search('舰载机', name, flags=0):
+                return 2
+            if re.search('高级', name, flags=0) and re.search('组件', name, flags=0):
+                return 4
+            if re.search('组件', name, flags=0):
+                return 2
+            if re.search('弹药', name, flags=0):
+                return 1
+            if re.search('建筑', name, flags=0):
+                return 16
+            if re.search('装备', name, flags=0):
+                return 32
+    if size == 'xl':
+        if re.search('制造效率', name, flags=0):
+            if re.search('舰船', name, flags=0):
+                return 1984
+            if re.search('建筑', name, flags=0):
+                return 28
+            if re.search('设备', name, flags=0):
+                return 33
 
+
+res = {}
 
 if genType == '1':
     file = open('marketGroups.yaml', 'rb')
@@ -62,11 +132,35 @@ if genType == '2':
     for key in obj:
         if 'zh' in obj[key]['name'] and 'marketGroupID' in obj[key]:
             if obj[key]['marketGroupID'] == 2347:
-                conv['m'].append({'name': obj[key]['name']['zh']})
+                bonus = 0
+                if calc_bonus(obj[key]['name']['zh'], 'm') is not None:
+                    bonus = calc_bonus(obj[key]['name']['zh'], 'm')
+                tech_level = 3
+                if re.search('I', obj[key]['name']['zh'], flags=0):
+                    tech_level = 1
+                if re.search('II', obj[key]['name']['zh'], flags=0):
+                    tech_level = 2
+                conv['m'].append({'name': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
             if obj[key]['marketGroupID'] == 2348:
-                conv['l'].append({'name': obj[key]['name']['zh']})
+                bonus = 0
+                if calc_bonus(obj[key]['name']['zh'], 'l') is not None:
+                    bonus = calc_bonus(obj[key]['name']['zh'], 'l')
+                tech_level = 3
+                if re.search('I', obj[key]['name']['zh'], flags=0):
+                    tech_level = 1
+                if re.search('II', obj[key]['name']['zh'], flags=0):
+                    tech_level = 2
+                conv['l'].append({'name': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
             if obj[key]['marketGroupID'] == 2349:
-                conv['xl'].append({'name': obj[key]['name']['zh']})
+                bonus = 0
+                if calc_bonus(obj[key]['name']['zh'], 'xl') is not None:
+                    bonus = calc_bonus(obj[key]['name']['zh'], 'xl')
+                tech_level = 3
+                if re.search('I', obj[key]['name']['zh'], flags=0):
+                    tech_level = 1
+                if re.search('II', obj[key]['name']['zh'], flags=0):
+                    tech_level = 2
+                conv['xl'].append({'name': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
     res = {
         'version': version,
         'payload': conv

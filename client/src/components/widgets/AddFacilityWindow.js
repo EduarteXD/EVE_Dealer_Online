@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box, Paper, Typography, Divider, Autocomplete, TextField, Slider, Grid, Button, Backdrop, ClickAwayListener, Avatar } from '@mui/material'
-import { VerticalAlignBottom } from '@mui/icons-material'
+import { Box, Paper, Typography, Divider, Autocomplete, TextField, 
+  Button, Backdrop, ClickAwayListener, Avatar } from '@mui/material'
 
 const AddFacilityWindow = (hooks) => {
   const options = [
@@ -20,42 +20,74 @@ const AddFacilityWindow = (hooks) => {
     { id: 47516, label: "\"普罗米修斯\"铁壁", size:'l' }
   ]
 
+  const secLvls = [
+    { id: 0, label: "高安" },
+    { id: 1, label: "低安" },
+    { id: 2, label: "零零与虫洞" }
+  ]
+
+  const [rigList, setRigList] = React.useState([])
+  const [secLevel, setSec] = React.useState(0)
+  const [rigSlots, setRigSlots] = React.useState({
+    0: {rigType: 0, rigTech :0, rigName: '无改装件'},
+    1: {rigType: 0, rigTech :0, rigName: '无改装件'},
+    2: {rigType: 0, rigTech :0, rigName: '无改装件'}
+  })
   const [selectedFacility, setFacility] = React.useState()
 
   const handleSubmit = () => {
-    fetch('api/blueprint/add', {
-      body: JSON.stringify({
-
+    var res = {
+      typeID: selectedFacility,
+      sec: secLevel,
+      name: document.getElementById('name').value,
+      rigs: rigSlots
+    }
+    fetch('api/structures/add', {
+      body: JSON.stringify({ 
+        data: JSON.stringify(res)
       }),
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok) {
-          hooks.setSettingOpen(false)
-          hooks.updateBpList()
-        }
-        else {
-          alert('请求失败！')
-          hooks.setSettingOpen(false)
-        }
-      })
-      .catch((err) => {
-        console.warn(err)
-      })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.ok)
+      {
+        hooks.setAddFacilityWindowOpen(false)
+        hooks.updateStructureList()
+      }
+      else
+      {
+        alert('请求失败！')
+        hooks.setAddFacilityWindowOpen(false)
+      }
+    })
+    .catch((err) => {
+      console.warn(err)
+    })
   }
 
   const handleClickAway = () => {
-    // hooks.setSettingOpen(false)
+    hooks.setAddFacilityWindowOpen(false)
   }
 
-  const handleChange = (event, value) => {
-    if (document.getElementById('category').value !== undefined) {
-      setFacility(value.id)
-    }
+  const handleChangeSec = (val) => {
+    setSec(val.id)
+  }
+
+  const handleChange = (event, val) => {
+    setFacility(val.id)
+    setRigList(hooks.rigsList[val.size])
+  }
+
+  const handleChangeRig = (val, rigSlotId) => {
+    var tmp = rigSlots
+    tmp[rigSlotId].rigType = val.bonus
+    tmp[rigSlotId].rigTech = val.tech
+    tmp[rigSlotId].rigName = val.label
+    setRigSlots(tmp)
   }
 
   return (
@@ -99,16 +131,35 @@ const AddFacilityWindow = (hooks) => {
                   right: '0'
                 }}
               >
-                <Autocomplete
-                  disablePortal
-                  options={options}
-                  id='category'
+                <TextField 
+                  label='设置建筑名称'
+                  id='name'
                   fullWidth
-                  renderInput={(params) => <TextField {...params} label="选择建筑类型" />}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  onChange={handleChange}
                 />
               </Box>
+              {
+                selectedFacility === undefined && (
+                  <Box
+                    sx={{
+                      padding: '0 0 20px 0',
+                      width: '80%',
+                      margin: 'auto',
+                      left: '0',
+                      right: '0'
+                    }}
+                  >
+                    <Autocomplete
+                      disablePortal
+                      options={options}
+                      id='category'
+                      fullWidth
+                      renderInput={(params) => <TextField {...params} label="选择建筑类型" />}
+                      isOptionEqualToValue={(option, value) => option.id === value.id}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                )
+              }
               {
                 selectedFacility !== undefined && (
                   <>
@@ -120,19 +171,87 @@ const AddFacilityWindow = (hooks) => {
                         right: '0'
                       }}
                     >
-                    <Box
-                      sx={{
-                        padding: '20px 20px 20px 20px'
-                      }}
-                    >
-                      <Avatar
+                      <Box
                         sx={{
-                          width: 128, 
-                          height: 128,
+                          padding: '0 20px 20px 20px',
+                          margin: 'auto',
+                          left: '0',
+                          right: '0'
                         }}
-                        src={'https://images.evetech.net/types/' + selectedFacility + '/render?size=128'}
-                      />
-                    </Box>
+                      >
+                        <Avatar
+                          sx={{
+                            width: 128, 
+                            height: 128,
+                            margin: 'auto',
+                            left: '0',
+                            right: '0'
+                          }}
+                          src={'https://images.evetech.net/types/' + selectedFacility + '/render?size=128'}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          textAlign: 'center'
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            padding: '10px 10px 10px 10px'
+                          }}
+                        >
+                          <Autocomplete
+                            disablePortal
+                            options={secLvls}
+                            id='secLvl'
+                            renderInput={(params) => <TextField {...params} label="安全等级" />}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
+                            onChange={(event, value) => handleChangeSec(value)}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            padding: '10px 10px 10px 10px'
+                          }}
+                        >
+                          <Autocomplete
+                            disablePortal
+                            options={rigList}
+                            id='rig-1'
+                            renderInput={(params) => <TextField {...params} label="选择改装件 - 1" />}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
+                            onChange={(event, value) => handleChangeRig(value, 0)}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            padding: '10px 10px 10px 10px'
+                          }}
+                        >
+                          <Autocomplete
+                            disablePortal
+                            options={rigList}
+                            id='rig-2'
+                            renderInput={(params) => <TextField {...params} label="选择改装件 - 2" />}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
+                            onChange={(event, value) => handleChangeRig(value, 1)}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            padding: '10px 10px 10px 10px'
+                          }}
+                        >
+                          <Autocomplete
+                            disablePortal
+                            options={rigList}
+                            id='rig-1'
+                            renderInput={(params) => <TextField {...params} label="选择改装件 - 3" />}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
+                            onChange={(event, value) => handleChangeRig(value, 2)}
+                          />
+                        </Box>
+                      </Box>
                     </Box>
                   </>
                 )
@@ -145,11 +264,9 @@ const AddFacilityWindow = (hooks) => {
               >
                 <Button
                   variant='outlined'
-                  onClick={() => {
-                    // alert(hooks.nameToId[document.getElementById('category').value])
-                  }}
+                  onClick={handleSubmit}
                 >
-                  提交
+                  添加
                 </Button>
               </Box>
             </Paper>
