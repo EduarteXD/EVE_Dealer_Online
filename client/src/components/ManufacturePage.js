@@ -14,6 +14,7 @@ import getEsiMarketData from '../functions/GetEsiMarketData'
 import getIdToGroup from '../functions/GetIdToGroup'
 import calcMaterialRequirement from '../functions/CalcMaterialRequirement'
 import getItemGroup from '../functions/GetItemGroup'
+import SetProcessCountWindow from './widgets/SetProcessCountWindow'
 
 const ManufacturePage = (hooks) => {
   const [reqestSent, setRequestStat] = React.useState(false)
@@ -23,6 +24,8 @@ const ManufacturePage = (hooks) => {
   const [isId2GroupLoading, setLoadingId2Group] = React.useState(true)
   const [isItemGroupLoading, setItemGroupLoading] = React.useState(true)
   const [isEsiMarketLoading, setEsiLoading] = React.useState(true)
+  const [toProduce, setToProduce] = React.useState({})
+  const [showSettingWindow, setSettingWindow] = React.useState(false)
   const [brief, setBrief] = React.useState({
     exists: false
   })
@@ -66,11 +69,24 @@ const ManufacturePage = (hooks) => {
     return (num + '').replace(reg, '$&,')
   }
 
+  const handleClick = (id) => {
+    setToProduce({
+      name: idToName[id],
+      id: id, 
+      count: 1
+    })
+    setSettingWindow(true)
+  }
+
+
   /**
    * @description Setup the brief
    */
-  const handleClick = (id) => {
-    var detail = blueprintDetail(id, updateMaterialRequirement, blueprintList, idToName)
+  const handleSubmit = (count) => {
+    var id = toProduce.id
+    // var count = toProduce.count
+    // console.log(count)
+    var detail = blueprintDetail(id, updateMaterialRequirement, blueprintList, idToName, count)
     detail.totVal = 0
     for (var key in detail.materials) {
       if (detail.materials[key].toBuy) {
@@ -90,11 +106,11 @@ const ManufacturePage = (hooks) => {
     document.documentElement.scrollTop = 0
   }
 
-  const updateMaterialRequirement = (content, start, end, bpID) => {
+  const updateMaterialRequirement = (content, start, end, bpID, count) => {
     // var bpID = content.blueprintID
     var temp = JSON.parse(JSON.stringify(content))
     for (var i = start; i < end; i++) {
-      var result = calcMaterialRequirement(temp.materials[i].quantity, 1, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup)
+      var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup)
       temp.materials[i].quantity = result.material
     }
     setFacility(result.facilityName)
@@ -546,11 +562,11 @@ const ManufacturePage = (hooks) => {
                                   !useLite && (
                                     <>
                                       <TableCell align='right'>是</TableCell>
-                                      <TableCell align='right'>1</TableCell>
+                                      <TableCell align='right'>{toProduce.count}</TableCell>
                                     </>
                                   )
                                 }
-                                <TableCell align='right'>1</TableCell>
+                                <TableCell align='right'>{toProduce.count}</TableCell>
                                 <TableCell align='right'>{format(brief.content.totVal)} 星币</TableCell>
                                 <TableCell align='right'></TableCell>
                               </TableRow>
@@ -776,6 +792,17 @@ const ManufacturePage = (hooks) => {
               brief.exists && showWidget && (
                 <ShowTotValue
                   val={format(brief.content.totVal)}
+                />
+              )
+            }
+            {
+              showSettingWindow && (
+                <SetProcessCountWindow 
+                  toProduce={toProduce}
+                  setToProduce={setToProduce}
+                  setSettingWindow={setSettingWindow}
+                  showSettingWindow={showSettingWindow}
+                  handleSubmit={handleSubmit}
                 />
               )
             }

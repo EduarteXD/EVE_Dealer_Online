@@ -98,12 +98,12 @@ for key in obj:
                 get_father(key) == 2202 or get_father(key) == 2203:
             conv['architectures'][key] = obj[key]['nameID']['zh']
         # 基础旗舰组件
-        if get_father(key) == 475 and (obj[key]['nameID']['zh'] == '标准旗舰组件' or
-                                       obj[key]['nameID']['zh'] == '防护性组件'):
+        if get_father(key) == 475 and obj[key]['nameID']['zh'] == '标准旗舰组件':
             conv['basicComponents'][key] = obj[key]['nameID']['zh']
         # 高级组件：高级组件，高级旗舰组件，工具，数据接口，三级科技组件
         if get_father(key) == 475 and (obj[level_up(key, 1)]['nameID']['zh'] == '高级组件' or
                                        obj[level_up(key, 1)]['nameID']['zh'] == '高级旗舰组件' or
+                                       obj[key]['nameID']['zh'] == '防护性组件' or
                                        obj[key]['nameID']['zh'] == '子系统组件' or
                                        obj[key]['nameID']['zh'] == 'R.Db' or
                                        obj[key]['nameID']['zh'] == 'R.A.M.'):

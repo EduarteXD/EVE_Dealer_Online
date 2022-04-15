@@ -1,4 +1,4 @@
-const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name) => {
+const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name, count) => {
   /*
     result = {
       materials: [
@@ -75,7 +75,8 @@ const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name)
   }
 
   var result = calc(itemID, 0)
-  result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID)
+  result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID, count)
+  // console.log(count)
   // console.log(result)
   return result
 }
