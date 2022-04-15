@@ -139,7 +139,7 @@ app.get('/api/data/itemgroup/version', (req, res) => {
 
 app.get('/api/data/structurerigs/version', (req, res) => {
   res.json({
-    version: '2204'
+    version: '2204_2'
   })
 })
 

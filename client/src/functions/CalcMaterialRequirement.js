@@ -53,6 +53,15 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
       if (itemGroup['ships'][idToGroup[itemID]].size === 'xlarge' && structureData[facilityList[i].typeID].size === 'm') {
         continue
       }
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       var shipType = 0
       if (itemGroup['ships'][idToGroup[itemID]].adv) {
         shipType += 1024
@@ -65,12 +74,22 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
       }
     }
     else if (itemGroup['equipments'][idToGroup[itemID]] !== undefined) {
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       for (let j in facilityList[i].rigs) {
         if ((facilityList[i].rigs[j].rigType & typeSelector['equipment']) === typeSelector['equipment']) {
           if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
@@ -78,12 +97,22 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
       }
     }
     else if (itemGroup['architectures'][idToGroup[itemID]] !== undefined) {
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       for (let j in facilityList[i].rigs) {
         if ((facilityList[i].rigs[j].rigType & typeSelector['architect']) === typeSelector['architect']) {
           if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
@@ -91,25 +120,46 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
       }
     }
     else if (itemGroup['basicComponents'][idToGroup[itemID]] !== undefined) {
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       for (let j in facilityList[i].rigs) {
         if ((facilityList[i].rigs[j].rigType & typeSelector['basicComponent']) === typeSelector['basicComponent']) {
+          // console.log(structureData[facilityList[i].typeID].name)
           if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
             result.me = getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
       }
     }
     else if (itemGroup['advancedComponents'][idToGroup[itemID]] !== undefined) {
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       for (let j in facilityList[i].rigs) {
         if ((facilityList[i].rigs[j].rigType & typeSelector['advancedComponent']) === typeSelector['advancedComponent']) {
           if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
@@ -117,12 +167,22 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
       }
     }
     else if (itemGroup['drones'][idToGroup[itemID]] !== undefined) {
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       for (let j in facilityList[i].rigs) {
         if ((facilityList[i].rigs[j].rigType & typeSelector['drone']) === typeSelector['drone']) {
           if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
@@ -130,12 +190,22 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
       }
     }
     else if (itemGroup['ammunition'][idToGroup[itemID]] !== undefined) {
+      //--------------
+      if (result.default || result.me > getBonuses(bluepringME, me, 0, facilityList[i].sec)) {
+        result.me = getBonuses(bluepringME, me, 0, facilityList[i].sec)
+        result.facilityName = facilityList[i].name
+        result.type = structureData[facilityList[i].typeID].name
+        result.typeID = facilityList[i].typeID
+        result.default = false
+      }
+      //--------------
       for (let j in facilityList[i].rigs) {
         if ((facilityList[i].rigs[j].rigType & typeSelector['ammunition']) === typeSelector['ammunition']) {
           if (result.default || result.me > getBonuses(bluepringME, me, facilityList[i].rigs[j].rigTech, facilityList[i].sec)) {
@@ -143,6 +213,7 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
             result.facilityName = facilityList[i].name
             result.type = structureData[facilityList[i].typeID].name
             result.typeID = facilityList[i].typeID
+            result.default = false
             break
           }
         }
@@ -156,7 +227,7 @@ const getProperFacility = (facilityList, itemGroup, itemID, bluepringME, idToGro
  * calc the material requirement after applying all material reduction factor
  *
  */
-const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, idToGroup, itemGroup) => {
+const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, idToGroup, itemGroup, facilityList) => {
   const selectBp = () => {
     var result = {
       me: 0,
@@ -182,7 +253,7 @@ const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, id
     }
     return result
   }
-  //---------------------------
+  /*---------------------------
   const facilityList = [
     {
       typeID: 0,
@@ -207,7 +278,7 @@ const calcMaterialRequirement = (baseCount, processCount, itemID, bpID, myBp, id
       }
     }
   ]
-  //---------------------------
+  ---------------------------*/
   var manuDetail = getProperFacility(facilityList, itemGroup, itemID, selectBp().me, idToGroup)
 
   return {

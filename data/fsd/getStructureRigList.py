@@ -47,7 +47,7 @@ def calc_bonus(name, size):
             if re.search('高级', name, flags=0) and re.search('组件', name, flags=0):
                 return 4
             if re.search('组件', name, flags=0):
-                return 2
+                return 8
             if re.search('弹药', name, flags=0):
                 return 1
             if re.search('建筑', name, flags=0):
@@ -77,7 +77,7 @@ def calc_bonus(name, size):
             if re.search('高级', name, flags=0) and re.search('组件', name, flags=0):
                 return 4
             if re.search('组件', name, flags=0):
-                return 2
+                return 8
             if re.search('弹药', name, flags=0):
                 return 1
             if re.search('建筑', name, flags=0):
@@ -140,7 +140,7 @@ if genType == '2':
                     tech_level = 1
                 if re.search('II', obj[key]['name']['zh'], flags=0):
                     tech_level = 2
-                conv['m'].append({'name': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
+                conv['m'].append({'label': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
             if obj[key]['marketGroupID'] == 2348:
                 bonus = 0
                 if calc_bonus(obj[key]['name']['zh'], 'l') is not None:
@@ -150,7 +150,7 @@ if genType == '2':
                     tech_level = 1
                 if re.search('II', obj[key]['name']['zh'], flags=0):
                     tech_level = 2
-                conv['l'].append({'name': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
+                conv['l'].append({'label': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
             if obj[key]['marketGroupID'] == 2349:
                 bonus = 0
                 if calc_bonus(obj[key]['name']['zh'], 'xl') is not None:
@@ -160,7 +160,7 @@ if genType == '2':
                     tech_level = 1
                 if re.search('II', obj[key]['name']['zh'], flags=0):
                     tech_level = 2
-                conv['xl'].append({'name': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
+                conv['xl'].append({'label': obj[key]['name']['zh'], 'id': key, 'bonus': bonus, 'tech': tech_level})
     res = {
         'version': version,
         'payload': conv

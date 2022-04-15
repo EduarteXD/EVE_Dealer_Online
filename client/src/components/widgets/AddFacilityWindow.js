@@ -245,7 +245,7 @@ const AddFacilityWindow = (hooks) => {
                           <Autocomplete
                             disablePortal
                             options={rigList}
-                            id='rig-1'
+                            id='rig-3'
                             renderInput={(params) => <TextField {...params} label="选择改装件 - 3" />}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             onChange={(event, value) => handleChangeRig(value, 2)}

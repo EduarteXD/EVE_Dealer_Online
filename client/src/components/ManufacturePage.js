@@ -41,6 +41,7 @@ const ManufacturePage = (hooks) => {
   const [idToGroup, setIdToGroup] = React.useState({})
   const [nameToId, setNameToId] = React.useState({})
   const [blueprintList, setBlueprintList] = React.useState({})
+  const [structureList, setStructureList] = React.useState()
 
   const [showWidget, setWidget] = React.useState(false)
   window.onscroll = () => {
@@ -110,7 +111,7 @@ const ManufacturePage = (hooks) => {
     // var bpID = content.blueprintID
     var temp = JSON.parse(JSON.stringify(content))
     for (var i = start; i < end; i++) {
-      var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup)
+      var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup, structureList)
       temp.materials[i].quantity = result.material
     }
     setFacility(result.facilityName)
@@ -174,7 +175,7 @@ const ManufacturePage = (hooks) => {
     for (var j in brief.content.materials[key].resolve.materials) {
       var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity, 
         Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess), 
-        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup)
+        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup, structureList)
       brief.content.materials[key].resolve.materials[j].quantity = manuDetail.material
       temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
       // brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
@@ -305,6 +306,20 @@ const ManufacturePage = (hooks) => {
         setItemGroup(JSON.parse(window.localStorage['itemgroup']))
       }
     })
+    fetch('api/structures/query')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data[0] !== undefined) {
+          var flist = []
+          for (var key in data) {
+            flist[parseInt(key)] = JSON.parse(data[key].data)
+          }
+          setStructureList(flist)
+        }
+        else {
+          setStructureList(undefined)
+        }
+      })
   }
 
   return (

@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Tooltip, Avatar, D
    List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material'
 import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, ConstructionOutlined,
   FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev, ArrowCircleUp, 
-  SettingsOutlined, ChangeCircleOutlined, Inventory2Outlined, ShowChartOutlined } from '@mui/icons-material'
+  SettingsOutlined, ChangeCircleOutlined, Inventory2Outlined, ShowChartOutlined, SwapHorizontalCircleOutlined } from '@mui/icons-material'
 
 import WelcomePage from './WelcomePage'
 import ValuationPage from './ValuationPage'
@@ -212,9 +212,6 @@ const Frame = () => {
                     <SettingsOutlined />
                   </ListItemIcon>
                   <ListItemText primary="设施管理" />
-                  <ListItemIcon>
-                    <ConstructionOutlined />
-                  </ListItemIcon>
                 </ListItem>
                 <ListItem button key="industry" onClick={() => changePage(3)}>
                   <ListItemIcon>
@@ -252,11 +249,20 @@ const Frame = () => {
                     <LogoDev />
                   </ListItemIcon>
                 </ListItem>
-                <ListItem button key="market" onClick={() => changePage(8)}>
+                <ListItem button key="market" onClick={() => changePage(9)}>
                   <ListItemIcon>
                     <ShowChartOutlined />
                   </ListItemIcon>
                   <ListItemText primary="市场信息" />
+                  <ListItemIcon>
+                    <LogoDev />
+                  </ListItemIcon>
+                </ListItem>
+                <ListItem button key="swap" onClick={() => changePage(10)}>
+                  <ListItemIcon>
+                    <SwapHorizontalCircleOutlined />
+                  </ListItemIcon>
+                  <ListItemText primary="Dino swap!" />
                   <ListItemIcon>
                     <LogoDev />
                   </ListItemIcon>

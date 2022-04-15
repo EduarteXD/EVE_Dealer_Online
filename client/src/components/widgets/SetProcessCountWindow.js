@@ -72,14 +72,6 @@ const SetProcessCountWindow = (hooks) => {
                 >
                   {hooks.toProduce.name}
                 </Typography>
-                <Divider
-                  sx={{
-                    width: '50%',
-                    margin: 'auto',
-                    left: '0',
-                    right: '0'
-                  }}
-                />
               </Box>
               <Grid
                 container
@@ -92,6 +84,7 @@ const SetProcessCountWindow = (hooks) => {
                   <Box>
                     <TextField
                       fullWidth
+                      defaultValue='1'
                       id='processCount'
                       label='生产流程'
                     />
