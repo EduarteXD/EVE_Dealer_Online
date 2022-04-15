@@ -64,7 +64,7 @@ const SetBlueprintInfoWindow = (hooks) => {
               margin: 'auto',
               left: '0',
               right: '0',
-              top: '25vh'
+              verticalAlign: 'center'
             }}
           >
             <Paper
