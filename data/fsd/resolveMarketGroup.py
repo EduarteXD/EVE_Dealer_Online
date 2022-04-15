@@ -2,6 +2,8 @@ import re
 import yaml
 import json
 
+version = input()
+
 file = open('marketGroups.yaml', 'rb')
 outPut = open('marketGroups.json', 'w', encoding='utf8')
 
@@ -155,5 +157,10 @@ for key in conv['ships']:
         belong['size'] = 'xlarge'
     conv['ships'][key] = belong
 
-outPut.write(json.dumps(conv, ensure_ascii=False))
+res = {
+    'version': version,
+    'payload': conv
+}
+
+outPut.write(json.dumps(res, ensure_ascii=False))
 outPut.close()

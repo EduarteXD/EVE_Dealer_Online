@@ -133,7 +133,7 @@ app.get('/api/data/idtogroup/version', (req, res) => {
 
 app.get('/api/data/itemgroup/version', (req, res) => {
   res.json({
-    version: '2204_3'
+    version: '2204_4'
   })
 })
 

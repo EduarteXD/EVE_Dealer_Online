@@ -731,6 +731,7 @@ const ManufacturePage = (hooks) => {
                                   )
                                 }
                                 <TableCell align='right'></TableCell>
+                                <TableCell align='right'></TableCell>
                                 <TableCell align='right'>
                                   <Button 
                                     variant='outlined' 
