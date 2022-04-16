@@ -19,6 +19,8 @@ if fileName == 'typeIDs':
 if fileName == 'blueprints':
     if genType == '1':
         print('blueprints')
+    if genType == '2':
+        print('reactions')
 
 # print(fileName + '.yaml')
 file = open(fileName + '.yaml', 'rb')
@@ -87,6 +89,18 @@ if fileName == 'blueprints':
                             val['activities']['manufacturing']['materials']
                         conv['payload'][val['activities']['manufacturing']['products'][0]['typeID']]['pq'] = \
                             val['activities']['manufacturing']['products'][0]['quantity']
+    if genType == '2':
+        for key, val in data.items():
+            if 'reaction' in val['activities']:
+                if 'products' in val['activities']['reaction']:
+                    if 'materials' in val['activities']['reaction']:
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']] = {}
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['bp'] = key
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['mt'] = \
+                            val['activities']['reaction']['materials']
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['pq'] = \
+                            val['activities']['reaction']['products'][0]['quantity']
+
 
 outPut.write(json.dumps(conv, ensure_ascii=False))
 outPut.close()
