@@ -15,13 +15,7 @@ const PurchasingListPage = () => {
       content = content + brief[key].name + ' x' + brief[key].quantity + '\n'
     }
 
-    var textarea = document.createElement("textarea")
-    document.body.appendChild(textarea)
-    textarea.style.position = "absolute"
-    textarea.style.clip = "rect(0 0 0 0)"
-    textarea.value = content
-    textarea.select()
-    document.execCommand("copy", true)
+    navigator.clipboard.writeText(content)
     setMsg(true)
   }
 
