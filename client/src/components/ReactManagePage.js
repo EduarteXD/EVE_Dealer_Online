@@ -8,6 +8,7 @@ import getMatchedReacts from '../functions/GetMatchedReacts'
 import getItemList from '../functions/GetItemList'
 import getIdToName from '../functions/GetIdToName'
 import getReactions from '../functions/GetReactions'
+import reactDetail from '../functions/ReactDetail'
 
 const ReactManagePage = (hooks) => {
   const [isItemListLoading, setItemListLoading] = React.useState(true)
@@ -18,6 +19,7 @@ const ReactManagePage = (hooks) => {
   const [reacts, setReacts] = React.useState({})
   const [nameToId, setNameToId] = React.useState({})
   const [idToName, setIdToName] = React.useState({})
+  const [toReact, setToReact] = React.useState([])
 
   if (!requestSent) {
     setReqStat(true)
@@ -49,11 +51,24 @@ const ReactManagePage = (hooks) => {
     else {
       setMatched({})
     }
-    // console.log(matched)
   }
 
   const handleAdd = (itemID) => {
-
+    var currentCount = Object.keys(toReact).length
+    var current = toReact
+    //-----------------
+    var count = 1
+    const updateMaterialRequirement = (content, start, end, formulaID, count) => {
+      var temp = JSON.parse(JSON.stringify(content))
+      for (var i = start; i < end; i++) {
+        var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id, bpID, myBp, idToGroup, itemGroup, structureList)
+        temp.materials[i].quantity = result.material
+      }
+      setFacility(result.facilityName)
+      return temp
+    }
+    //-----------------
+    toReact[currentCount] = reactDetail(itemID, updateMaterialRequirement, reacts, idToName, count)
   }
 
   return (

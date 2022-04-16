@@ -1,5 +1,5 @@
 .basket {
-  transition: opacity 1s;
+  transition: opacity 0.5s;
   opacity: 1;
 }
 

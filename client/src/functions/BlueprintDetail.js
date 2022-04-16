@@ -1,52 +1,10 @@
 const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name, count) => {
-  /*
-    result = {
-      materials: [
-          {
-            id: id, 
-            quantity: quantity, <- per process
-            toBuy: true,
-            dividable: false,
-            depth: 0,
-            resolve: {}
-          },
-          {
-            id: id, 
-            toBuy: true
-            dividable: true,
-            resolve: {
-              materials: [
-                {
-                  id: id, 
-                  quantity: quantity,
-                  toBuy: true,
-                  dividable: false,
-                  depth: 1,
-                  resolve: {}
-                }
-              ],
-              blueprintID: id,
-              perProcess: perProcessMade,
-              name: name
-            }
-          }
-      ],
-      blueprintID: id,
-      perProcess: perProcessMade,
-      name: name
-    }
-  */
-  // var storage = window.localStorage
-  // var blueprints = JSON.parse(storage['blueprintList'])
-  // var ID2Name = JSON.parse(storage['ID2Name'])
-  
   const calc = (itemID, depth) => {
     if (itemID in blueprints) {
       var blueprint = blueprints[itemID]
       var resolvedItems = []
       var i = 0
-      for (var key in blueprint.mt)
-      {
+      for (var key in blueprint.mt) {
         var resolve = calc(blueprint.mt[key].typeID, depth + 1)
         resolvedItems[i] = {
           id: blueprint.mt[key].typeID,
@@ -76,8 +34,6 @@ const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name,
 
   var result = calc(itemID, 0)
   result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID, count)
-  // console.log(count)
-  // console.log(result)
   return result
 }
 

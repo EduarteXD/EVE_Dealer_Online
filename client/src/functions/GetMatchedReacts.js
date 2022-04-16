@@ -6,7 +6,6 @@ const getMatchedReacts = (inputed, setMatched, nameToID, reacts, idToName) => {
       var str = name
       if (str.search(inputed) >= 0) {
         if (reacts[nameToID[name]] !== undefined) {
-          console.log(name)
           result[name] = nameToID[name]
           count++
         }
