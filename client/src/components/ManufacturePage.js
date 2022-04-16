@@ -91,6 +91,14 @@ const ManufacturePage = (hooks) => {
     detail.totVal = 0
     for (var key in detail.materials) {
       if (detail.materials[key].toBuy) {
+        // console.log(idToName[detail.materials[key].id])
+        // console.log(market[detail.materials[key].id])
+        if (market[detail.materials[key].id] === undefined) {
+          market[detail.materials[key].id] = {
+            adj: NaN,
+            avg: NaN
+          }
+        }
         var lineValue = market[detail.materials[key].id].avg * detail.materials[key].quantity
         if (!isNaN(lineValue)) {
           detail.totVal = parseInt(detail.totVal) + parseInt(lineValue)
