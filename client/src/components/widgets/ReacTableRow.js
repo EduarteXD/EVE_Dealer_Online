@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableRow, TableCell, Grid, Typography } from '@mui/material'
+import { TableRow, TableCell, Grid, Typography, Button } from '@mui/material'
 
 const ReactTableRow = (hooks) => {
   const renderName = (name, depth) => {
@@ -14,6 +14,9 @@ const ReactTableRow = (hooks) => {
     <>
       <TableRow
         key={hooks.data.id}
+        sx={{
+          background: '#f2f2f2'
+        }}
       >
         <TableCell>
           <Grid
@@ -98,7 +101,17 @@ const ReactTableRow = (hooks) => {
             </TableCell>
             <TableCell align='right'>{hooks.data.quantity * hooks.data.materials[key].quantity}</TableCell>
             <TableCell align='right'>{hooks.data.quantity * hooks.data.materials[key].quantity}</TableCell>
-            <TableCell align='right'></TableCell>
+            <TableCell align='right'>
+                {
+                  hooks.data.materials[key].dividable && (
+                    <Button
+                      variant='outlined'
+                    >
+                      反应
+                    </Button>
+                  )
+                }
+            </TableCell>
           </TableRow>
         ))
       }
