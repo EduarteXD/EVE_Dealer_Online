@@ -1,5 +1,5 @@
 const getMatchedItem = (inputed, setMatched, nameToID, blueprints) => {
-  var storage = window.localStorage
+  // var storage = window.localStorage
   // var nameToID = JSON.parse(storage['itemList'])
   // var blueprints = JSON.parse(storage['blueprintList'])
   var result ={}

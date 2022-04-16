@@ -1,5 +1,4 @@
 import React from 'react'
-import { Collapse } from '@mui/material'
 import LoginPage from './LoginPage'
 import BackgroundFrame from './BackgroundFrame'
 

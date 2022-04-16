@@ -75,6 +75,7 @@ const PurchasingListPage = () => {
                           <Grid container>
                             <Grid item md={1}>
                               <img
+                                alt={brief[key].id}
                                 src={
                                   "https://images.evetech.net/types/" + brief[key].id + "/icon?size=32"
                                 }

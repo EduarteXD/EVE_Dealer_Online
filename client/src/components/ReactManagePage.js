@@ -1,20 +1,65 @@
 import React from 'react'
-import { Box, Card, Paper, Grid, LinearProgress, Typography, Divider, TextField, TableContainer, 
-  Table, TableHead, TableBody, TableRow, TableCell, Button } from '@mui/material'
+import {
+  Box, Card, Paper, Grid, LinearProgress, Typography, Divider, TextField, TableContainer,
+  Table, TableHead, TableBody, TableRow, TableCell, Button
+} from '@mui/material'
 
 import getMatchedReacts from '../functions/GetMatchedReacts'
+import getItemList from '../functions/GetItemList'
+import getIdToName from '../functions/GetIdToName'
+import getReactions from '../functions/GetReactions'
 
 const ReactManagePage = (hooks) => {
-  const [isLoading, setLoadingStat] = React.useState(true)
+  const [isItemListLoading, setItemListLoading] = React.useState(true)
+  const [isIdToNameLoading, setIdToNameLoading] = React.useState(true)
+  const [isReactionLoading, setReactionLoading] = React.useState(true)
+  const [requestSent, setReqStat] = React.useState(false)
+  const [matched, setMatched] = React.useState({})
+  const [reacts, setReacts] = React.useState({})
+  const [nameToId, setNameToId] = React.useState({})
+  const [idToName, setIdToName] = React.useState({})
 
-  if (isLoading) {
-    setLoadingStat(false)
+  if (!requestSent) {
+    setReqStat(true)
+    getItemList((stat) => {
+      setItemListLoading(stat)
+      if (!stat) {
+        setNameToId(JSON.parse(window.localStorage['itemList']))
+      }
+    })
+    getIdToName((stat) => {
+      setIdToNameLoading(stat)
+      if (!stat) {
+        setIdToName(JSON.parse(window.localStorage['ID2Name']))
+      }
+    })
+    getReactions((stat) => {
+      setReactionLoading(stat)
+      if (!stat) {
+        setReacts(JSON.parse(window.localStorage['reactions']))
+      }
+    })
+  }
+
+  const handleChange = () => {
+    if (document.getElementById('prodName').value.trim().replace(/[^\u4E00-\u9FA5]/g, '') !== '') {
+      getMatchedReacts(document.getElementById('prodName').value.trim().replace(/[^\u4E00-\u9FA5]/g, ''),
+        setMatched, nameToId, reacts, idToName)
+    }
+    else {
+      setMatched({})
+    }
+    // console.log(matched)
+  }
+
+  const handleAdd = (itemID) => {
+
   }
 
   return (
     <>
       {
-        isLoading ? (
+        isItemListLoading || isIdToNameLoading || isReactionLoading ? (
           <Box
             sx={{
               textAlign: 'center'
@@ -59,9 +104,10 @@ const ReactManagePage = (hooks) => {
                     md={4}
                     xs={12}
                   >
-                    <TextField 
+                    <TextField
                       fullWidth
                       label='输入产品名称'
+                      onChange={handleChange}
                       id='prodName'
                     />
                   </Grid>
@@ -87,20 +133,60 @@ const ReactManagePage = (hooks) => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          <TableRow>
-                            <TableCell>
-                              这里是名称
-                            </TableCell>
-                            <TableCell
-                              align='right'
-                            >
-                              <Button
-                                variant='outlined'
+                          {
+                            Object.keys(matched).map((key) => (
+                              <TableRow
+                                key={matched[key]}
                               >
-                                添加到规划
-                              </Button>
-                            </TableCell>
-                          </TableRow>
+                                <TableCell>
+                                  <Grid
+                                    container
+                                  >
+                                    <Grid
+                                      item
+                                      md={1.5}
+                                    >
+                                      <img
+                                        alt={key}
+                                        src={'https://images.evetech.net/types/' + matched[key] + '/icon?size=32'}
+                                        style={{
+                                          width: '32px',
+                                          height: '32px'
+                                        }}
+                                      />
+                                    </Grid>
+                                    <Grid
+                                      item
+                                      xl={0}
+                                      lg={0.1}
+                                      md={0.5}
+                                      xs={1}
+                                    />
+                                    <Grid
+                                      item
+                                      md={8}
+                                    >
+                                      <Typography
+                                        mt={0.5}
+                                      >
+                                        {key}
+                                      </Typography>
+                                    </Grid>
+                                  </Grid>
+                                </TableCell>
+                                <TableCell
+                                  align='right'
+                                >
+                                  <Button
+                                    variant='outlined'
+                                    onClick={() => handleAdd(matched[key])}
+                                  >
+                                    添加到规划
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          }
                         </TableBody>
                       </Table>
                     </TableContainer>
