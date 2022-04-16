@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Box, Card, Paper, Grid, LinearProgress, Typography, Divider, TextField, TableContainer,
+  Box, Paper, Grid, LinearProgress, Typography, Divider, TextField, TableContainer,
   Table, TableHead, TableBody, TableRow, TableCell, Button
 } from '@mui/material'
 
@@ -10,11 +10,16 @@ import getIdToName from '../functions/GetIdToName'
 import getReactions from '../functions/GetReactions'
 import reactDetail from '../functions/ReactDetail'
 
-const ReactManagePage = (hooks) => {
+import ReactTableRow from './widgets/ReacTableRow'
+import SetProcessCountWindow from './widgets/SetProcessCountWindow'
+
+const ReactManagePage = () => {
   const [isItemListLoading, setItemListLoading] = React.useState(true)
   const [isIdToNameLoading, setIdToNameLoading] = React.useState(true)
   const [isReactionLoading, setReactionLoading] = React.useState(true)
+  const [showSettingWindow, setSettingWindow] = React.useState(false)
   const [requestSent, setReqStat] = React.useState(false)
+  const [toProduce, setToProduce] = React.useState({})
   const [matched, setMatched] = React.useState({})
   const [reacts, setReacts] = React.useState({})
   const [nameToId, setNameToId] = React.useState({})
@@ -53,22 +58,20 @@ const ReactManagePage = (hooks) => {
     }
   }
 
-  const handleAdd = (itemID) => {
-    var currentCount = Object.keys(toReact).length
+  const handleSubmit = (count) => {
     var current = toReact
-    //-----------------
-    var count = 1
-    const updateMaterialRequirement = (content, start, end, formulaID, count) => {
-      var temp = JSON.parse(JSON.stringify(content))
-      for (var i = start; i < end; i++) {
-        var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id, bpID, myBp, idToGroup, itemGroup, structureList)
-        temp.materials[i].quantity = result.material
-      }
-      setFacility(result.facilityName)
-      return temp
-    }
-    //-----------------
-    toReact[currentCount] = reactDetail(itemID, updateMaterialRequirement, reacts, idToName, count)
+    current.push(reactDetail(toProduce.id, reacts, idToName, count))
+    console.log(current)
+    setToReact([...current])
+  }
+
+  const handleAdd = (id) => {
+    setToProduce({
+      name: idToName[id],
+      id: id,
+      count: 1
+    })
+    setSettingWindow(true)
   }
 
   return (
@@ -85,6 +88,7 @@ const ReactManagePage = (hooks) => {
         ) : (
           <Grid
             container
+            spacing={2}
             sx={{
               width: "85vw",
               margin: "auto",
@@ -93,6 +97,7 @@ const ReactManagePage = (hooks) => {
               marginTop: "5vh"
             }}
           >
+            <Grid item xs={0} />
             <Grid
               item
               xs={12}
@@ -109,7 +114,7 @@ const ReactManagePage = (hooks) => {
                 <Divider />
                 <Grid
                   container
-                  spacing={1}
+                  spacing={2}
                   sx={{
                     padding: '20px 20px 20px 20px'
                   }}
@@ -209,7 +214,57 @@ const ReactManagePage = (hooks) => {
                 </Grid>
               </Paper>
             </Grid>
+            <Grid
+              item
+              xs={12}
+            >
+              <Paper>
+                <Typography
+                  variant='h6'
+                  sx={{
+                    padding: '20px 20px 20px 20px'
+                  }}
+                >
+                  用料
+                </Typography>
+                <Divider />
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>名称</TableCell>
+                        <TableCell align='right'>需求数量</TableCell>
+                        <TableCell align='right'>生成数量</TableCell>
+                        <TableCell align='right'>操作</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {
+                        // @TODO fixxxxx this!!!!!!!!!
+                        Object.keys(toReact).map((key) => (
+                          <ReactTableRow 
+                            key={key}
+                            data={toReact[key]}
+                          />
+                        ))
+                      }
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Paper>
+            </Grid>
           </Grid>
+        )
+      }
+      {
+        showSettingWindow && (
+          <SetProcessCountWindow 
+            toProduce={toProduce}
+            setToProduce={setToProduce}
+            setSettingWindow={setSettingWindow}
+            showSettingWindow={showSettingWindow}
+            handleSubmit={handleSubmit}
+          />
         )
       }
     </>

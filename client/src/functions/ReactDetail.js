@@ -1,4 +1,4 @@
-const reactDetail = (itemID, updateMaterialRequirement, reacts, ID2Name, count) => {
+const reactDetail = (itemID, reacts, ID2Name, count) => {
   const calc = (itemID, depth) => {
     if (itemID in reacts) {
       var formula = reacts[itemID]
@@ -20,6 +20,7 @@ const reactDetail = (itemID, updateMaterialRequirement, reacts, ID2Name, count) 
       var result = {
         id: itemID,
         name: ID2Name[itemID],
+        quantity: count,
         formulaID: formula.bp,
         perProcess: formula.pq,
         materials: resolvedItems
@@ -32,7 +33,8 @@ const reactDetail = (itemID, updateMaterialRequirement, reacts, ID2Name, count) 
   }
 
   var result = calc(itemID, 0)
-  result = updateMaterialRequirement(result, 0, result.materials.length, result.formulaID, count)
+  // console.log(result)
+  // result = updateMaterialRequirement(result, 0, result.materials.length, result.formulaID, count)
   return result
 }
 

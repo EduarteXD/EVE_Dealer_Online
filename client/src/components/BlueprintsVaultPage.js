@@ -109,7 +109,7 @@ const BlueprintsVaultPage = () => {
               margin: "auto",
               left: "0",
               right: "0",
-              marginTop: "5vh",
+              marginTop: "5vh"
             }}
           >
             <Grid item xs={0} />
