@@ -143,6 +143,16 @@ app.get('/api/data/structurerigs/version', (req, res) => {
   })
 })
 
+app.get('/api/data/reactions/version', (req, res) => {
+  res.json({
+    version: '2204'
+  })
+})
+
+app.get('/api/data/reactions', (req, res) => {
+  res.sendFile(__dirname + '/data/reactions.json')
+})
+
 app.get('/api/data/structurerigs', (req, res) => {
   res.sendFile(__dirname + '/data/structurerigs.json')
 })
