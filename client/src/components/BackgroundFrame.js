@@ -11,6 +11,7 @@ import ManufacturePage from './ManufacturePage'
 import PurchasingListPage from './PurchasingListPage'
 import BlueprintsVaultPage from './BlueprintsVaultPage'
 import FacilityManagePage from './FacilityManagePage'
+import ReactManagePage from './ReactManagePage'
 
 import AboutPage from './AboutPage'
 
@@ -132,12 +133,7 @@ const Frame = () => {
           }
           {
             page === 1 && (
-              <ValuationPage
-                // marketData={marketData}
-                // setMarketData={setMarketData}
-                // marketRequested={marketRequested}
-                // setMarketRequest={setMarketRequest}
-              />
+              <ValuationPage />
             )
           }
           {
@@ -159,6 +155,11 @@ const Frame = () => {
           {
             page === 4 && (
               <PurchasingListPage />
+            )
+          }
+          {
+            page === 5 && (
+              <ReactManagePage />
             )
           }
           {
