@@ -161,6 +161,9 @@ const ReactManagePage = () => {
                                 <TableCell>
                                   <Grid
                                     container
+                                    sx={{
+                                      verticalAlign: 'middle'
+                                    }}
                                   >
                                     <Grid
                                       item
@@ -186,9 +189,7 @@ const ReactManagePage = () => {
                                       item
                                       md={8}
                                     >
-                                      <Typography
-                                        mt={0.5}
-                                      >
+                                      <Typography>
                                         {key}
                                       </Typography>
                                     </Grid>

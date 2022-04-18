@@ -159,7 +159,12 @@ const BlueprintsVaultPage = () => {
                               }}
                             >
                               <TableCell>
-                                <Grid container>
+                                <Grid 
+                                  container
+                                  sx={{
+                                    verticalAlign: 'middle'
+                                  }}
+                                >
                                   <Grid item md={1.5}>
                                     <img
                                       alt={key}
@@ -176,7 +181,7 @@ const BlueprintsVaultPage = () => {
                                   </Grid>
                                   <Grid item xl={0} lg={0.1} md={0.5} xs={1} />
                                   <Grid item md={8}>
-                                    <Typography mt={0.5}>{key}</Typography>
+                                    <Typography>{key}</Typography>
                                   </Grid>
                                 </Grid>
                               </TableCell>

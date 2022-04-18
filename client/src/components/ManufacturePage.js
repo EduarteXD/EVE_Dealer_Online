@@ -439,6 +439,9 @@ const ManufacturePage = (hooks) => {
                                   <TableCell>
                                     <Grid
                                       container
+                                      sx={{
+                                        verticalAlign: 'middle'
+                                      }}
                                     >
                                       <Grid 
                                         item
@@ -464,9 +467,7 @@ const ManufacturePage = (hooks) => {
                                         item
                                         md={8}
                                       >
-                                        <Typography
-                                          mt={0.5}
-                                        >
+                                        <Typography>
                                           {key}
                                         </Typography>
                                       </Grid>
@@ -543,6 +544,9 @@ const ManufacturePage = (hooks) => {
                                 <TableCell>
                                   <Grid 
                                     container
+                                    sx={{
+                                      verticalAlign: 'middle'
+                                    }}
                                   >
                                     <Grid 
                                       item
@@ -568,9 +572,7 @@ const ManufacturePage = (hooks) => {
                                       item
                                       md={6}
                                     >
-                                      <Typography
-                                        mt={0.6}
-                                      >
+                                      <Typography>
                                         {brief.content.name}
                                       </Typography>
                                     </Grid>

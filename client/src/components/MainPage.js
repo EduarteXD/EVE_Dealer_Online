@@ -5,6 +5,7 @@ import BackgroundFrame from './BackgroundFrame'
 const MainPage = (hooks) => {
   const [requestSent, setRequest] = React.useState(false)
   const [loggedIn, setUserStat] = React.useState(false)
+  const [completed, setCompleted] = React.useState(false)
   
   const getData = () => {
     fetch('api/user')
@@ -18,6 +19,7 @@ const MainPage = (hooks) => {
             isLoading: false
           }
         )
+        setCompleted(true)
       }
       else{
         hooks.setAppStat(
@@ -26,6 +28,7 @@ const MainPage = (hooks) => {
             isLoading: false
           }
         )
+        setCompleted(true)
       }
     })
     .catch((err) => {
@@ -43,12 +46,14 @@ const MainPage = (hooks) => {
   return (
     <>
       {
-        loggedIn ? (
-          <BackgroundFrame />
-        ) : (
-          <LoginPage
-            setUserStat={setUserStat}
-          />
+        completed && (
+          loggedIn ? (
+            <BackgroundFrame />
+          ) : (
+            <LoginPage
+              setUserStat={setUserStat}
+            />
+          )
         )
       }
     </>
