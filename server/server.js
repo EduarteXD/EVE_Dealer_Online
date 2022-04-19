@@ -41,7 +41,6 @@ const genTrackerID = (uid) => {
     var id = 'E-' + base62(parseInt(now.getTime() / 1000 + now.getTime() % 1000))
     const md5 = crypto.createHash('md5')
     var token = 'T-' + base62(parseInt(now.getTime() / 10 + now.getTime() % 1000))
-    // var token = 'T-' + md5.update(base62(parseInt(now.getTime() / 100))).digest('hex').toUpperCase()
     const deleteParms = [uid]
     connection.query('delete from `trackers` where `uid` = ?', deleteParms, (err) => {
       if (err)
