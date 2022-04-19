@@ -1,4 +1,4 @@
-const findProperFacility = (facilityList) => {
+const findOptimalFacility = (facilityList) => {
 
 }
 

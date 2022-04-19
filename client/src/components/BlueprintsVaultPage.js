@@ -23,10 +23,7 @@ const BlueprintsVaultPage = () => {
     exists: false
   })
   const [ID2Name, setID2Name] = React.useState({})
-  const [bpInfo, setbpInfo] = React.useState({
-    id: 4311,
-    name: '龙卷风级蓝图'
-  })
+  const [bpInfo, setbpInfo] = React.useState({})
 
   const updateBpList = () => {
     fetch('api/blueprint/query')

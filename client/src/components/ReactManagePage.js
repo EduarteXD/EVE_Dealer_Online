@@ -63,6 +63,8 @@ const ReactManagePage = () => {
     current.push(reactDetail(toProduce.id, reacts, idToName, count))
     console.log(current)
     setToReact([...current])
+    document.getElementById('prodName').value=''
+    handleChange()
   }
 
   const handleAdd = (id) => {
@@ -241,7 +243,6 @@ const ReactManagePage = () => {
                     </TableHead>
                     <TableBody>
                       {
-                        // @TODO fixxxxx this!!!!!!!!!
                         Object.keys(toReact).map((key) => (
                           <ReactTableRow 
                             key={key}

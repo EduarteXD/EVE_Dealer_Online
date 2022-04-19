@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LoginPage from './LoginPage'
 import BackgroundFrame from './BackgroundFrame'
 
@@ -32,7 +32,7 @@ const MainPage = (hooks) => {
       }
     })
     .catch((err) => {
-      // console.warn(err)
+      console.warn(err)
       hooks.setFail(true)
     })
   }

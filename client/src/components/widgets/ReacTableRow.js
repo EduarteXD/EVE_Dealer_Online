@@ -10,6 +10,11 @@ const ReactTableRow = (hooks) => {
     return prefix + name
   }
 
+  const handleDivide = (key) => {
+    alert(key)
+    alert(hooks.data.materials[key].id)
+  }
+
   return (
     <>
       <TableRow
@@ -106,6 +111,7 @@ const ReactTableRow = (hooks) => {
                   hooks.data.materials[key].dividable && (
                     <Button
                       variant='outlined'
+                      onClick={() => handleDivide(key)}
                     >
                       反应
                     </Button>
