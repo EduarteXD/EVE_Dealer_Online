@@ -10,7 +10,7 @@ import getIdToName from '../functions/GetIdToName'
 import getReactions from '../functions/GetReactions'
 import reactDetail from '../functions/ReactDetail'
 
-import ReactTableRow from './widgets/ReacTableRow'
+import ReactTableRow from './widgets/ReactTableRow'
 import SetProcessCountWindow from './widgets/SetProcessCountWindow'
 
 const ReactManagePage = () => {

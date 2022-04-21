@@ -11,8 +11,25 @@ const ReactTableRow = (hooks) => {
   }
 
   const handleDivide = (key) => {
-    alert(key)
-    alert(hooks.data.materials[key].id)
+    console.log(hooks.data.materials.length)
+    console.log(hooks.data.materials[key].resolve.materials.length)
+    var newMat = []
+    for (var i in hooks.data.materials) {
+      if (i <= key) {
+        newMat[i] = hooks.data.materials[i]
+      }
+    }
+    for (i = 1; i <= hooks.data.materials[key].resolve.materials.length; i++) {
+      newMat[parseInt(key) + i] = hooks.data.materials[key].resolve.materials[i - 1]
+      newMat[parseInt(key) + i].quantity *= Math.ceil(newMat[key].quantity / newMat[key].resolve.perProcess)
+      // console.log(parseInt(key) + i)
+    }
+    for (i; i + parseInt(key) < hooks.data.materials.length + hooks.data.materials[key].resolve.materials.length; i++) {
+      newMat[parseInt(key) + i] = hooks.data.materials[parseInt(key) + i - hooks.data.materials[key].resolve.materials.length]
+      // console.log(i + parseInt(key))
+    }
+
+    console.log(newMat)
   }
 
   return (
