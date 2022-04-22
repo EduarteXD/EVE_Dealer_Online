@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   Box, Paper, Grid, LinearProgress, Typography, Divider, TextField, TableContainer,
-  Table, TableHead, TableBody, TableRow, TableCell, Button
+  Table, TableHead, TableBody, TableRow, TableCell, Button, Alert
 } from '@mui/material'
 
 import getMatchedReacts from '../functions/GetMatchedReacts'
@@ -64,8 +64,8 @@ const ReactManagePage = () => {
     let pos = Object.keys(current).length
     current[pos] = reactDetail(toProduce.id, reacts, idToName, count)
     console.log(current)
-    setToReact({...current})
-    document.getElementById('prodName').value=''
+    setToReact({ ...current })
+    document.getElementById('prodName').value = ''
     handleChange()
   }
 
@@ -85,7 +85,7 @@ const ReactManagePage = () => {
     // console.log(toReact)
     console.log(newTable)
     console.log(row)
-    setToReact({...newTable})
+    setToReact({ ...newTable })
   }
 
   return (
@@ -100,181 +100,184 @@ const ReactManagePage = () => {
             <LinearProgress />
           </Box>
         ) : (
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              width: "85vw",
-              margin: "auto",
-              left: "0",
-              right: "0",
-              marginTop: "5vh"
-            }}
-          >
-            <Grid item xs={0} />
+          <>
+            <Alert severity='warning'>Pending for Refactoring</Alert>
             <Grid
-              item
-              xs={12}
+              container
+              spacing={2}
+              sx={{
+                width: "85vw",
+                margin: "auto",
+                left: "0",
+                right: "0",
+                marginTop: "5vh"
+              }}
             >
-              <Paper>
-                <Typography
-                  variant='h6'
-                  sx={{
-                    padding: '20px 20px 20px 20px'
-                  }}
-                >
-                  添加反应规划
-                </Typography>
-                <Divider />
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    padding: '20px 20px 20px 20px'
-                  }}
-                >
-                  <Grid
-                    item
-                    md={4}
-                    xs={12}
+              <Grid item xs={0} />
+              <Grid
+                item
+                xs={12}
+              >
+                <Paper>
+                  <Typography
+                    variant='h6'
+                    sx={{
+                      padding: '20px 20px 20px 20px'
+                    }}
                   >
-                    <TextField
-                      fullWidth
-                      label='输入产品名称'
-                      onChange={handleChange}
-                      id='prodName'
-                    />
-                  </Grid>
+                    添加反应规划
+                  </Typography>
+                  <Divider />
                   <Grid
-                    item
-                    md={8}
-                    xs={12}
+                    container
+                    spacing={2}
+                    sx={{
+                      padding: '20px 20px 20px 20px'
+                    }}
                   >
-                    <TableContainer
-                      component={Paper}
+                    <Grid
+                      item
+                      md={4}
+                      xs={12}
                     >
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>
-                              名称
-                            </TableCell>
-                            <TableCell
-                              align='right'
-                            >
-                              操作
-                            </TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {
-                            Object.keys(matched).map((key) => (
-                              <TableRow
-                                key={matched[key]}
+                      <TextField
+                        fullWidth
+                        label='输入产品名称'
+                        onChange={handleChange}
+                        id='prodName'
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={8}
+                      xs={12}
+                    >
+                      <TableContainer
+                        component={Paper}
+                      >
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>
+                                名称
+                              </TableCell>
+                              <TableCell
+                                align='right'
                               >
-                                <TableCell>
-                                  <Grid
-                                    container
-                                    sx={{
-                                      verticalAlign: 'middle'
-                                    }}
-                                  >
-                                    <Grid
-                                      item
-                                      md={1.5}
-                                    >
-                                      <img
-                                        alt={key}
-                                        src={'https://images.evetech.net/types/' + matched[key] + '/icon?size=32'}
-                                        style={{
-                                          width: '32px',
-                                          height: '32px'
-                                        }}
-                                      />
-                                    </Grid>
-                                    <Grid
-                                      item
-                                      xl={0}
-                                      lg={0.1}
-                                      md={0.5}
-                                      xs={1}
-                                    />
-                                    <Grid
-                                      item
-                                      md={8}
-                                    >
-                                      <Typography>
-                                        {key}
-                                      </Typography>
-                                    </Grid>
-                                  </Grid>
-                                </TableCell>
-                                <TableCell
-                                  align='right'
+                                操作
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {
+                              Object.keys(matched).map((key) => (
+                                <TableRow
+                                  key={matched[key]}
                                 >
-                                  <Button
-                                    variant='outlined'
-                                    onClick={() => handleAdd(matched[key])}
+                                  <TableCell>
+                                    <Grid
+                                      container
+                                      sx={{
+                                        verticalAlign: 'middle'
+                                      }}
+                                    >
+                                      <Grid
+                                        item
+                                        md={1.5}
+                                      >
+                                        <img
+                                          alt={key}
+                                          src={'https://images.evetech.net/types/' + matched[key] + '/icon?size=32'}
+                                          style={{
+                                            width: '32px',
+                                            height: '32px'
+                                          }}
+                                        />
+                                      </Grid>
+                                      <Grid
+                                        item
+                                        xl={0}
+                                        lg={0.1}
+                                        md={0.5}
+                                        xs={1}
+                                      />
+                                      <Grid
+                                        item
+                                        md={8}
+                                      >
+                                        <Typography>
+                                          {key}
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
+                                  </TableCell>
+                                  <TableCell
+                                    align='right'
                                   >
-                                    添加到规划
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))
-                          }
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                                    <Button
+                                      variant='outlined'
+                                      onClick={() => handleAdd(matched[key])}
+                                    >
+                                      添加到规划
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))
+                            }
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Paper>
+                </Paper>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <Paper>
+                  <Typography
+                    variant='h6'
+                    sx={{
+                      padding: '20px 20px 20px 20px'
+                    }}
+                  >
+                    用料
+                  </Typography>
+                  <Divider />
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>名称</TableCell>
+                          <TableCell align='right'>需求数量</TableCell>
+                          <TableCell align='right'>生成数量</TableCell>
+                          <TableCell align='right'>操作</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {
+                          Object.keys(toReact).map((key) => (
+                            <ReactTableRow
+                              key={key}
+                              pos={key}
+                              data={toReact[key]}
+                              handleUpdate={handleUpdate}
+                            />
+                          ))
+                        }
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Paper>
+              </Grid>
             </Grid>
-            <Grid
-              item
-              xs={12}
-            >
-              <Paper>
-                <Typography
-                  variant='h6'
-                  sx={{
-                    padding: '20px 20px 20px 20px'
-                  }}
-                >
-                  用料
-                </Typography>
-                <Divider />
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>名称</TableCell>
-                        <TableCell align='right'>需求数量</TableCell>
-                        <TableCell align='right'>生成数量</TableCell>
-                        <TableCell align='right'>操作</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {
-                        Object.keys(toReact).map((key) => (
-                          <ReactTableRow
-                            key={key}
-                            pos={key}
-                            data={toReact[key]}
-                            handleUpdate={handleUpdate}
-                          />
-                        ))
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Paper>
-            </Grid>
-          </Grid>
+          </>
         )
       }
       {
         showSettingWindow && (
-          <SetProcessCountWindow 
+          <SetProcessCountWindow
             toProduce={toProduce}
             setToProduce={setToProduce}
             setSettingWindow={setSettingWindow}

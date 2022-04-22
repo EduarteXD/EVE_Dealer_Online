@@ -25,7 +25,7 @@ const LoadingPage = (hooks) => {
           sx={{
             width: '90vw',
             margin: 'auto',
-            marginTop: '20vh',
+            marginTop: 'calc(50vh - 200px)',
             left: '0',
             right: '0',
             textAlign: 'center'

@@ -123,13 +123,21 @@ const ReactTableRow = (hooks) => {
             <TableCell align='right'>{hooks.data.quantity * hooks.data.materials[key].quantity}</TableCell>
             <TableCell align='right'>
                 {
-                  hooks.data.materials[key].dividable && hooks.data.materials[key].toBuy && (
-                    <Button
-                      variant='outlined'
-                      onClick={() => handleDivide(key)}
-                    >
-                      反应
-                    </Button>
+                  hooks.data.materials[key].dividable && (
+                    hooks.data.materials[key].toBuy ? (
+                      <Button
+                        variant='outlined'
+                        onClick={() => handleDivide(key)}
+                      >
+                        反应
+                      </Button>
+                    ) : (
+                      <Button
+                        variant='outlined'
+                      >
+                        撤销
+                      </Button>
+                    )
                   )
                 }
             </TableCell>
