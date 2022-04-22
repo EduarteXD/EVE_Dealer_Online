@@ -24,7 +24,7 @@ const ReactManagePage = () => {
   const [reacts, setReacts] = React.useState({})
   const [nameToId, setNameToId] = React.useState({})
   const [idToName, setIdToName] = React.useState({})
-  const [toReact, setToReact] = React.useState([])
+  const [toReact, setToReact] = React.useState({})
 
   if (!requestSent) {
     setReqStat(true)
@@ -60,9 +60,11 @@ const ReactManagePage = () => {
 
   const handleSubmit = (count) => {
     var current = toReact
-    current.push(reactDetail(toProduce.id, reacts, idToName, count))
+    // console.log(current.length)
+    let pos = Object.keys(current).length
+    current[pos] = reactDetail(toProduce.id, reacts, idToName, count)
     console.log(current)
-    setToReact([...current])
+    setToReact({...current})
     document.getElementById('prodName').value=''
     handleChange()
   }
@@ -74,6 +76,16 @@ const ReactManagePage = () => {
       count: 1
     })
     setSettingWindow(true)
+  }
+
+  const handleUpdate = (row, key) => {
+    var newTable = toReact
+    console.log(key)
+    newTable[key].materials = row
+    // console.log(toReact)
+    console.log(newTable)
+    console.log(row)
+    setToReact({...newTable})
   }
 
   return (
@@ -244,9 +256,11 @@ const ReactManagePage = () => {
                     <TableBody>
                       {
                         Object.keys(toReact).map((key) => (
-                          <ReactTableRow 
+                          <ReactTableRow
                             key={key}
+                            pos={key}
                             data={toReact[key]}
+                            handleUpdate={handleUpdate}
                           />
                         ))
                       }

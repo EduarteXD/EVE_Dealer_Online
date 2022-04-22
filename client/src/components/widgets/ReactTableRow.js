@@ -11,8 +11,7 @@ const ReactTableRow = (hooks) => {
   }
 
   const handleDivide = (key) => {
-    console.log(hooks.data.materials.length)
-    console.log(hooks.data.materials[key].resolve.materials.length)
+    // console.log(hooks.data)
     var newMat = []
     for (var i in hooks.data.materials) {
       if (i <= key) {
@@ -22,14 +21,13 @@ const ReactTableRow = (hooks) => {
     for (i = 1; i <= hooks.data.materials[key].resolve.materials.length; i++) {
       newMat[parseInt(key) + i] = hooks.data.materials[key].resolve.materials[i - 1]
       newMat[parseInt(key) + i].quantity *= Math.ceil(newMat[key].quantity / newMat[key].resolve.perProcess)
-      // console.log(parseInt(key) + i)
     }
     for (i; i + parseInt(key) < hooks.data.materials.length + hooks.data.materials[key].resolve.materials.length; i++) {
       newMat[parseInt(key) + i] = hooks.data.materials[parseInt(key) + i - hooks.data.materials[key].resolve.materials.length]
-      // console.log(i + parseInt(key))
     }
-
-    console.log(newMat)
+    hooks.handleUpdate(newMat, hooks.pos)
+    newMat[key].toBuy = false
+    // console.log(newMat)
   }
 
   return (
@@ -125,7 +123,7 @@ const ReactTableRow = (hooks) => {
             <TableCell align='right'>{hooks.data.quantity * hooks.data.materials[key].quantity}</TableCell>
             <TableCell align='right'>
                 {
-                  hooks.data.materials[key].dividable && (
+                  hooks.data.materials[key].dividable && hooks.data.materials[key].toBuy && (
                     <Button
                       variant='outlined'
                       onClick={() => handleDivide(key)}
