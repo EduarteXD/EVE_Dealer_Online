@@ -58,7 +58,7 @@ const AboutPage = () => {
               }}
             >
               <Typography>
-                EVE小助手 Online dev build @20220416#1
+                EVE小助手 Online dev build @20220423#0
               </Typography>
             </Box>
             <Box
