@@ -114,7 +114,7 @@ app.get('/api/data/itemlist/version', (req, res) => {
 
 app.get('/api/data/blueprints/version', (req, res) => {
   res.json({
-    version: '2205'
+    version: '2205_2'
   })
 })
 

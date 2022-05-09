@@ -1,7 +1,26 @@
 import React from 'react'
 import { Paper, Grid, Typography, Avatar, Divider, Box, IconButton, Tooltip } from '@mui/material'
+import ReactMarkdown from 'react-markdown'
 
 const AboutPage = () => {
+  const changeLog = `
+    ### Scheduled
+
+    - add more methods in valuation
+    - add fold/ unfold all in manufacture page
+
+    ### Changelog
+
+    - 20220509@0:
+    merged react management function into manufacture function
+
+    - 20220423@0:
+    finished the basis of react management function
+
+    - 20220422@1:
+    added changelog module
+  `
+
   return (
     <>
       <Grid
@@ -58,7 +77,7 @@ const AboutPage = () => {
               }}
             >
               <Typography>
-                EVE小助手 Online dev build @20220423#0
+                EVE小助手 Online dev build @20220509#0
               </Typography>
             </Box>
             <Box
@@ -100,6 +119,22 @@ const AboutPage = () => {
           item
           xs={0}
         />
+        <Grid 
+          item
+          xs={12}
+        >
+          <Paper>
+            <Box
+              sx={{
+                padding: '20px 20px 20px 20px'
+              }}
+            >
+              <ReactMarkdown
+                children={changeLog}
+              />
+            </Box>
+          </Paper>
+        </Grid>
       </Grid>
     </>
   )

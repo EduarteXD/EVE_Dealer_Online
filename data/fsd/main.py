@@ -21,6 +21,8 @@ if fileName == 'blueprints':
         print('blueprints')
     if genType == '2':
         print('reactions')
+    if genType == '3':
+        print('all blueprints')
 
 # print(fileName + '.yaml')
 file = open(fileName + '.yaml', 'rb')
@@ -100,6 +102,31 @@ if fileName == 'blueprints':
                             val['activities']['reaction']['materials']
                         conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['pq'] = \
                             val['activities']['reaction']['products'][0]['quantity']
+    if genType == '3':
+        for key, val in data.items():
+            # print(val['activities'])
+            if 'manufacturing' in val['activities']:
+                if 'products' in val['activities']['manufacturing']:
+                    if 'materials' in val['activities']['manufacturing']:
+                        # print(val['activities']['manufacturing']['products'][0]['typeID'])
+                        # print(val['activities']['manufacturing'])
+                        conv['payload'][val['activities']['manufacturing']['products'][0]['typeID']] = {}
+                        conv['payload'][val['activities']['manufacturing']['products'][0]['typeID']]['bp'] = key
+                        conv['payload'][val['activities']['manufacturing']['products'][0]['typeID']]['mt'] = \
+                            val['activities']['manufacturing']['materials']
+                        conv['payload'][val['activities']['manufacturing']['products'][0]['typeID']]['pq'] = \
+                            val['activities']['manufacturing']['products'][0]['quantity']
+                        conv['payload'][val['activities']['manufacturing']['products'][0]['typeID']]['type'] = 'manufacture'
+            if 'reaction' in val['activities']:
+                if 'products' in val['activities']['reaction']:
+                    if 'materials' in val['activities']['reaction']:
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']] = {}
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['bp'] = key
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['mt'] = \
+                            val['activities']['reaction']['materials']
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['pq'] = \
+                            val['activities']['reaction']['products'][0]['quantity']
+                        conv['payload'][val['activities']['reaction']['products'][0]['typeID']]['type'] = 'react'
 
 
 outPut.write(json.dumps(conv, ensure_ascii=False))

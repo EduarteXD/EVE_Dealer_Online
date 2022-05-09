@@ -20,6 +20,33 @@ const AddFacilityWindow = (hooks) => {
     { id: 47516, label: "\"普罗米修斯\"铁壁", size:'l' }
   ]
 
+  const reactRigs = {
+    m : [
+      {
+        label: 'T1反应监测',
+        bonus: 1024,
+        tech: 1
+      },
+      {
+        label: 'T2反应监测',
+        bonus: 1024,
+        tech: 2
+      }
+    ],
+    l: [
+      {
+        label: 'T1反应监测',
+        bonus: 1024,
+        tech: 1
+      },
+      {
+        label: 'T2反应监测',
+        bonus: 1024,
+        tech: 2
+      }
+    ]
+  }
+
   const secLvls = [
     { id: 0, label: "高安" },
     { id: 1, label: "低安" },
@@ -79,7 +106,12 @@ const AddFacilityWindow = (hooks) => {
 
   const handleChange = (event, val) => {
     setFacility(val.id)
-    setRigList(hooks.rigsList[val.size])
+    if (val.id === 35835 || val.id === 35836) {
+      setRigList(reactRigs[val.size])
+    }
+    else {
+      setRigList(hooks.rigsList[val.size])
+    }
   }
 
   const handleChangeRig = (val, rigSlotId) => {

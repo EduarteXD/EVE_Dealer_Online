@@ -223,15 +223,17 @@ const Frame = () => {
                     <ConstructionOutlined />
                   </ListItemIcon>
                 </ListItem>
-                <ListItem button key="react" onClick={() => changePage(5)}>
-                  <ListItemIcon>
-                    <ScienceOutlined />
-                  </ListItemIcon>
-                  <ListItemText primary="反应管理" />
-                  <ListItemIcon>
-                    <LogoDev />
-                  </ListItemIcon>
-                </ListItem>
+                {/*
+                  <ListItem button key="react" onClick={() => changePage(5)}>
+                    <ListItemIcon>
+                      <ScienceOutlined />
+                    </ListItemIcon>
+                    <ListItemText primary="反应管理" />
+                    <ListItemIcon>
+                      <LogoDev />
+                    </ListItemIcon>
+                  </ListItem>
+                */}
                 <ListItem button key="recycle" onClick={() => changePage(7)}>
                   <ListItemIcon>
                     <ChangeCircleOutlined />

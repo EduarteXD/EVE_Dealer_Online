@@ -119,7 +119,7 @@ const ManufacturePage = (hooks) => {
     // var bpID = content.blueprintID
     var temp = JSON.parse(JSON.stringify(content))
     for (var i = start; i < end; i++) {
-      var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup, structureList)
+      var result = calcMaterialRequirement(temp.materials[i].quantity, count, temp.id/*temp.materials[i].id*/, bpID, myBp, idToGroup, itemGroup, structureList, blueprintList[temp.id].type)
       temp.materials[i].quantity = result.material
     }
     setFacility(result.facilityName)
@@ -183,7 +183,8 @@ const ManufacturePage = (hooks) => {
     for (var j in brief.content.materials[key].resolve.materials) {
       var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity, 
         Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess), 
-        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup, structureList)
+        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup, structureList, 
+        blueprintList[temp.content.materials[key].id].type)
       brief.content.materials[key].resolve.materials[j].quantity = manuDetail.material
       temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
       // brief.content.materials[key].resolve.materials[j].quantity = brief.content.materials[key].resolve.materials[j].quantity * Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess)
