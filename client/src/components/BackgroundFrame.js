@@ -2,7 +2,7 @@ import React from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Tooltip, Avatar, Drawer,
    List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material'
 import { Menu, NotificationsNoneOutlined, HomeOutlined, PriceChangeOutlined, ConstructionOutlined,
-  FactoryOutlined, InfoOutlined, ArchitectureOutlined, ScienceOutlined, LogoDev, ArrowCircleUp, 
+  FactoryOutlined, InfoOutlined, ArchitectureOutlined, LogoDev, ArrowCircleUp, 
   SettingsOutlined, ChangeCircleOutlined, Inventory2Outlined, ShowChartOutlined, SwapHorizontalCircleOutlined } from '@mui/icons-material'
 
 import WelcomePage from './WelcomePage'
@@ -41,7 +41,7 @@ const Frame = () => {
 
   if (!reqSent)
   {
-    setNotifyCount(0)
+    setNotifyCount(1)
     setReqStat(true);
     fetch('api/user/info')
     .then(response => response.json())

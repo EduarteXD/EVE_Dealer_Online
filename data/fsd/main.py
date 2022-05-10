@@ -15,6 +15,8 @@ if fileName == 'typeIDs':
         print('idToName')
     if genType == '4':
         print('structureList')
+    if genType == '5':
+        print('marketItemList')
 
 if fileName == 'blueprints':
     if genType == '1':
@@ -73,6 +75,12 @@ if fileName == 'typeIDs':
                                                 conv['payload'][key]['me'] = v['bonus']
                                             if v['bonusText']['en'] == 'reduction in time requirements for manufacturing and science jobs':
                                                 conv['payload'][key]['te'] = v['bonus']
+    if genType == '5':
+        for key, val in data.items():
+            if 'zh' in val['name']:
+                if val['published']:
+                    if 'marketGroupID' in val:
+                        conv['payload'][key] = val['name']['zh']
 
 
 # blueprints

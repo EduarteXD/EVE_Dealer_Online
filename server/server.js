@@ -7,6 +7,11 @@ import mysql from 'mysql'
 import crypto from 'crypto'
 import compression from 'compression'
 import path from 'path'
+import request from 'request'
+import util from 'util'
+import fs from 'fs'
+
+const asyncReq = util.promisify(request.get)
 
 const __dirname = path.resolve()
 dotenv.config()
@@ -16,6 +21,58 @@ app.use(bodyParser.json({ extended: 'true' }))
 app.use(cors())
 app.use(cookies())
 app.use(compression())
+
+const fetchMarketDetail = async () => {
+  var marketData = {}
+  var esiMarket = 'https://esi.evepc.163.com/latest/markets/10000002/orders/?datasource=serenity&order_type=all&page='
+  let i = 1
+  while (true) {
+    /* 
+    if (i > 10) {
+      console.log('[Market]dev update')
+      console.log('[Market]Market data successfully updated')
+      break;
+    }
+    */
+    console.log('[Market]Fetched ' + i + ' th page')
+    let result = await asyncReq(esiMarket + i)
+    let content = JSON.parse(result.body)
+    if('error' in content) {
+      console.log('[Market]Market data successfully updated')
+      break
+    }
+    else {
+      for (var key in content) {
+        if (!(content[key].type_id in marketData)) {
+          marketData[content[key].type_id] = {
+            price: {
+              buy: undefined,
+              sell: undefined
+            }
+          }
+        }
+        if (content[key].is_buy_order) {
+          // buy order, leave the maxium
+          marketData[content[key].type_id].price.buy = marketData[content[key].type_id].price.buy === undefined ? content[key].price : 
+            marketData[content[key].type_id].price.buy > content[key].price ? marketData[content[key].type_id].price.buy : content[key].price
+        }
+        else {
+          // sell order, leave the minimum
+          marketData[content[key].type_id].price.sell = marketData[content[key].type_id].price.sell === undefined ? content[key].price : 
+            marketData[content[key].type_id].price.sell < content[key].price ? marketData[content[key].type_id].price.sell : content[key].price
+        }
+      }
+    }
+    i++
+  }
+  fs.writeFile('./data/marketData.json', JSON.stringify(marketData), (err) => {
+    if (err) {
+      console.log(err)
+    }
+  })
+}
+
+fetchMarketDetail()
 
 const connection = mysql.createConnection({
   host: process.env.SQL_HOST,
@@ -146,6 +203,10 @@ app.get('/api/data/reactions/version', (req, res) => {
   res.json({
     version: '2204'
   })
+})
+
+app.get('/api/data/market', (req, res) => {
+  res.sendFile(__dirname + '/data/marketData.json')
 })
 
 app.get('/api/data/reactions', (req, res) => {

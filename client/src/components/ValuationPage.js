@@ -1,10 +1,11 @@
 import React from 'react'
-import { Box, LinearProgress, TextField, Grid, Card, Divider, Typography, Button, Table,
-  TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar } from '@mui/material'
+import { Box, LinearProgress, TextField, Grid, Card, Divider, Typography, Button, Table, MenuItem, 
+  TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar, FormControl, Select, InputLabel } from '@mui/material'
 
 import getEsiMarketData from '../functions/GetEsiMarketData'
 import resolveClipboard from '../functions/ResolveClipboard'
 import getItemList from '../functions/GetItemList'
+import getRealMarketData from '../functions/GetRealMarketData'
 
 const ValuationPage = (hooks) => {
   const [requestSent, setRequestStat] = React.useState(false)
@@ -12,6 +13,7 @@ const ValuationPage = (hooks) => {
   const [isLoading, setLoading] = React.useState(true)
   const [isLoadingMarket, setMarketLoading] = React.useState(true)
   const [result, setData] = React.useState({})
+  const [method, setMethod] = React.useState('avg')
 
   var storage = window.sessionStorage
 
@@ -19,6 +21,7 @@ const ValuationPage = (hooks) => {
   {
     setRequestStat(true)
     getEsiMarketData(setMarketLoading)
+    getRealMarketData(setMarketLoading)
     getItemList(setLoading)
   }
 
@@ -27,6 +30,10 @@ const ValuationPage = (hooks) => {
     setData(resolveClipboard(document.getElementById('contract').value, JSON.parse(storage['EsiMarketData'])))
     setResult(true)
     document.getElementById('contract').value = ''
+  }
+
+  const handleChangeMethod = (event) => {
+    setMethod(event.target.value)
   }
 
   return (
@@ -99,6 +106,43 @@ const ValuationPage = (hooks) => {
                       item
                       xs={0.5}
                     />
+                    <Grid
+                      item
+                      xs={0.5}
+                    />
+                    <Grid
+                      item
+                      xs={7}
+                    >
+                      <FormControl
+                        fullWidth
+                      >
+                        <InputLabel>计价</InputLabel>
+                        <Select
+                          label="Age"
+                          value={method}
+                          onChange={handleChangeMethod}
+                        >
+                          <MenuItem value={'avg'}>均价</MenuItem>
+                          <MenuItem value={'buy'}>买单</MenuItem>
+                          <MenuItem value={'sell'}>卖单</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={4}
+                    >
+                      <TextField 
+                        id='discount'
+                        label='折扣'
+                        defaultValue='100'
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={0.5}
+                    />
                   </Grid>
                   <Box
                     sx={{
@@ -152,7 +196,7 @@ const ValuationPage = (hooks) => {
                               <TableRow>
                                 <TableCell>项目</TableCell>
                                 <TableCell align="right">数量</TableCell>
-                                <TableCell align="right">总价(成交均价)</TableCell>
+                                <TableCell align="right">总价</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
