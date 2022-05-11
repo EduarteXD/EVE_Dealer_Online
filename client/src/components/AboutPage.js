@@ -9,12 +9,14 @@ const AboutPage = () => {
     - add more methods in valuation
     - add fold/ unfold all in manufacture page
     - stock management page
-    - market api
     - refining page
     - Dino swap (maybe later? haven't figure out how to make this
     - market page
 
     ### Changelog
+
+    - 20220511@0:
+    added market api
 
     - 20220509@0:
     merged react management function into manufacture function
@@ -82,7 +84,7 @@ const AboutPage = () => {
               }}
             >
               <Typography>
-                EVE小助手 Online dev build @20220509#0
+                EVE小助手 Online dev build @20220511#0
               </Typography>
             </Box>
             <Box

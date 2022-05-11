@@ -108,10 +108,6 @@ const ValuationPage = (hooks) => {
                     />
                     <Grid
                       item
-                      xs={0.5}
-                    />
-                    <Grid
-                      item
                       xs={7}
                     >
                       <FormControl

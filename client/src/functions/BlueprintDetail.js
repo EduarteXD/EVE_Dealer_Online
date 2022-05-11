@@ -5,6 +5,11 @@ const expand = (brief) => {
   const dfs = (data) => {
     for (var key in data.materials) {
       result[iter] = data.materials[key]
+      /*
+      if (result[iter].dividable) {
+        result[iter].toBuy = false
+      }
+      */
       iter++
       if (data.materials[key].dividable) {
         dfs(data.materials[key].resolve, iter)
@@ -15,6 +20,7 @@ const expand = (brief) => {
   dfs(brief)
 
   console.log(result)
+  return result
 }
 
 const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name, count) => {
@@ -53,7 +59,8 @@ const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name,
 
   var result = calc(itemID, 0)
   result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID, count)
-  expand(result)
+  // test func -> expand all
+  result.materials =  expand(result)
   return result
 }
 
