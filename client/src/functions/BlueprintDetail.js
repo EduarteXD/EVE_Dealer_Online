@@ -1,3 +1,22 @@
+const expand = (brief) => {
+  var result = {}
+  var iter = 0
+  
+  const dfs = (data) => {
+    for (var key in data.materials) {
+      result[iter] = data.materials[key]
+      iter++
+      if (data.materials[key].dividable) {
+        dfs(data.materials[key].resolve, iter)
+      }
+    }
+  }
+
+  dfs(brief)
+
+  console.log(result)
+}
+
 const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name, count) => {
   const calc = (itemID, depth) => {
     if (itemID in blueprints) {
@@ -34,6 +53,7 @@ const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name,
 
   var result = calc(itemID, 0)
   result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID, count)
+  expand(result)
   return result
 }
 
