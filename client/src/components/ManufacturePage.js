@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
-import { Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table, 
+import {
+  Button, Grid, Paper, Typography, Divider, Avatar, TextField, Box, LinearProgress, Table,
   TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, IconButton, Collapse,
-  FormControlLabel, FormGroup, Switch } from '@mui/material'
+  FormControlLabel, FormGroup, Switch
+} from '@mui/material'
 import { AccountTreeOutlined, Close } from '@mui/icons-material'
 import ShowTotValue from './widgets/TotValueWindow'
 
@@ -48,15 +50,13 @@ const ManufacturePage = (hooks) => {
     if (!showWidget && document.body.scrollTop + document.documentElement.scrollTop > 200) {
       setWidget(true)
     }
-    else if (showWidget && document.body.scrollTop + document.documentElement.scrollTop <= 200)
-    {
+    else if (showWidget && document.body.scrollTop + document.documentElement.scrollTop <= 200) {
       setWidget(false)
     }
     if (!hooks.toTop && document.body.scrollTop + document.documentElement.scrollTop > 100) {
       hooks.setToTop(true)
     }
-    else if (hooks.toTop && document.body.scrollTop + document.documentElement.scrollTop <= 100)
-    {
+    else if (hooks.toTop && document.body.scrollTop + document.documentElement.scrollTop <= 100) {
       hooks.setToTop(false)
     }
   }
@@ -66,14 +66,14 @@ const ManufacturePage = (hooks) => {
   }
 
   const format = (num) => {
-    var reg=/\d{1,3}(?=(\d{3})+$)/g
+    var reg = /\d{1,3}(?=(\d{3})+$)/g
     return (num + '').replace(reg, '$&,')
   }
 
   const handleClick = (id) => {
     setToProduce({
       name: idToName[id],
-      id: id, 
+      id: id,
       count: 1
     })
     setSettingWindow(true)
@@ -109,7 +109,7 @@ const ManufacturePage = (hooks) => {
       exists: true,
       content: detail
     })
-    document.getElementById('object').value=''
+    document.getElementById('object').value = ''
     handleChange(false)
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
@@ -137,8 +137,7 @@ const ManufacturePage = (hooks) => {
   const stepTwo = () => {
     var toBuy = {}
     for (var key in brief.content.materials) {
-      if (brief.content.materials[key].toBuy)
-      {
+      if (brief.content.materials[key].toBuy) {
         if (toBuy[brief.content.materials[key].id] !== undefined) {
           toBuy[brief.content.materials[key].id].quantity += parseInt(brief.content.materials[key].quantity)
         }
@@ -181,9 +180,9 @@ const ManufacturePage = (hooks) => {
       temp.content.materials[parseInt(i) + parseInt(insertLen)] = brief.content.materials[i]
     }
     for (var j in brief.content.materials[key].resolve.materials) {
-      var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity, 
-        Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess), 
-        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup, structureList, 
+      var manuDetail = calcMaterialRequirement(brief.content.materials[key].resolve.materials[j].quantity,
+        Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess),
+        temp.content.materials[key].id, temp.content.materials[key].resolve.blueprintID, myBp, idToGroup, itemGroup, structureList,
         blueprintList[temp.content.materials[key].id].type)
       brief.content.materials[key].resolve.materials[j].quantity = manuDetail.material
       temp.content.materials[parseInt(key) + parseInt(j) + 1] = brief.content.materials[key].resolve.materials[j]
@@ -202,7 +201,7 @@ const ManufacturePage = (hooks) => {
     // console.log(insertLen)
     // temp.content = updateMaterialRequirement(temp.content, key + 1, key + 1 + insertLen, temp.content.materials[key].resolve.blueprintID)
     // console.log(temp)
-    setBrief({...temp})
+    setBrief({ ...temp })
   }
 
   /**
@@ -223,12 +222,11 @@ const ManufacturePage = (hooks) => {
     var start = parseInt(key) + 1
     var foldLevel = brief.content.materials[key].depth
     var toDelete = 0
-    while (brief.content.materials[toDelete + start] !== undefined && 
+    while (brief.content.materials[toDelete + start] !== undefined &&
       brief.content.materials[toDelete + start].depth > foldLevel) {
       toDelete++
     }
-    for (let i = 0; i < start; i++)
-    {
+    for (let i = 0; i < start; i++) {
       temp.content.materials[i] = brief.content.materials[i]
     }
     for (let i = start; brief.content.materials[i] !== undefined; i++) {
@@ -247,9 +245,9 @@ const ManufacturePage = (hooks) => {
     setBrief(temp)
   }
 
-  const handleChange = (rstBrief=true) => {
-    if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,'') !== '') {
-      getMatchedItem(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g,''), setMatched, nameToId, blueprintList)
+  const handleChange = (rstBrief = true) => {
+    if (document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g, '') !== '') {
+      getMatchedItem(document.getElementById('object').value.trim().replace(/[^\u4E00-\u9FA5]/g, ''), setMatched, nameToId, blueprintList)
     }
     else {
       setMatched({})
@@ -263,20 +261,19 @@ const ManufacturePage = (hooks) => {
 
   const updateBpList = () => {
     fetch('api/blueprint/query')
-    .then((response) => response.json())
-    .then((data) => {
-      setMyBp({
-        exists: true,
-        content: data
+      .then((response) => response.json())
+      .then((data) => {
+        setMyBp({
+          exists: true,
+          content: data
+        })
       })
-    })
-    .catch((err) => {
-      console.warn(err)
-    })
+      .catch((err) => {
+        console.warn(err)
+      })
   }
 
-  if (!reqestSent)
-  {
+  if (!reqestSent) {
     setRequestStat(true)
     updateBpList()
     getIdToName((stat) => {
@@ -444,11 +441,11 @@ const ManufacturePage = (hooks) => {
                                         verticalAlign: 'middle'
                                       }}
                                     >
-                                      <Grid 
+                                      <Grid
                                         item
                                         md={1.5}
                                       >
-                                        <img 
+                                        <img
                                           alt={key}
                                           src={'https://images.evetech.net/types/' + matched[key] + '/icon?size=32'}
                                           style={{
@@ -457,14 +454,14 @@ const ManufacturePage = (hooks) => {
                                           }}
                                         />
                                       </Grid>
-                                      <Grid 
+                                      <Grid
                                         item
                                         xl={0}
                                         lg={0.1}
                                         md={0.5}
                                         xs={1}
                                       />
-                                      <Grid 
+                                      <Grid
                                         item
                                         md={8}
                                       >
@@ -536,20 +533,20 @@ const ManufacturePage = (hooks) => {
                                 <TableCell align='right'>操作</TableCell>
                               </TableRow>
                               <TableRow
-                                /*
-                                sx={{
-                                  backgroundColor: '#f2f2f2'
-                                }}
-                                */
+                              /*
+                              sx={{
+                                backgroundColor: '#f2f2f2'
+                              }}
+                              */
                               >
                                 <TableCell>
-                                  <Grid 
+                                  <Grid
                                     container
                                     sx={{
                                       verticalAlign: 'middle'
                                     }}
                                   >
-                                    <Grid 
+                                    <Grid
                                       item
                                       md={1}
                                     >
@@ -562,7 +559,7 @@ const ManufacturePage = (hooks) => {
                                         }}
                                       />
                                     </Grid>
-                                    <Grid 
+                                    <Grid
                                       item
                                       xl={1}
                                       lg={2}
@@ -596,21 +593,21 @@ const ManufacturePage = (hooks) => {
                                 <TableCell align='right'>{format(brief.content.totVal)} 星币</TableCell>
                                 <TableCell align='right'></TableCell>
                               </TableRow>
-                              </TableHead>
-                              <TableBody>
+                            </TableHead>
+                            <TableBody>
                               {
                                 Object.keys(brief.content.materials).map((key) => (
                                   <TableRow
                                     key={key}
                                     sx={
-                                      brief.content.materials[key].toBuy ? {} : {backgroundColor: '#f2f2f2'}
+                                      brief.content.materials[key].toBuy ? {} : { backgroundColor: '#f2f2f2' }
                                     }
                                   >
                                     <TableCell>
-                                      <Grid 
+                                      <Grid
                                         container
                                       >
-                                        <Grid 
+                                        <Grid
                                           item
                                           md={1}
                                         >
@@ -623,7 +620,7 @@ const ManufacturePage = (hooks) => {
                                             }}
                                           />
                                         </Grid>
-                                        <Grid 
+                                        <Grid
                                           item
                                           xl={1}
                                           lg={2}
@@ -666,6 +663,7 @@ const ManufacturePage = (hooks) => {
                                     <TableCell
                                       align='right'
                                     >
+
                                       {
                                         brief.content.materials[key].toBuy ? (
                                           format(brief.content.materials[key].quantity)
@@ -723,6 +721,7 @@ const ManufacturePage = (hooks) => {
                                     <TableCell
                                       align='right'
                                     >
+
                                       {
                                         brief.content.materials[key].dividable ? (
                                           brief.content.materials[key].toBuy ? (
@@ -737,7 +736,7 @@ const ManufacturePage = (hooks) => {
                                                 撤销
                                               </Button>
                                             </>
-                                        )) : (
+                                          )) : (
                                           <></>
                                         )
                                       }
@@ -759,8 +758,8 @@ const ManufacturePage = (hooks) => {
                                 <TableCell align='right'></TableCell>
                                 <TableCell align='right'></TableCell>
                                 <TableCell align='right'>
-                                  <Button 
-                                    variant='outlined' 
+                                  <Button
+                                    variant='outlined'
                                     onClick={() => stepTwo()}
                                   >
                                     下一步
@@ -804,7 +803,7 @@ const ManufacturePage = (hooks) => {
                               空空如也~
                             </Typography>
                           </Grid>
-                        </Grid>                      
+                        </Grid>
                       </>
                     )
                   }
@@ -824,7 +823,7 @@ const ManufacturePage = (hooks) => {
             }
             {
               showSettingWindow && (
-                <SetProcessCountWindow 
+                <SetProcessCountWindow
                   toProduce={toProduce}
                   setToProduce={setToProduce}
                   setSettingWindow={setSettingWindow}

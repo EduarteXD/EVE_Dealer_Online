@@ -2,9 +2,10 @@ const expand = (brief) => {
   var result = {}
   var iter = 0
   
-  const dfs = (data) => {
+  const dfs = (data, father) => {
     for (var key in data.materials) {
       result[iter] = data.materials[key]
+      result[iter].father = father
       /*
       if (result[iter].dividable) {
         result[iter].toBuy = false
@@ -12,12 +13,12 @@ const expand = (brief) => {
       */
       iter++
       if (data.materials[key].dividable) {
-        dfs(data.materials[key].resolve, iter)
+        dfs(data.materials[key].resolve, iter - 1)
       }
     }
   }
 
-  dfs(brief)
+  dfs(brief, null)
 
   console.log(result)
   return result
