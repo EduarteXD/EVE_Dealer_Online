@@ -597,151 +597,155 @@ const ManufacturePage = (hooks) => {
                             <TableBody>
                               {
                                 Object.keys(brief.content.materials).map((key) => (
-                                  <TableRow
-                                    key={key}
-                                    sx={
-                                      brief.content.materials[key].toBuy ? {} : { backgroundColor: '#f2f2f2' }
-                                    }
+                                  <Collapse
+                                    in={!brief.content.materials[brief.content.materials[key].father].toBuy}
                                   >
-                                    <TableCell>
-                                      <Grid
-                                        container
-                                      >
-                                        <Grid
-                                          item
-                                          md={1}
-                                        >
-                                          <img
-                                            alt={brief.content.materials[key].name}
-                                            src={'https://images.evetech.net/types/' + brief.content.materials[key].id + '/icon?size=32'}
-                                            style={{
-                                              width: '32px',
-                                              height: '32px'
-                                            }}
-                                          />
-                                        </Grid>
-                                        <Grid
-                                          item
-                                          xl={1}
-                                          lg={2}
-                                          md={3}
-                                          xs={0}
-                                        />
-                                        <Grid
-                                          item
-                                          md={6}
-                                        >
-                                          <Typography
-                                            mt={0.6}
-                                          >
-                                            {renderName(brief.content.materials[key].name, brief.content.materials[key].depth)}
-                                          </Typography>
-                                        </Grid>
-                                      </Grid>
-                                    </TableCell>
-                                    <TableCell align='right'>
-                                      {brief.content.materials[key].useFacility !== undefined && (
-                                        brief.content.materials[key].useFacility
-                                      )}
-                                    </TableCell>
-                                    {
-                                      !useLite && (
-                                        <>
-                                          <TableCell
-                                            align='right'
-                                          >
-                                            {brief.content.materials[key].toBuy ? '否' : '是'}
-                                          </TableCell>
-                                          <TableCell
-                                            align='right'
-                                          >
-                                            {format(brief.content.materials[key].quantity)}
-                                          </TableCell>
-                                        </>
-                                      )
-                                    }
-                                    <TableCell
-                                      align='right'
-                                    >
-
-                                      {
-                                        brief.content.materials[key].toBuy ? (
-                                          format(brief.content.materials[key].quantity)
-                                        ) : (
-                                          format(
-                                            Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess) * brief.content.materials[key].resolve.perProcess
-                                          )
-                                        )
+                                    <TableRow
+                                      key={key}
+                                      sx={
+                                        brief.content.materials[key].toBuy ? {} : { backgroundColor: '#f2f2f2' }
                                       }
-                                    </TableCell>
-                                    <TableCell
-                                      align='right'
                                     >
-                                      {
-                                        brief.content.materials[key].toBuy ? (
-                                          <>
-                                            {
-                                              !isNaN(market[brief.content.materials[key].id].avg) ? (
-                                                format(
-                                                  parseInt(
-                                                    market[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
-                                                  )
-                                                )
-                                              ) : (
-                                                <>
-                                                  <Typography
-                                                    sx={{
-                                                      color: 'red'
-                                                    }}
-                                                  >
-                                                    无报价
-                                                  </Typography>
-                                                </>
-                                              )
-                                            }
-                                            {
-                                              !isNaN(market[brief.content.materials[key].id].avg) && (
-                                                <>
-                                                  &nbsp;星币
-                                                </>
-                                              )
-                                            }
-                                          </>
-                                        ) : (
-                                          <>
-                                            <AccountTreeOutlined
-                                              sx={{
-                                                opacity: 0.5
+                                      <TableCell>
+                                        <Grid
+                                          container
+                                        >
+                                          <Grid
+                                            item
+                                            md={1}
+                                          >
+                                            <img
+                                              alt={brief.content.materials[key].name}
+                                              src={'https://images.evetech.net/types/' + brief.content.materials[key].id + '/icon?size=32'}
+                                              style={{
+                                                width: '32px',
+                                                height: '32px'
                                               }}
                                             />
+                                          </Grid>
+                                          <Grid
+                                            item
+                                            xl={1}
+                                            lg={2}
+                                            md={3}
+                                            xs={0}
+                                          />
+                                          <Grid
+                                            item
+                                            md={6}
+                                          >
+                                            <Typography
+                                              mt={0.6}
+                                            >
+                                              {renderName(brief.content.materials[key].name, brief.content.materials[key].depth)}
+                                            </Typography>
+                                          </Grid>
+                                        </Grid>
+                                      </TableCell>
+                                      <TableCell align='right'>
+                                        {brief.content.materials[key].useFacility !== undefined && (
+                                          brief.content.materials[key].useFacility
+                                        )}
+                                      </TableCell>
+                                      {
+                                        !useLite && (
+                                          <>
+                                            <TableCell
+                                              align='right'
+                                            >
+                                              {brief.content.materials[key].toBuy ? '否' : '是'}
+                                            </TableCell>
+                                            <TableCell
+                                              align='right'
+                                            >
+                                              {format(brief.content.materials[key].quantity)}
+                                            </TableCell>
                                           </>
                                         )
                                       }
-                                    </TableCell>
-                                    <TableCell
-                                      align='right'
-                                    >
+                                      <TableCell
+                                        align='right'
+                                      >
 
-                                      {
-                                        brief.content.materials[key].dividable ? (
+                                        {
+                                          brief.content.materials[key].toBuy ? (
+                                            format(brief.content.materials[key].quantity)
+                                          ) : (
+                                            format(
+                                              Math.ceil(brief.content.materials[key].quantity / brief.content.materials[key].resolve.perProcess) * brief.content.materials[key].resolve.perProcess
+                                            )
+                                          )
+                                        }
+                                      </TableCell>
+                                      <TableCell
+                                        align='right'
+                                      >
+                                        {
                                           brief.content.materials[key].toBuy ? (
                                             <>
-                                              <Button variant='outlined' onClick={() => handleDivide(key)}>
-                                                自制
-                                              </Button>
+                                              {
+                                                !isNaN(market[brief.content.materials[key].id].avg) ? (
+                                                  format(
+                                                    parseInt(
+                                                      market[brief.content.materials[key].id].avg * brief.content.materials[key].quantity
+                                                    )
+                                                  )
+                                                ) : (
+                                                  <>
+                                                    <Typography
+                                                      sx={{
+                                                        color: 'red'
+                                                      }}
+                                                    >
+                                                      无报价
+                                                    </Typography>
+                                                  </>
+                                                )
+                                              }
+                                              {
+                                                !isNaN(market[brief.content.materials[key].id].avg) && (
+                                                  <>
+                                                    &nbsp;星币
+                                                  </>
+                                                )
+                                              }
                                             </>
                                           ) : (
                                             <>
-                                              <Button variant='outlined' onClick={() => handleReject(key)}>
-                                                撤销
-                                              </Button>
+                                              <AccountTreeOutlined
+                                                sx={{
+                                                  opacity: 0.5
+                                                }}
+                                              />
                                             </>
-                                          )) : (
-                                          <></>
-                                        )
-                                      }
-                                    </TableCell>
-                                  </TableRow>
+                                          )
+                                        }
+                                      </TableCell>
+                                      <TableCell
+                                        align='right'
+                                      >
+
+                                        {
+                                          brief.content.materials[key].dividable ? (
+                                            brief.content.materials[key].toBuy ? (
+                                              <>
+                                                <Button variant='outlined' onClick={() => handleDivide(key)}>
+                                                  自制
+                                                </Button>
+                                              </>
+                                            ) : (
+                                              <>
+                                                <Button variant='outlined' onClick={() => handleReject(key)}>
+                                                  撤销
+                                                </Button>
+                                              </>
+                                            )) : (
+                                            <></>
+                                          )
+                                        }
+                                      </TableCell>
+                                    </TableRow>
+                                  </Collapse>
                                 ))
                               }
                               <TableRow>
