@@ -61,7 +61,7 @@ const blueprintDetail = (itemID, updateMaterialRequirement, blueprints, ID2Name,
   var result = calc(itemID, 0)
   result = updateMaterialRequirement(result, 0, result.materials.length, result.blueprintID, count)
   // test func -> expand all
-  result.materials =  expand(result)
+  result.materials = expand(result)
   return result
 }
 
