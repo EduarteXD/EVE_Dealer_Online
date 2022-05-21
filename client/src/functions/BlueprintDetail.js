@@ -20,7 +20,7 @@ const expand = (brief) => {
 
   dfs(brief, null)
 
-  console.log(result)
+  // console.log(result)
   return result
 }
 
