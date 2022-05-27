@@ -160,6 +160,7 @@ const ManufacturePage = (hooks) => {
     temp.content.totVal = 0
     for (var key in temp.content.materials) {
       if (temp.content.materials[key].father === null || (!temp.content.materials[temp.content.materials[key].father].toBuy && temp.content.materials[key].toBuy)) {
+        if (!temp.content.materials[key].toBuy) continue
         if (market[temp.content.materials[key].id] === undefined) {
           market[temp.content.materials[key].id] = {
             adj: NaN,
@@ -229,6 +230,7 @@ const ManufacturePage = (hooks) => {
     temp.content.totVal = 0
     for (var key in temp.content.materials) {
       if (temp.content.materials[key].father === null || (!temp.content.materials[temp.content.materials[key].father].toBuy && temp.content.materials[key].toBuy)) {
+        if (!temp.content.materials[key].toBuy) continue
         if (market[temp.content.materials[key].id] === undefined) {
           market[temp.content.materials[key].id] = {
             adj: NaN,
